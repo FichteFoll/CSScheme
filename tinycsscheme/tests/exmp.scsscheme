@@ -1,0 +1,50 @@
+/* `*` is a special selector that expects a body with the general settings (like
+ * background and foreground color, indent guides ...).
+ *
+ * All other @rules are arbitrary as long as only an identifier or a string
+ * follows, e.g. name and uuid or "foldingStartMatches" or whatever, if you need
+ * that. They will be added as an arbitrary dict entry with a string value.
+ */
+
+$fore: #888888;
+
+@name "Test Scheme"; /* a string */
+
+@uuid pls-no; /* an ident */
+
+* {
+    background: #111111;
+    foreground: $fore;
+    lineHighlight: #12345678;
+}
+
+source {
+    foreground: darken($fore, 20);
+    fontStyle: bold italic;
+    @random-at-rule yeah;
+}
+
+/* optional name in at-rule */
+text {
+    @name "Text";
+    foreground: #00FF00;
+    fontStyle: bold italic;
+}
+
+
+string {
+    foreground: rgba(0,0,0,0.2);
+    fontStyle: italic;
+
+    /* nested */
+    constant {
+        foreground: darken($fore, 70);
+    }
+}
+
+
+/* invalid usage of # */
+String and Number#string, number {
+    foreground: #0000FF;
+    fontStyle: underline ;
+}

@@ -1,0 +1,10 @@
+; Binary files
+*.pyc
+*.cache
+*.coverage
+*.dmp
+
+; Other irrelevant files
+*.sublime-project
+*.sublime-workspace
+*/htmlcov

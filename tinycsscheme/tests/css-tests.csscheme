@@ -1,0 +1,45 @@
+/* `*` is a special selector that expects a body with the general settings (like
+ * background and foreground color, indent guides ...).
+ *
+ * All other @rules are arbitrary as long as only an identifier or a string
+ * follows, e.g. name and uuid or "foldingStartMatches" or whatever, if you need
+ * that. They will be added as an arbitrary dict entry with a string value.
+ */
+@name "Test Scheme";
+/* a string */
+@uuid pls-no;
+/* an ident */
+/* line 15, C:\Program Files\Sublime Text 3 Portable Beta\Data\Packages\CSScheme\tinycsscheme\tests\exmp.scsscheme */
+* {
+  background: #111111;
+  foreground: #888888;
+  lineHighlight: #12345678; }
+
+/* line 21, C:\Program Files\Sublime Text 3 Portable Beta\Data\Packages\CSScheme\tinycsscheme\tests\exmp.scsscheme */
+source {
+  foreground: #555555;
+  fontStyle: bold italic;
+  @random-at-rule yeah; }
+
+/* optional name in at-rule */
+/* line 28, C:\Program Files\Sublime Text 3 Portable Beta\Data\Packages\CSScheme\tinycsscheme\tests\exmp.scsscheme */
+text {
+  @name "Text";
+  foreground: #00FF00;
+  fontStyle: bold italic; }
+
+/* line 35, C:\Program Files\Sublime Text 3 Portable Beta\Data\Packages\CSScheme\tinycsscheme\tests\exmp.scsscheme */
+string {
+  foreground: #3c3c3c;
+  fontStyle: italic;
+  /* nested */ }
+  /* line 40, C:\Program Files\Sublime Text 3 Portable Beta\Data\Packages\CSScheme\tinycsscheme\tests\exmp.scsscheme */
+  string constant {
+    foreground: #123456; }
+
+/* invalid usage of # */
+/* line 47, C:\Program Files\Sublime Text 3 Portable Beta\Data\Packages\CSScheme\tinycsscheme\tests\exmp.scsscheme */
+String and Number#string, number {
+  @scope sure;
+  foreground: #0000FF;
+  fontStyle: underline; }
