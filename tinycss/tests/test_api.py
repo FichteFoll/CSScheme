@@ -9,12 +9,11 @@
 
 
 from __future__ import unicode_literals
-import itertools
 
 from pytest import raises
 
-from tinycss import make_parser
-from tinycss.page3 import CSSPage3Parser
+from .. import make_parser
+from ..page3 import CSSPage3Parser
 
 
 def test_make_parser():

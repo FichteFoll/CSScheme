@@ -12,7 +12,7 @@ from __future__ import unicode_literals
 
 import pytest
 
-from tinycss.color3 import parse_color_string, hsl_to_rgb
+from ..color3 import parse_color_string, hsl_to_rgb
 
 
 @pytest.mark.parametrize(('css_source', 'expected_result'), [

@@ -15,7 +15,7 @@ import os
 
 import pytest
 
-from tinycss.tokenizer import (
+from ..tokenizer import (
     python_tokenize_flat, cython_tokenize_flat, regroup)
 
 

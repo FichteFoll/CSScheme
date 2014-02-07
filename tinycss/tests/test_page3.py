@@ -12,7 +12,7 @@ from __future__ import unicode_literals
 
 import pytest
 
-from tinycss.page3 import CSSPage3Parser
+from ..page3 import CSSPage3Parser
 from .test_tokenizer import jsonify
 from . import assert_errors
 
