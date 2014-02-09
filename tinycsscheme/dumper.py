@@ -97,14 +97,58 @@ class CSSchemeDumper(object):
             if r.at_keyword in invalid:
                 raise DumpError(r, "You can not override the '{0}' key using at-rules"
                                    .format(r.at_keyword.strip('@')),
-                                '%s %s' % (sel, r.at_keyword))
+                                '%s, %s' % (sel, r.at_keyword))
             rdict[r.at_keyword.strip('@')] = r.value.value
 
         # Add real declarations to a sub-'settings' dict
         s = OrderedDict()
-        for d in rset.declarations:
-            # One or multiple HASH, STRING or IDENT (separated by S)
-            s[d.name] = "".join(v.value for v in d.value)
+        for decl in rset.declarations:
+            self.validify_declaration(decl, sel)
+            # One or multiple HASH, STRING or IDENT (separated by S) tokens
+            s[decl.name] = "".join(v.value for v in decl.value)
         rdict['settings'] = s
 
         return rdict
+
+    known_properties = dict(
+        color=('foreground', 'background', 'caret', 'invisibles', 'lineHighlight', 'selection',
+               'activeGuide'),
+        style_list=('fontStyle', 'tagsOptions')
+        # Maybe some more?
+    )
+
+    def validify_declaration(self, decl, sel):
+        # Check for property characteristics (if we know its type)
+        if decl.name in self.known_properties['color']:
+            if len(decl.value) > 1:
+                # We only expect one token for colors
+                raise DumpError(decl.value[1], 'expected 1 token for property {0}, got {1}'
+                                               .format(decl.name, len(decl.value)), sel)
+
+            v = decl.value[0]
+            if v.type in ('IDENT', 'STRING'):
+                # Lookup css color names and replace them with their HASH
+                from .css_colors import css_colors
+                if not v.value in css_colors:
+                    raise DumpError(v, "unknown color name for property {0}: {1}"
+                                       .format(decl.name, v.value), sel)
+
+                v.value = css_colors[v.value]
+                v.type  = 'HASH'  # This feels a bit dirty, but I guess it's k
+
+            elif v.type == 'FUNCTION':
+                # TODO rgb(), rgba(), hsl(), hsla() FUNCTION
+                pass
+
+            assert v.type == 'HASH'
+
+        elif decl.name in self.known_properties['style_list']:
+            for token in decl.value:
+                if token.type == 'S':
+                    continue
+                elif token.type not in ('IDENT', 'STRING'):
+                    raise DumpError(token, "unexpected {0} token for property {1}"
+                                           .format(token.type, decl.name), sel)
+                elif token.value not in ('bold', 'italic', 'underline', 'stippled_underline'):
+                    raise DumpError(token, "invalid value '{0}' for property {1}"
+                                           .format(token.value, decl.name), sel)

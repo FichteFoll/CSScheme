@@ -141,13 +141,6 @@ class CSSchemeParser(CSS21Parser):
                 known.add(d.name)
         return declarations, at_rules, errors
 
-    known_properties = dict(
-        color=('foreground', 'background', 'caret', 'invisibles', 'lineHighlight', 'selection',
-               'activeGuide'),
-        style_list=('fontStyle', 'tagsOptions')
-        # Maybe some more?
-    )
-
     def parse_declaration(self, tokens):
         """Parse a single declaration.
 
@@ -182,52 +175,12 @@ class CSSchemeParser(CSS21Parser):
             raise ParseError(name_token,
                              "expected a property value for property {}".format(property_name))
 
-        # Validate the value(s)
-        def invalid_value(token, msg=""):
-            match_type = token.type in ('}', ')', ']') and 'unmatched' or 'unexpected'
-            raise ParseError(token, '{0} {1} token for property {2}{3}'
-                                    .format(match_type, token.type, property_name,
-                                            ': ' + msg if msg else ""))
-
-        # Only allow HASH, IDENT, STRING (and S) (minimal requirements)
-        # TODO rgb(), rgba(), hsl(), hsla() FUNCTION
+        # Only allow a list of HASH, IDENT, STRING, FUNCTION (and S) (minimal requirements)
         for token in value:
-            if token.type not in ('S', 'IDENT', 'STRING', 'HASH'):
-                invalid_value(token)
-
-        # Check if we know the property's type
-        property_type = None
-        for type_, elmnts in self.known_properties.items():
-            if property_name in elmnts:
-                property_type = type_
-                break
-
-        # Check for property characteristics (if we know its type)
-        if property_type == 'color':
-            if len(value) > 1:
-                raise ParseError(value[1], 'expected 1 token for property {0}, got {1}'
-                                           .format(property_name, len(value)))
-            v = value[0]
-            if v.type in ('IDENT', 'STRING'):
-                # Lookup css color names and replace them with their HASH
-                from .css_colors import css_colors
-                if not v.value in css_colors:
-                    raise ParseError(v, "unknown color name for property {}".format(property_name))
-
-                v.value = css_colors[v.value]
-                v.type  = 'HASH'  # This feels a bit dirty, but I guess it's k
-
-            assert v.type == 'HASH'
-
-        elif property_type == 'style_list':
-            for token in value:
-                if token.type == 'S':
-                    continue
-                elif token.type not in ('IDENT', 'STRING'):
-                    invalid_value(token)
-                elif token.value not in ('bold', 'italic', 'underline', 'stippled_underline'):
-                    raise ParseError(token, "invalid value '{0}' for property {1}"
-                                            .format(token.value, property_name))
+            if token.type not in ('S', 'IDENT', 'STRING', 'HASH', 'FUNCTION'):
+                match_type = token.type in ('}', ')', ']') and 'unmatched' or 'unexpected'
+                raise ParseError(token, '{0} {1} token for property {2}'
+                                        .format(match_type, token.type, property_name))
 
         # Note: '!important' priority ignored
         return Declaration(property_name, value, None, name_token.line, name_token.column)

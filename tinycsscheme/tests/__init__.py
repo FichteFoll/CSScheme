@@ -27,3 +27,14 @@ def jsonify(tokens):
             yield token.type, list(jsonify(token.content))
         else:
             yield token.type, token.value
+
+
+def tuplify(rule):
+    if rule.at_keyword:
+        return (rule.at_keyword, list(jsonify([rule.value])))
+    else:
+        return (rule.selector.as_css(),
+                [(decl.name, list(jsonify(decl.value)))
+                 for decl in rule.declarations],
+                [tuplify(at_rule)
+                 for at_rule in rule.at_rules])

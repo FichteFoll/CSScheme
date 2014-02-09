@@ -8,18 +8,7 @@
 import pytest
 
 from ..parser import CSSchemeParser, CSS21Parser
-from . import jsonify, assert_errors
-
-
-def tuplify(rule):
-    if rule.at_keyword:
-        return (rule.at_keyword, list(jsonify([rule.value])))
-    else:
-        return (rule.selector.as_css(),
-                [(decl.name, list(jsonify(decl.value)))
-                 for decl in rule.declarations],
-                [tuplify(at_rule)
-                 for at_rule in rule.at_rules])
+from . import jsonify, assert_errors, tuplify
 
 
 # Carried over from css21 (to ensure that basic stuff still works)
@@ -186,49 +175,7 @@ def test_at_rules(css_source, expected_rules, expected_errors):
 
     ('foo {decl ;}',
         [('foo', [], [])],
-        ["expected ':'"]),
-
-
-    # Known types
-    ('foo {background: #123456; foreground: #12345678}',
-        [('foo',
-          [('background', [('HASH', "#123456")]),
-           ('foreground', [('HASH', "#12345678")])],
-          [])],
-        []),
-
-    ('foo {background: black; foreground: "cyan"}',
-        [('foo',
-          [('background', [('HASH', "#000000")]),
-           ('foreground', [('HASH', "#00FFFF")])],
-          [])],
-        []),
-
-    ('foo {fontStyle: bold "italic" underline stippled_underline}',
-        [('foo',
-          [('fontStyle', [('IDENT',  "bold"),
-                          ('S',      " "),
-                          ('STRING', "italic"),
-                          ('S',      " "),
-                          ('IDENT',  "underline"),
-                          ('S',      " "),
-                          ('IDENT',  "stippled_underline")])],
-          [])],
-        []),
-
-
-    # Errored known types
-    ('foo {background: #123456 #789012; foreground: ident;'
-     'caret: 12;} ',
-        [('foo', [], [])],
-        ["expected 1 token for property background, got 3",
-         "unknown color name for property foreground",
-         "unexpected INTEGER token for property caret"]),
-
-    ('foo {fontStyle: #123456; tagsOptions: italicc}',
-        [('foo', [], [])],
-        ["unexpected HASH token for property fontStyle",
-         "invalid value 'italicc' for property tagsOptions"])
+        ["expected ':'"])
 ])
 def test_rulesets(css_source, expected_rules, expected_errors):
     stylesheet = CSSchemeParser().parse_stylesheet(css_source)
