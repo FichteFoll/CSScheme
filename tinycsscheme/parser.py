@@ -1,32 +1,14 @@
 from itertools import chain
 
-try:
-    from ..tinycss.css21 import (ParseError, AtRule, Declaration, TokenList, RuleSet, Stylesheet,
-                                 CSS21Parser, strip_whitespace, validate_any)
-    # For running tests from the "tests" subdir
-    from ..tinycss.token_data import Token
-except:
-    from tinycss.css21 import (ParseError, AtRule, Declaration, TokenList, RuleSet, Stylesheet,
-                               CSS21Parser, strip_whitespace, validate_any)
-    from tinycss.token_data import Token
-
-# Notes on the tinycss codestyle vs this one:
-# - The documentation is Sphinx-optimized, I'll try to adapt to the style.
-# - tinycss previously had a max line lenght of 80, raised it to 100.
+from .tinycss.css21 import (ParseError, Declaration, RuleSet, CSS21Parser,
+                            strip_whitespace, validate_any)
 
 __all__ = [
-    # from tinycss.css21
-    'Stylesheet',
-    'Declaration',
-    'AtRule',
-    'RuleSet',
     # from tinycss.css21 imported
-    'TokenList',
     'ParseError',
     # from this file
     'StringRule',
-    'CSSchemeParser',
-    'Token'
+    'CSSchemeParser'
 ]
 
 
@@ -175,6 +157,7 @@ class CSSchemeParser(CSS21Parser):
             raise ParseError(name_token,
                              "expected a property value for property {}".format(property_name))
 
+        # TODO remove strings completely (adjust tests)
         # Only allow a list of HASH, IDENT, STRING, FUNCTION (and S) (minimal requirements)
         for token in value:
             if token.type not in ('S', 'IDENT', 'STRING', 'HASH', 'FUNCTION'):

@@ -59,6 +59,7 @@ class convert_csscheme(sublime_plugin.TextCommand):
             sass=['sass', '-l'],
             scss=['sass', '-l',  '--scss'],
             # less='less',  # TODO
+            # stylus= ...
         )
         # import spdb ; spdb.start()
 

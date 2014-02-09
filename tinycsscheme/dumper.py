@@ -4,6 +4,12 @@ from collections import OrderedDict
 import plistlib
 
 from .parser import StringRule
+from .tinycss.parsing import split_on_comma, strip_whitespace
+from .tinycss.token_data import Token
+
+
+def clamp(minimum, x, maximum):
+    return max(minimum, min(x, maximum))
 
 
 class DumpError(ValueError):
@@ -126,29 +132,82 @@ class CSSchemeDumper(object):
                                                .format(decl.name, len(decl.value)), sel)
 
             v = decl.value[0]
+            color = None
             if v.type in ('IDENT', 'STRING'):
                 # Lookup css color names and replace them with their HASH
                 from .css_colors import css_colors
                 if not v.value in css_colors:
-                    raise DumpError(v, "unknown color name for property {0}: {1}"
+                    raise DumpError(v, "unknown color name '{1}' for property {0}"
                                        .format(decl.name, v.value), sel)
 
-                v.value = css_colors[v.value]
-                v.type  = 'HASH'  # This feels a bit dirty, but I guess it's k
+                color = css_colors[v.value]
 
             elif v.type == 'FUNCTION':
-                # TODO rgb(), rgba(), hsl(), hsla() FUNCTION
-                pass
+                fn = v.function_name
+                if fn not in ('rgb', 'hsl', 'rgba', 'hsla'):
+                    raise DumpError(v, "unknown function '{1}()' for property {0}"
+                                       .format(decl.name, fn), sel)
 
-            assert v.type == 'HASH'
+                # Parse parameters
+                raw_params = list(map(strip_whitespace, split_on_comma(v.content)))
+                if len(raw_params) != len(fn):
+                    raise DumpError(v, "expected {0} parameters for function '{1}()', got {2}"
+                                       .format(len(fn), fn, len(raw_params)),
+                                    '%s, %s' % (sel, decl.name))
+
+                # Validate parameters
+                def unexpected_value(i, v, p):
+                    raise DumpError(p, "unexpected value {2} for parameter {0} in function "
+                                       "'{1}()'".format(i, fn, p.type),
+                                    '%s, %s' % (sel, decl.name))
+                # Save everything as floating numbers between 0 and 1
+                params = []
+                for i, p in enumerate(raw_params):
+                    if len(p) != 1:
+                        raise DumpError(p[1], "expected 1 token for parameter {0} in function "
+                                              "'{1}()', got {2}".format(i, fn, len(p)),
+                                        '%s, %s' % (sel, decl.name))
+                    p = p[0]
+
+                    if fn[i] in 'rgb':
+                        if p.type == 'INTEGER':
+                            params.append(clamp(0, p.value, 255) / 255.0)
+                        elif p.type == 'PERCENTAGE':
+                            params.append(clamp(0, p.value, 100) / 100.0)
+                        else:
+                            unexpected_value(i, v, p)
+                    elif fn[i] == 'a':
+                        if p.type not in ('NUMBER', 'INTEGER'):
+                            unexpected_value(i, v, p)
+                        params.append(clamp(0, p.value, 1))
+                    elif fn[i] == 'h':
+                        if p.type not in ('NUMBER', 'INTEGER'):
+                            unexpected_value(i, v, p)
+                        params.append((p.value % 360) / 360.0)
+                    elif fn[i] in 'sl':
+                        if p.type != 'PERCENTAGE':
+                            unexpected_value(i, v, p)
+                        params.append(p.value)
+
+                # Convert hsl to rgb
+                if 'hsl' in fn:
+                    import colorsys
+                    params[:3] = colorsys.hls_to_rgb(params[0], params[2], params[1])
+
+                color = "#" + ''.join("{:02X}".format(round(c * 255)) for c in params)
+
+            # Replace the old value (could be a FunctionToken)
+            if color:
+                decl.value[0] = Token('HASH', v.as_css(), color, None, v.line, v.column)
+            assert decl.value[0].type == 'HASH'
 
         elif decl.name in self.known_properties['style_list']:
             for token in decl.value:
                 if token.type == 'S':
                     continue
                 elif token.type not in ('IDENT', 'STRING'):
-                    raise DumpError(token, "unexpected {0} token for property {1}"
-                                           .format(token.type, decl.name), sel)
+                    raise DumpError(token, "unexpected {1} token for property {0}"
+                                           .format(decl.name, token.type), sel)
                 elif token.value not in ('bold', 'italic', 'underline', 'stippled_underline'):
-                    raise DumpError(token, "invalid value '{0}' for property {1}"
-                                           .format(token.value, decl.name), sel)
+                    raise DumpError(token, "invalid value '{1}' for property {0}"
+                                           .format(decl.name, token.value), sel)

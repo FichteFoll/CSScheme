@@ -4,8 +4,13 @@
 
 import pytest
 
+from ..tinycss.css21 import Stylesheet, Declaration, RuleSet
+from ..tinycss.token_data import Token
+from ..tinycss.tokenizer import tokenize_grouped
+
 from ..dumper import CSSchemeDumper, DumpError
-from ..parser import Stylesheet, Declaration, RuleSet, StringRule, Token
+from ..parser import StringRule
+
 from . import jsonify
 
 
@@ -23,32 +28,14 @@ def SS(rules):
 
 
 def RS(sel, decl, at_rules=[]):
-    sel = tokenize(sel)
+    sel = tokenize_grouped(sel)
     rs = RuleSet(sel, decl, 0, 0)
     rs.at_rules = at_rules
     return rs
 
 
 def DC(name, value):
-    return Declaration(name, tokenize(value), None, 0, 0)
-
-
-# Quick and dirty implementation of a tokenizer so I don't need to use parts
-# of the parser
-def tokenize(value):
-    tl = []
-    for v in value.split():
-        # Add S separator
-        if tl:
-            tl.append(T('S', ' '))
-
-        if value.startswith('#'):
-            tl.append(T('HASH', v))
-        elif v[0] == '"' == v[-1]:
-            tl.append(T('STRING', v.strip('"')))
-        else:
-            tl.append(T('IDENT', v))
-    return tl
+    return Declaration(name, tokenize_grouped(value), None, 0, 0)
 
 
 @pytest.mark.parametrize(('stylesheet', 'expected_data'), [
@@ -160,6 +147,7 @@ def test_datafy_ruleset_errors(ruleset, expected_error):
 
 
 @pytest.mark.parametrize(('decl', 'expected_decl'), [
+    # color
     (DC('background', "#123456"),
      ('background', [('HASH', "#123456")])),
 
@@ -169,6 +157,10 @@ def test_datafy_ruleset_errors(ruleset, expected_error):
     (DC('background', "cyan"),
      ('background', [('HASH', "#00FFFF")])),
 
+    (DC('background', "rgb(0, 254, 100%)"),
+     ('background', [('HASH', "#00FEFF")])),  # TODO
+
+    # style list
     (DC('fontStyle', 'bold "italic" underline stippled_underline'),
      ('fontStyle', [('IDENT',  "bold"),
                     ('S',      " "),
@@ -185,12 +177,14 @@ def test_validify_decl(decl, expected_decl):
 
 
 @pytest.mark.parametrize(('decl', 'expected_error'), [
+    # color
     (DC('background', "#123456 #12345678"),
      "expected 1 token for property background, got 3"),
 
     (DC('foreground', "not-a-color"),
-     "unknown color name for property foreground: not-a-color"),
+     "unknown color name 'not-a-color' for property foreground"),
 
+    # style list
     (DC('fontStyle', "#000001"),
      "unexpected HASH token for property fontStyle"),
 

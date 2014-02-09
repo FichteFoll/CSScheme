@@ -7,7 +7,8 @@
 
 import pytest
 
-from ..parser import CSSchemeParser, CSS21Parser
+from ..parser import CSSchemeParser
+from ..tinycss.css21 import CSS21Parser
 from . import jsonify, assert_errors, tuplify
 
 
@@ -119,6 +120,7 @@ def test_at_rules(css_source, expected_rules, expected_errors):
     assert len(stylesheet.rules) == expected_rules
 
 
+# TOTEST unclosed functions
 @pytest.mark.parametrize(('css_source', 'expected_rules', 'expected_errors'), [
     ('foo {/* hey */}\n',
         [('foo', [], [])],
