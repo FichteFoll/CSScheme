@@ -150,6 +150,9 @@ class CSSchemeDumper(object):
 
                 # Parse parameters
                 raw_params = list(map(strip_whitespace, split_on_comma(v.content)))
+                if raw_params == [[]]:  # Reduce the list if no arguments found
+                    raw_params = []
+                # Check parameter count
                 if len(raw_params) != len(fn):
                     raise DumpError(v, "expected {0} parameters for function '{1}()', got {2}"
                                        .format(len(fn), fn, len(raw_params)),
@@ -157,15 +160,15 @@ class CSSchemeDumper(object):
 
                 # Validate parameters
                 def unexpected_value(i, v, p):
-                    raise DumpError(p, "unexpected value {2} for parameter {0} in function "
-                                       "'{1}()'".format(i, fn, p.type),
+                    raise DumpError(p, "unexpected {2} value for parameter {0} in function "
+                                       "'{1}()'".format(i + 1, fn, p.type),
                                     '%s, %s' % (sel, decl.name))
                 # Save everything as floating numbers between 0 and 1
                 params = []
                 for i, p in enumerate(raw_params):
                     if len(p) != 1:
                         raise DumpError(p[1], "expected 1 token for parameter {0} in function "
-                                              "'{1}()', got {2}".format(i, fn, len(p)),
+                                              "'{1}()', got {2}".format(i + 1, fn, len(p)),
                                         '%s, %s' % (sel, decl.name))
                     p = p[0]
 
@@ -179,7 +182,7 @@ class CSSchemeDumper(object):
                     elif fn[i] == 'a':
                         if p.type not in ('NUMBER', 'INTEGER'):
                             unexpected_value(i, v, p)
-                        params.append(clamp(0, p.value, 1))
+                        params.append(1 - clamp(0, p.value, 1))
                     elif fn[i] == 'h':
                         if p.type not in ('NUMBER', 'INTEGER'):
                             unexpected_value(i, v, p)
@@ -187,7 +190,7 @@ class CSSchemeDumper(object):
                     elif fn[i] in 'sl':
                         if p.type != 'PERCENTAGE':
                             unexpected_value(i, v, p)
-                        params.append(p.value)
+                        params.append(clamp(0, p.value, 100) / 100.0)
 
                 # Convert hsl to rgb
                 if 'hsl' in fn:

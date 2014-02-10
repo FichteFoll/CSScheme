@@ -145,6 +145,25 @@ def test_at_rules(css_source, expected_rules, expected_errors):
           [])],
         []),
 
+    ('fooz {decl: function(param1, param2)}',
+        [('fooz',
+          [('decl',  [('FUNCTION', "function",
+                       [('IDENT', 'param1'),
+                        ('DELIM', ','),
+                        ('S', ' '),
+                        ('IDENT', 'param2')])])],
+          [])],
+        []),
+
+    # Don't ask me why this produces no errors
+    ('fooz {decl: function(param1}',
+        [('fooz',
+          [('decl',  [('FUNCTION', "function",
+                       [('IDENT', 'param1'),
+                        ('}', '}')])])],
+          [])],
+        []),
+
     ('foo {list: mixed ident and "string list"}',
         [('foo',
           [('list', [('IDENT',  "mixed"),
@@ -177,7 +196,7 @@ def test_at_rules(css_source, expected_rules, expected_errors):
 
     ('foo {decl ;}',
         [('foo', [], [])],
-        ["expected ':'"])
+        ["expected ':'"]),
 ])
 def test_rulesets(css_source, expected_rules, expected_errors):
     stylesheet = CSSchemeParser().parse_stylesheet(css_source)

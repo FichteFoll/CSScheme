@@ -151,14 +151,23 @@ def test_datafy_ruleset_errors(ruleset, expected_error):
     (DC('background', "#123456"),
      ('background', [('HASH', "#123456")])),
 
-    (DC('background', "black"),
-     ('background', [('HASH', "#000000")])),
+    (DC('foreground', "black"),
+     ('foreground', [('HASH', "#000000")])),
 
     (DC('background', "cyan"),
      ('background', [('HASH', "#00FFFF")])),
 
-    (DC('background', "rgb(0, 254, 100%)"),
-     ('background', [('HASH', "#00FEFF")])),  # TODO
+    (DC('background', "rgb(16, 32, 50.2%)"),
+     ('background', [('HASH', "#102080")])),
+
+    (DC('background', "rgba(-100%, 312.6%, 5, .5)"),
+     ('background', [('HASH', "#00FF0580")])),
+
+    (DC('background', "hsl(0, 50%, 50%)"),
+     ('background', [('HASH', "#BF4040")])),
+
+    (DC('background', "hsla(123.4, 250%, 13.54%, 0.1)"),
+     ('background', [('HASH', "#004504E6")])),
 
     # style list
     (DC('fontStyle', 'bold "italic" underline stippled_underline'),
@@ -183,6 +192,41 @@ def test_validify_decl(decl, expected_decl):
 
     (DC('foreground', "not-a-color"),
      "unknown color name 'not-a-color' for property foreground"),
+
+    (DC('background', "yolo()"),
+     "unknown function 'yolo()' for property background"),
+
+    (DC('background', "rgb()"),
+     "expected 3 parameters for function 'rgb()', got 0"),
+
+    (DC('background', "rgba(1, 2, 3, 4, 5)"),
+     "expected 4 parameters for function 'rgba()', got 5"),
+
+    (DC('background', "rgb(1, 2 3, 4)"),
+     "expected 1 token for parameter 2 in function 'rgb()', got 3"),
+
+    (DC('background', "rgb(1, 2, 3}"),
+     "expected 1 token for parameter 3 in function 'rgb()', got 2"),
+
+    # Can't test all possible value types here, so only cover all params and
+    # possible values as a whole
+    (DC('background', "rgb(hi, 2, 3)"),
+     "unexpected IDENT value for parameter 1 in function 'rgb()'"),
+
+    (DC('background', "rgb(1, 2, 2.2)"),
+     "unexpected NUMBER value for parameter 3 in function 'rgb()'"),
+
+    (DC('background', "rgba(1, 2, 2, 10%)"),
+     "unexpected PERCENTAGE value for parameter 4 in function 'rgba()'"),
+
+    (DC('background', "hsl(\"string\", 2%, 3%)"),
+     "unexpected STRING value for parameter 1 in function 'hsl()'"),
+
+    (DC('background', "hsl(0, 2, 3%)"),
+     "unexpected INTEGER value for parameter 2 in function 'hsl()'"),
+
+    (DC('background', "hsla(0, 2%, 3%, #123)"),
+     "unexpected HASH value for parameter 4 in function 'hsla()'"),
 
     # style list
     (DC('fontStyle', "#000001"),
