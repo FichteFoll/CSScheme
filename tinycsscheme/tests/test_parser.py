@@ -120,7 +120,6 @@ def test_at_rules(css_source, expected_rules, expected_errors):
     assert len(stylesheet.rules) == expected_rules
 
 
-# TOTEST unclosed functions
 @pytest.mark.parametrize(('css_source', 'expected_rules', 'expected_errors'), [
     ('foo {/* hey */}\n',
         [('foo', [], [])],
@@ -152,15 +151,6 @@ def test_at_rules(css_source, expected_rules, expected_errors):
                         ('DELIM', ','),
                         ('S', ' '),
                         ('IDENT', 'param2')])])],
-          [])],
-        []),
-
-    # Don't ask me why this produces no errors
-    ('fooz {decl: function(param1}',
-        [('fooz',
-          [('decl',  [('FUNCTION', "function",
-                       [('IDENT', 'param1'),
-                        ('}', '}')])])],
           [])],
         []),
 
@@ -197,6 +187,12 @@ def test_at_rules(css_source, expected_rules, expected_errors):
     ('foo {decl ;}',
         [('foo', [], [])],
         ["expected ':'"]),
+
+    ('fooz {decl: function(param1}',
+        [('fooz',
+          [],
+          [])],
+        ["unmatched } token for property decl in function 'function()'"]),
 ])
 def test_rulesets(css_source, expected_rules, expected_errors):
     stylesheet = CSSchemeParser().parse_stylesheet(css_source)

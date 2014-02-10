@@ -157,13 +157,22 @@ class CSSchemeParser(CSS21Parser):
             raise ParseError(name_token,
                              "expected a property value for property {}".format(property_name))
 
-        # TODO remove strings completely (adjust tests)
         # Only allow a list of HASH, IDENT, STRING, FUNCTION (and S) (minimal requirements)
-        for token in value:
-            if token.type not in ('S', 'IDENT', 'STRING', 'HASH', 'FUNCTION'):
-                match_type = token.type in ('}', ')', ']') and 'unmatched' or 'unexpected'
-                raise ParseError(token, '{0} {1} token for property {2}'
-                                        .format(match_type, token.type, property_name))
+        # STRING is for arbitrary properties
+        def check_token_types(tokens, fn=None):
+            for token in tokens:
+                if not (token.type in ('S', 'IDENT', 'STRING', 'HASH', 'FUNCTION') or
+                        token.type == 'DELIM' and fn):
+                    match_type = token.type in ('}', ')', ']') and 'unmatched' or 'unexpected'
+                    raise ParseError(token, '{0} {1} token for property {2}{3}'
+                                            .format(match_type, token.type, property_name,
+                                                    " in function '%s()'" % fn if fn else ''))
+                if token.type == 'FUNCTION':
+                    check_token_types(token.content, token.function_name)
+                # elif token.is_container:
+                #     check_token_types(token.content)
+
+        check_token_types(value)
 
         # Note: '!important' priority ignored
         return Declaration(property_name, value, None, name_token.line, name_token.column)

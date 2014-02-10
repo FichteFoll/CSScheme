@@ -29,6 +29,7 @@ class DummyToken(object):
 
 
 class CSSchemeDumper(object):
+    # TODO test this
     def dump_stylesheet_file(self, out_file, stylesheet):
         data = self.datafy_stylesheet(stylesheet)
         plistlib.writePlist(data, out_file)
@@ -93,6 +94,7 @@ class CSSchemeDumper(object):
 
     def datafy_ruleset(self, rset):
         rdict = OrderedDict()
+        # TODO test selector?
         sel = rset.selector.as_css()
         if sel != '*':
             rdict['scope'] = sel
@@ -133,7 +135,7 @@ class CSSchemeDumper(object):
 
             v = decl.value[0]
             color = None
-            if v.type in ('IDENT', 'STRING'):
+            if v.type == 'IDENT':
                 # Lookup css color names and replace them with their HASH
                 from .css_colors import css_colors
                 if not v.value in css_colors:
@@ -198,6 +200,10 @@ class CSSchemeDumper(object):
                     params[:3] = colorsys.hls_to_rgb(params[0], params[2], params[1])
 
                 color = "#" + ''.join("{:02X}".format(round(c * 255)) for c in params)
+            elif v.type != 'HASH':
+                raise DumpError(v, "unexpected {1} value for property {0}"
+                                   .format(decl.name, v.type),
+                                '%s, %s' % (sel, decl.name))
 
             # Replace the old value (could be a FunctionToken)
             if color:
@@ -208,7 +214,7 @@ class CSSchemeDumper(object):
             for token in decl.value:
                 if token.type == 'S':
                     continue
-                elif token.type not in ('IDENT', 'STRING'):
+                elif token.type != 'IDENT':
                     raise DumpError(token, "unexpected {1} token for property {0}"
                                            .format(decl.name, token.type), sel)
                 elif token.value not in ('bold', 'italic', 'underline', 'stippled_underline'):

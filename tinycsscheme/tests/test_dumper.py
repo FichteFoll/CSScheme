@@ -170,10 +170,10 @@ def test_datafy_ruleset_errors(ruleset, expected_error):
      ('background', [('HASH', "#004504E6")])),
 
     # style list
-    (DC('fontStyle', 'bold "italic" underline stippled_underline'),
+    (DC('fontStyle', 'bold italic underline stippled_underline'),
      ('fontStyle', [('IDENT',  "bold"),
                     ('S',      " "),
-                    ('STRING', "italic"),
+                    ('IDENT', "italic"),
                     ('S',      " "),
                     ('IDENT',  "underline"),
                     ('S',      " "),
@@ -187,6 +187,9 @@ def test_validify_decl(decl, expected_decl):
 
 @pytest.mark.parametrize(('decl', 'expected_error'), [
     # color
+    (DC('background', "\"#123456\""),
+     "unexpected STRING value for property background"),
+
     (DC('background', "#123456 #12345678"),
      "expected 1 token for property background, got 3"),
 
@@ -231,6 +234,9 @@ def test_validify_decl(decl, expected_decl):
     # style list
     (DC('fontStyle', "#000001"),
      "unexpected HASH token for property fontStyle"),
+
+    (DC('fontStyle', "\"hi\""),
+     "unexpected STRING token for property fontStyle"),
 
     (DC('tagsOptions', "italicc"),
      "invalid value 'italicc' for property tagsOptions")
