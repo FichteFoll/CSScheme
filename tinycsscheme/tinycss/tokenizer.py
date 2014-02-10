@@ -210,7 +210,7 @@ try:
     from . import speedups
 except ImportError:
     cython_tokenize_flat = None
-else:
+else:  # pragma: no cover
     cython_tokenize_flat = speedups.tokenize_flat
     # Default to the Cython version if available
     tokenize_flat = cython_tokenize_flat

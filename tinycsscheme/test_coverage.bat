@@ -1,1 +1,5 @@
-py.test --cov . --cov-report html
+py.test --cov-config .coveragerc ^
+        --cov . ^
+        --cov-report html ^
+        tests/
+REM~        .

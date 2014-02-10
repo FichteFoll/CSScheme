@@ -30,7 +30,7 @@ class DummyToken(object):
 
 class CSSchemeDumper(object):
     # TODO test this
-    def dump_stylesheet_file(self, out_file, stylesheet):
+    def dump_stylesheet_file(self, out_file, stylesheet):  # pragma: no cover
         data = self.datafy_stylesheet(stylesheet)
         plistlib.writePlist(data, out_file)
 
