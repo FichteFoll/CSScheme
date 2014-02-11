@@ -29,7 +29,8 @@ class DummyToken(object):
 
 
 class CSSchemeDumper(object):
-    # TODO test this
+    # I could test this, but it is like one line and I only forward anyway. I'll just leave this
+    # comment here to remind myself.
     def dump_stylesheet_file(self, out_file, stylesheet):  # pragma: no cover
         data = self.datafy_stylesheet(stylesheet)
         plistlib.writePlist(data, out_file)
@@ -56,10 +57,6 @@ class CSSchemeDumper(object):
                         asterisk = r
                 else:
                     rulesets.append(r)
-
-        # from pprint import pprint
-        # pprint(at_rules)
-        # pprint(rulesets)
 
         # Make sure the name is at the top
         if not 'name' in at_rules:

@@ -6,6 +6,7 @@ import subprocess
 import sublime
 import sublime_plugin
 
+# TODO incorporate
 from sublime_lib.view import OutputPanel
 
 try:
@@ -14,6 +15,8 @@ try:
 except:
     from tinycsscheme.parser import CSSchemeParser, ParseError
     from tinycsscheme.dumper import CSSchemeDumper, DumpError
+
+DEBUG = True
 
 
 def normalize_stdout(source):
@@ -31,7 +34,6 @@ def swap_path_line(pattern, rel_dir):
 
 
 class convert_csscheme(sublime_plugin.TextCommand):
-# class ConvertCSScheme(sublime_plugin.TextCommand):
     """docs
     """
     def is_enabled(self):
@@ -46,22 +48,20 @@ class convert_csscheme(sublime_plugin.TextCommand):
 
     def run(self, edit):
         if self.view.is_dirty():
-            return sublime.status_message("Save file first")
+            return sublime.status_message("Save the file first")
 
         in_file = self.view.file_name()
         in_ext = self.get_in_ext()
         in_dir, in_base = os.path.split(in_file)
         out_file = os.path.splitext(in_file)[0] + '.tmTheme'
 
-        # Get text data
-
+        # TODO do this in oop style?
         commands = dict(
             sass=['sass', '-l'],
             scss=['sass', '-l',  '--scss'],
             # less='less',  # TODO
             # stylus= ...
         )
-        # import spdb ; spdb.start()
 
         # Open up output panel and auto-finalize it when we are done
         with OutputPanel(self.view.window(), "csscheme") as out:
@@ -78,7 +78,6 @@ class convert_csscheme(sublime_plugin.TextCommand):
                     out.write_line("Error converting from %s to CSS:\n"
                                    "%s: %s" % (in_ext, e.__class__.__name__, e))
                     return
-                # print(results)
 
                 if results[1]:
                     out.set_regex(r"^\s+in (.*?) on line (\d+)$")
@@ -102,7 +101,7 @@ class convert_csscheme(sublime_plugin.TextCommand):
                 text = self.view.substr(sublime.Region(0, self.view.size()))
 
             # DEBUG
-            if in_ext != 'css':
+            if DEBUG and in_ext != 'css':
                 v = self.view.window().new_file()
                 v.set_scratch(True)
                 v.set_syntax_file("Packages/CSS/CSS.tmLanguage")
