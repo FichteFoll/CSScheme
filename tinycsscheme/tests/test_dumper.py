@@ -20,7 +20,9 @@ def T(type_, value):
 
 
 def SR(keyword, value):
-    return StringRule(keyword, T('STRING', value), 0, 0)
+    tokens = list(tokenize_grouped(value))
+    assert len(tokens) == 1
+    return StringRule(keyword, tokens[0], 0, 0)
 
 
 def SS(rules):
@@ -45,14 +47,16 @@ def DC(name, value):
         RS('*', []),
         # Should this be tested here?
         RS('source', [DC('foreground', "#123456")]),
+        SR('@uuid', '2e3af29f-ebee-431f-af96-72bda5d4c144')
         ]),
      {'name': "Test",
+      'at-rule': "hi",
+      'uuid': "2e3af29f-ebee-431f-af96-72bda5d4c144",
       'settings': [
           {'settings': {}},
           {'scope': "source",
            'settings': {'foreground': "#123456"}},
-      ],
-      'at-rule': "hi"}
+      ]}
      ),
 ])
 def test_datafy(stylesheet, expected_data):
@@ -82,7 +86,7 @@ def test_datafy(stylesheet, expected_data):
      ),
 
     (SS([
-        SR('@settings', ""),
+        SR('@settings', "value"),
         SR('@name', "Test"),
         RS('*', [])
         ]),
@@ -112,7 +116,7 @@ def test_datafy_errors(stylesheet, expected_error):
     (RS('some other ruleset', [
         DC('fontStyle', "bold"),
         ], [
-        SR('@name', "Test name")
+        SR('@name', "\"Test name\"")
         ]),
      {'name': "Test name",
       'scope': "some other ruleset",

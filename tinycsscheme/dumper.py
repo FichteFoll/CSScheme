@@ -1,5 +1,23 @@
-"""TODO
 """
+    Dump Stylesheet objects returned by CSSchemeParser methods into .tmTheme-style property lists.
+
+    Does a few checks to assure that data is valid:
+
+    - Must define exactly one * ruleset.
+
+    - @name at-rule is required.
+
+    - You can not overwrite keys with the @settins at-rule, neither can you overwrite @scope keys in
+      rulesets.
+
+    - Known property names are checked for validity. This includes but is not limited to:
+      + 'foreground', 'background', 'caret' which accept color values, and
+      + 'fontStyle', 'tagsOptions' which accept a list of idents with valid font decoration options.
+
+    - Color functions 'rgb', 'hsl' and their alpha variants are checked for validity of parameters
+      and *evaluated to color hashes*.
+"""
+
 from collections import OrderedDict
 import plistlib
 
@@ -12,14 +30,19 @@ def clamp(minimum, x, maximum):
     return max(minimum, min(x, maximum))
 
 
+def strvalue(token):
+    # Required for uuids in at-rules which are represented as DIMENSION
+    return str(token.value) + (token.unit if token.unit else '')
+
+
 class DumpError(ValueError):
     def __init__(self, subject, reason, location=None):
         self.line = subject.line
         self.column = subject.column
         self.reason = reason
         self.location = ' in "%s"' % location if location else ''
-        super(DumpError, self).__init__(
-            'Dump error at {0.line}:{0.column}, {0.reason}'.format(self))
+        super(DumpError, self).__init__('Dump error at {0.line}:{0.column}, {0.reason}'
+                                        .format(self))
 
 
 class DummyToken(object):
@@ -61,7 +84,7 @@ class CSSchemeDumper(object):
         # Make sure the name is at the top
         if not 'name' in at_rules:
             raise DumpError(dummy, "Must contain 'name' at-rule")
-        data['name'] = at_rules['name'].value.value
+        data['name'] = strvalue(at_rules['name'].value)
         del at_rules['name']
 
         # Then all remaining at-rules (should be subclasses of StringRule)
@@ -69,7 +92,7 @@ class CSSchemeDumper(object):
             assert isinstance(r, StringRule)
             if k == 'settings':
                 raise DumpError(r, "Can not override 'settings' key using at-rules.", '@%s' % k)
-            data[k] = r.value.value
+            data[k] = strvalue(r.value)
 
         # Build 'settings' dict from rules
         s = []
@@ -142,6 +165,8 @@ class CSSchemeDumper(object):
                 color = css_colors[v.value]
 
             elif v.type == 'FUNCTION':
+                # Apparently, tinycss.color3 does this too but with no exception messages and I
+                # found out about it after I finished my own implementation anyway.
                 fn = v.function_name
                 if fn not in ('rgb', 'hsl', 'rgba', 'hsla'):
                     raise DumpError(v, "unknown function '{1}()' for property {0}"
@@ -149,7 +174,7 @@ class CSSchemeDumper(object):
 
                 # Parse parameters
                 raw_params = list(map(strip_whitespace, split_on_comma(v.content)))
-                if raw_params == [[]]:  # Reduce the list if no arguments found
+                if raw_params == [[]]:  # Reduce the list if no arguments found for param count
                     raw_params = []
                 # Check parameter count
                 if len(raw_params) != len(fn):

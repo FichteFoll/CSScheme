@@ -100,6 +100,7 @@ def test_core_parser(css_source, expected_rules, expected_errors):
     (' @charset  "ascii"; foo { } ', 2, []),
     ('@charset ascii;', 1, []),
     ('@charset #123456;', 1, []),
+    ('@uuid 2e3af29f-ebee-431f-af96-72bda5d4c144;', 1, []),
     # Errors
     ('foo{} @lipsum{} bar{}', 2,
         ["expected ';', got a block"]),
@@ -108,11 +109,20 @@ def test_core_parser(css_source, expected_rules, expected_errors):
     ('@lipsum a b;', 0,
         ["expected 1 token for @lipsum rule, got 3"]),
     ('@lipsum 23;', 0,
-        ["expected STRING, IDENT or HASH token for @lipsum rule, got INTEGER"]),
+        ["expected STRING, IDENT or HASH token or a valid uuid4 for @lipsum "
+         "rule, got INTEGER"]),
     ('foo {@uuid #122323;}', 1,
         ["@uuid not allowed in ruleset"]),
     ('@baz ascii; @baz asciii;', 1,
         ["@baz only allowed once, previously line 1"]),
+    #                                       -vvv- not hexadecimal
+    ('@uuid 2e3af29f-ebee-431f-af96-72bda5d4cxyz;', 0,
+        ["expected STRING, IDENT or HASH token or a valid uuid4 for @uuid rule, "
+         "got DIMENSION"]),
+    #                    -v- must be 4
+    ('@uuid 2e3af29f-ebee-331f-af96-72bda5d4c144;', 0,
+        ["expected STRING, IDENT or HASH token or a valid uuid4 for @uuid rule, "
+         "got DIMENSION"]),
 ])
 def test_at_rules(css_source, expected_rules, expected_errors):
     stylesheet = CSSchemeParser().parse_stylesheet(css_source)

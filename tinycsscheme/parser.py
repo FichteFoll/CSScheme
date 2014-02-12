@@ -1,3 +1,22 @@
+"""
+    Parse files/strings in custom CSS format optimized for use with Text Mate and Sublime Text Color
+    Schemes.
+
+    Extends tinycss's css21 basic parser and differs in the following points:
+
+    - Generally, all at-rules are only allowed once in a scope only accept a single value as their
+      head, no body. Must be STRING, IDENT, HASH or a valid uuid4. Examples:
+
+        @some-at-rule "a string value";
+        @uuid 2e3af29f-ebee-431f-af96-72bda5d4c144;
+
+    - At-rules are allowed in rulesets.
+
+    - Declarations may only provide a list (separated by spaces) of values of the type FUNCTION,
+      HASH, STRING, IDENT (and DELIM commas for function parameters).
+"""
+
+import re
 from itertools import chain
 
 from .tinycss.css21 import (ParseError, Declaration, RuleSet, CSS21Parser,
@@ -10,6 +29,11 @@ __all__ = [
     'StringRule',
     'CSSchemeParser'
 ]
+
+
+def is_uuid(test):
+    return bool(re.match(r"[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}",
+                         test, re.I))
 
 
 class StringRule(object):
@@ -74,9 +98,14 @@ class CSSchemeParser(CSS21Parser):
         if len(head) > 1:
             raise ParseError(head[1], 'expected 1 token for {0} rule, got {1}'
                                       .format(rule.at_keyword, len(head)))
-        if head[0].type not in ('STRING', 'IDENT', 'HASH'):
-            raise ParseError(rule, 'expected STRING, IDENT or HASH token for {0} rule, got {1}'
-                                   .format(rule.at_keyword, head[0].type))
+
+        # DIMENSION for uuids that start with a number
+        whole_value = str(head[0].value) + (head[0].unit if head[0].unit else '')
+        print(whole_value, is_uuid(whole_value))
+        if not (head[0].type in ('STRING', 'IDENT', 'HASH')
+                or (head[0].type == 'DIMENSION' and is_uuid(whole_value))):
+            raise ParseError(rule, 'expected STRING, IDENT or HASH token or a valid uuid4 for '
+                                   '{0} rule, got {1}'.format(rule.at_keyword, head[0].type))
 
         return StringRule(rule.at_keyword, head[0], rule.line, rule.column)
 
