@@ -164,6 +164,18 @@ def test_at_rules(css_source, expected_rules, expected_errors):
           [])],
         []),
 
+    ('fooz {decl: function(0, 1% 0.2)}',
+        [('fooz',
+          [('decl',  [('FUNCTION', "function",
+                       [('INTEGER', 0),
+                        ('DELIM', ','),
+                        ('S', ' '),
+                        ('PERCENTAGE', 1),
+                        ('S', ' '),
+                        ('NUMBER', 0.2)])])],
+          [])],
+        []),
+
     ('foo {list: mixed ident and "string list"}',
         [('foo',
           [('list', [('IDENT',  "mixed"),

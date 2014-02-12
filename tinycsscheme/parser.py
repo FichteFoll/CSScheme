@@ -188,10 +188,11 @@ class CSSchemeParser(CSS21Parser):
 
         # Only allow a list of HASH, IDENT, STRING, FUNCTION (and S) (minimal requirements)
         # STRING is for arbitrary properties
+        # inside FUNCTIONS we also allow: DELIM, INTEGER, NUMBER and PERCENTAGE
         def check_token_types(tokens, fn=None):
             for token in tokens:
                 if not (token.type in ('S', 'IDENT', 'STRING', 'HASH', 'FUNCTION') or
-                        token.type == 'DELIM' and fn):
+                        fn and token.type in ('DELIM', 'INTEGER', 'NUMBER', 'PERCENTAGE')):
                     match_type = token.type in ('}', ')', ']') and 'unmatched' or 'unexpected'
                     raise ParseError(token, '{0} {1} token for property {2}{3}'
                                             .format(match_type, token.type, property_name,
