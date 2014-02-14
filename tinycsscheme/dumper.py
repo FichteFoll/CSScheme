@@ -14,8 +14,8 @@
       + 'foreground', 'background', 'caret' which accept color values, and
       + 'fontStyle', 'tagsOptions' which accept a list of idents with valid font decoration options.
 
-    - Color functions 'rgb', 'hsl' and their alpha variants are checked for validity of parameters
-      and *evaluated to color hashes*.
+    - CSS color names as well as color functions 'rgb', 'hsl' and their alpha variants are checked
+      for validity of parameters and **evaluated to color hashes**.
 """
 
 from collections import OrderedDict

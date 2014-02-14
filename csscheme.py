@@ -37,7 +37,6 @@ class convert_csscheme(sublime_plugin.TextCommand):
     """docs
     """
     def is_enabled(self):
-        print('enabled', self.get_in_ext() is not None)
         return self.get_in_ext() is not None
 
     def get_in_ext(self):
@@ -55,7 +54,7 @@ class convert_csscheme(sublime_plugin.TextCommand):
         in_dir, in_base = os.path.split(in_file)
         out_file = os.path.splitext(in_file)[0] + '.tmTheme'
 
-        # TODO do this in oop style?
+        # TODO do this in oop style (with error reporting and cmd and stuff)
         commands = dict(
             sass=['sass', '-l'],
             scss=['sass', '-l',  '--scss'],
@@ -160,7 +159,6 @@ class convert_csscheme(sublime_plugin.TextCommand):
                                        % (in_base, e.line, e.column, e.reason))
                 return
 
-            print("dumping")
             # Dump CSS data as plist into out_file
             try:
                 CSSchemeDumper().dump_stylesheet_file(out_file, stylesheet)

@@ -101,7 +101,6 @@ class CSSchemeParser(CSS21Parser):
 
         # DIMENSION for uuids that start with a number
         whole_value = str(head[0].value) + (head[0].unit if head[0].unit else '')
-        print(whole_value, is_uuid(whole_value))
         if not (head[0].type in ('STRING', 'IDENT', 'HASH')
                 or (head[0].type == 'DIMENSION' and is_uuid(whole_value))):
             raise ParseError(rule, 'expected STRING, IDENT or HASH token or a valid uuid4 for '
