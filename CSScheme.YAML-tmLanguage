@@ -48,7 +48,7 @@ repository:
     - include: '#comment-block'
     - name: entity.name.tag.wildcard.csscheme
       match: \*
-    - # name: TODO
+    - name: punctuation.parameter-sep.csscheme
       match: ','
     - name: meta.selector.subtract.csscheme
       begin: (?<!\w)-
@@ -57,7 +57,6 @@ repository:
       end: (?=[{,])
       patterns:
       - include: '#selector-patterns'
-    # TODO match parens?
     - name: invalid.illegal.selector.csscheme
       match: '[^\s\w*.-]'
 
@@ -77,7 +76,7 @@ repository:
         (?x)
         \b(?:(background|foreground|caret|invisibles|lineHighlight|selection|
               activeGuide|fontStyle|tagsOptions)
-          |([a-zA-Z-_]+)
+          |([a-zA-Z_-]+)
           )
         \s*(:)
       beginCaptures:
@@ -92,6 +91,7 @@ repository:
       - include: '#number'
       - include: '#color'
       - include: '#style'
+      - include: '#string'
 
   string:
     patterns:
@@ -174,7 +174,10 @@ repository:
 
   uuid:
     name: constant.numeric.uuid.csscheme
-    match: (?i)[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}
+    match: |
+      (?ix) \b
+      [a-f0-9]{8} - [a-f0-9]{4} - 4[a-f0-9]{3} - [89ab][a-f0-9]{3} - [a-f0-9]{12}
+      \b
 
   integer:
     name: constant.numeric.integer.csscheme
