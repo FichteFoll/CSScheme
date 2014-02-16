@@ -18,8 +18,8 @@
       for validity of parameters and **evaluated to color hashes**.
 """
 
+import re
 from collections import OrderedDict
-import plistlib
 
 from .parser import StringRule
 from .tinycss.parsing import split_on_comma, strip_whitespace
@@ -56,6 +56,7 @@ class CSSchemeDumper(object):
     # comment here to remind myself.
     def dump_stylesheet_file(self, out_file, stylesheet):  # pragma: no cover
         data = self.datafy_stylesheet(stylesheet)
+        import plistlib
         plistlib.writePlist(data, out_file)
 
     def datafy_stylesheet(self, stylesheet):
@@ -125,7 +126,7 @@ class CSSchemeDumper(object):
             if r.at_keyword in invalid:
                 raise DumpError(r, "You can not override the '{0}' key using at-rules"
                                    .format(r.at_keyword.strip('@')),
-                                '%s, %s' % (sel, r.at_keyword))
+                                '%s; %s' % (sel, r.at_keyword))
             rdict[r.at_keyword.strip('@')] = r.value.value
 
         # Add real declarations to a sub-'settings' dict
@@ -180,20 +181,20 @@ class CSSchemeDumper(object):
                 if len(raw_params) != len(fn):
                     raise DumpError(v, "expected {0} parameters for function '{1}()', got {2}"
                                        .format(len(fn), fn, len(raw_params)),
-                                    '%s, %s' % (sel, decl.name))
+                                    '%s; %s' % (sel, decl.name))
 
                 # Validate parameters
                 def unexpected_value(i, v, p):
                     raise DumpError(p, "unexpected {2} value for parameter {0} in function "
                                        "'{1}()'".format(i + 1, fn, p.type),
-                                    '%s, %s' % (sel, decl.name))
+                                    '%s; %s' % (sel, decl.name))
                 # Save everything as floating numbers between 0 and 1
                 params = []
                 for i, p in enumerate(raw_params):
                     if len(p) != 1:
                         raise DumpError(p[1], "expected 1 token for parameter {0} in function "
                                               "'{1}()', got {2}".format(i + 1, fn, len(p)),
-                                        '%s, %s' % (sel, decl.name))
+                                        '%s; %s' % (sel, decl.name))
                     p = p[0]
 
                     if fn[i] in 'rgb':
@@ -222,15 +223,34 @@ class CSSchemeDumper(object):
                     params[:3] = colorsys.hls_to_rgb(params[0], params[2], params[1])
 
                 color = "#" + ''.join("{:02X}".format(round(c * 255)) for c in params)
-            elif v.type != 'HASH':
-                raise DumpError(v, "unexpected {1} value for property {0}"
-                                   .format(decl.name, v.type),
-                                '%s, %s' % (sel, decl.name))
+            elif v.type == 'STRING':
+                if re.match(r"^#[a-f\d]+$", v.value):
+                    color = v.value
+                else:
+                    raise DumpError(v, "unexpected value for property {0}, expected color hash"
+                                       .format(decl.name),
+                                    '%s; %s' % (sel, decl.name))
+            elif v.type == 'HASH':
+                color = v.value
+            # No other types are allowed from the parser
+            # else:
+            #     raise DumpError(v, "unexpected {1} value for property {0}"
+            #                        .format(decl.name, v.type),
+            #                     '%s; %s' % (sel, decl.name))
+            assert color
 
-            # Replace the old value (could be a FunctionToken)
-            if color:
+            if (len(color) - 1) not in (3, 6, 8):
+                raise DumpError(v, "unexpected length of {1} of color hash for property {0}"
+                                   .format(decl.name, len(color) - 1),
+                                '%s; %s' % (sel, decl.name))
+
+            # Translate 3-lenght color hashes
+            if len(color) == 4:
+                color = '#' + ''.join(color[i] * 2 for i in range(1, 4))
+
+            # Replace the old value
+            if v.type != 'HASH' or color != v.value:
                 decl.value[0] = Token('HASH', v.as_css(), color, None, v.line, v.column)
-            assert decl.value[0].type == 'HASH'
 
         elif decl.name in self.known_properties['style_list']:
             for token in decl.value:

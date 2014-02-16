@@ -1,4 +1,3 @@
-import locale
 import re
 import os
 import subprocess
@@ -19,11 +18,6 @@ except:
 DEBUG = True
 
 
-def normalize_stdout(source):
-    # or 'utf-8'?
-    return source.decode(locale.getpreferredencoding()).replace('\r\n', '\n')
-
-
 # Returns a function for use with `re.sub`, requires matches in groups 1 and 2
 def swap_path_line(pattern, rel_dir):
     def repl(m):
@@ -42,8 +36,8 @@ class convert_csscheme(sublime_plugin.TextCommand):
     def get_in_ext(self):
         if not self.view.file_name():
             return None
-        m = re.search(r'\.((?:le|sc|sa|c)ss)cheme$', self.view.file_name())
-        return m.group(1) if m else None
+        m = re.search(r'\.((?:sc|sa|c)ss)cheme$', self.view.file_name())
+        return m and m.group(1)
 
     def run(self, edit):
         if self.view.is_dirty():
@@ -58,7 +52,7 @@ class convert_csscheme(sublime_plugin.TextCommand):
         commands = dict(
             sass=['sass', '-l'],
             scss=['sass', '-l',  '--scss'],
-            # less='less',  # TODO
+            # less='less',  # TODO?
             # stylus= ...
         )
 
@@ -71,18 +65,19 @@ class convert_csscheme(sublime_plugin.TextCommand):
                     process = subprocess.Popen(commands[in_ext] + [in_file],
                                                stdout=subprocess.PIPE,
                                                stderr=subprocess.PIPE,
-                                               shell=True)
-                    results = process.communicate()
+                                               shell=True,
+                                               universal_newlines=True)
+                    text, stderr = process.communicate()
                 except Exception as e:
                     out.write_line("Error converting from %s to CSS:\n"
                                    "%s: %s" % (in_ext, e.__class__.__name__, e))
                     return
 
-                if results[1]:
+                if process.returncode:
                     out.set_regex(r"^\s+in (.*?) on line (\d+)$")
 
-                    stderr = normalize_stdout(results[1])
-                    out.write_line("Errors converting from %s to CSS:" % in_ext)
+                    out.write_line("Errors converting from %s to CSS, return code: %s\n"
+                                   % (in_ext, process.returncode))
                     # Swap line and path because sublime can't parse them otherwise
                     out.write_line(re.sub(r"on line (\d+) of (.*?)$",
                                           swap_path_line(r"in %s on line %s", in_dir),
@@ -90,11 +85,13 @@ class convert_csscheme(sublime_plugin.TextCommand):
                                           flags=re.M))
                     return
 
-                if results[0] is None:
+                elif text is None:
                     out.write_line("Unexpected error converting from %s to CSS:\nNo output"
                                    % in_ext)
                     return
-                text = normalize_stdout(results[0])
+
+                elif stderr:
+                    out.write_line(stderr + "\n")
             else:
                 assert in_ext == 'css'
                 text = self.view.substr(sublime.Region(0, self.view.size()))
@@ -103,7 +100,7 @@ class convert_csscheme(sublime_plugin.TextCommand):
             if DEBUG and in_ext != 'css':
                 v = self.view.window().new_file()
                 v.set_scratch(True)
-                v.set_syntax_file("Packages/CSS/CSS.tmLanguage")
+                v.set_syntax_file("Packages/CSScheme/CSScheme.tmLanguage")
                 from sublime_lib.edit import Edit
                 with Edit(v) as edit:
                     edit.append(text)
@@ -173,5 +170,5 @@ class convert_csscheme(sublime_plugin.TextCommand):
                     out.write_line("Error in data:\n  %s%s\n" % (e.reason, e.location))
                 return
 
-            # Open out_file
+            # Open out_file; TODO option
             self.view.window().open_file(out_file)
