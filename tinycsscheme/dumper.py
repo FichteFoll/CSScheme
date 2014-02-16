@@ -15,7 +15,8 @@
       + 'fontStyle', 'tagsOptions' which accept a list of idents with valid font decoration options.
 
     - CSS color names as well as color functions 'rgb', 'hsl' and their alpha variants are checked
-      for validity of parameters and **evaluated to color hashes**.
+      for validity of parameters and **evaluated to color hashes**, three-digit hashes (like #123)
+      are expanded to six digits.
 """
 
 import re

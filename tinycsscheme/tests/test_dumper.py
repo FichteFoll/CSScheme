@@ -155,6 +155,12 @@ def test_datafy_ruleset_errors(ruleset, expected_error):
     (DC('background', "#123456"),
      ('background', [('HASH', "#123456")])),
 
+    (DC('background', "'#12345678'"),
+     ('background', [('HASH', "#12345678")])),
+
+    (DC('background', "#123"),
+     ('background', [('HASH', "#112233")])),
+
     (DC('foreground', "black"),
      ('foreground', [('HASH', "#000000")])),
 
@@ -191,11 +197,17 @@ def test_validify_decl(decl, expected_decl):
 
 @pytest.mark.parametrize(('decl', 'expected_error'), [
     # color
-    (DC('background', "\"#123456\""),
-     "unexpected STRING value for property background"),
-
     (DC('background', "#123456 #12345678"),
      "expected 1 token for property background, got 3"),
+
+    (DC('background', "#12345"),
+     "unexpected length of 5 of color hash for property background"),
+
+    (DC('background', "'hi there'"),
+     "unexpected value for property background, expected color hash"),
+
+    (DC('background', "\"#12345\""),
+     "unexpected length of 5 of color hash for property background"),
 
     (DC('foreground', "not-a-color"),
      "unknown color name 'not-a-color' for property foreground"),
