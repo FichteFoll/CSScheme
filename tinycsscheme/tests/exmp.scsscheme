@@ -30,7 +30,7 @@ $i: 2 !default;
 @mixin red($background: true) {
     foreground: red;
     @if $background {
-        background: red;
+        background: #F00;
     }
 }
 
@@ -49,12 +49,14 @@ $i: 2 !default;
     foreground: /**/ $fore
         // here as well
     ;
+    // will generate a string because SASS doesn't like literal hashes with length 8
     lineHighlight: '#12345678';
-    lineHighlights: unquote('#12345678') // no final ;
+    // will generate a hash but is unnecessarily verbose
+    caret: unquote('#12345678') // no final ;
 }
 
 source {
-    foreground: darken($fore, 20/$i - 2+2);
+    foreground: darken($fore, 20/$i - 2+2); // #555555
     fontStyle: bold italic;
     @random-at-rule yeah; // an ident
 }
@@ -73,7 +75,6 @@ string {
     @extend %default !optional;
     foreground: rgba(0,0,0,/**/0.2);
     some-color: hsl($hue: 150, $saturation: 100%, $lightness: 50%);
-    fontStyle: italic;
     width: "#{grid-width((1 + 2) * 3)}"; // gotta be string
 
     /* nested */
@@ -82,7 +83,7 @@ string {
     }
 
     red {
-        @include red($background: false);
+        @include bolded-red($background: false);
     }
 
     &, &.nope {
@@ -91,7 +92,7 @@ string {
 }
 
 /* interpolation in selector */
-String and Number#{hsl(0, 30%, 20%)}string, number {
+String and Number #{hsl(0, 30%, 20%)} string, number {
     foreground: #0000FF;
     fontStyle: /**/underline ;
 }

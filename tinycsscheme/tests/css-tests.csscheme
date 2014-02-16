@@ -7,39 +7,35 @@
  */
 @name "Test Scheme";
 /* a string */
-@uuid pls-no;
-/* an ident */
-/* line 15, C:\Program Files\Sublime Text 3 Portable Beta\Data\Packages\CSScheme\tinycsscheme\tests\exmp.scsscheme */
+@uuid 69871a78-3515-43a2-bbc0-81bdc8c3d745;
+@uuId 69871a78-3515-43a2-bbc0-81bdc8c3d74;
+
 * {
   background: #111111;
-  foreground: #888888;
+  foreground: #888;
+  unknown: hsl(0,0,0);
   lineHighlight: #12345678; }
 
-/* line 21, C:\Program Files\Sublime Text 3 Portable Beta\Data\Packages\CSScheme\tinycsscheme\tests\exmp.scsscheme */
 source {
   foreground: #555555;
   fontStyle: bold italic;
   @random-at-rule yeah; }
 
-/* optional name in at-rule */
-/* line 28, C:\Program Files\Sublime Text 3 Portable Beta\Data\Packages\CSScheme\tinycsscheme\tests\exmp.scsscheme */
 text {
+  /* optional name in at-rule */
   @name "Text";
-  foreground: #00FF00;
+  foreground: green;
   fontStyle: bold italic; }
 
-/* line 35, C:\Program Files\Sublime Text 3 Portable Beta\Data\Packages\CSScheme\tinycsscheme\tests\exmp.scsscheme */
-string {
-  foreground: #3c3c3c;
-  fontStyle: italic;
-  /* nested */ }
-  /* line 40, C:\Program Files\Sublime Text 3 Portable Beta\Data\Packages\CSScheme\tinycsscheme\tests\exmp.scsscheme */
+* string {
+  foreground: rgba(-20%, /**/2, 2.1, .1);
+  fontStyle: italic; }
+
   string constant {
-    foreground: #123456; }
+    foreground: #12345678; }
 
 /* invalid usage of # */
-/* line 47, C:\Program Files\Sublime Text 3 Portable Beta\Data\Packages\CSScheme\tinycsscheme\tests\exmp.scsscheme */
-String and Number#string, number {
+String and Number#string, /**/ number - /**/number.constant {
   @scope sure;
   foreground: #0000FF;
   fontStyle: underline; }
