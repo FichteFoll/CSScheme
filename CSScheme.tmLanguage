@@ -92,7 +92,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(?&lt;=[\s,:])(?i)(#)[0-9a-f]{6}([0-9a-f]{2})?\b</string>
+					<string>(?&lt;![\w-])(?i)(#)(?:[0-9a-f]{3}){1,2}([0-9a-f]{2})?\b</string>
 					<key>name</key>
 					<string>constant.other.color-hash.csscheme</string>
 				</dict>

@@ -120,7 +120,7 @@ repository:
   color:
     patterns:
     - name: constant.other.color-hash.csscheme
-      match: (?<=[\s,:])(?i)(#)[0-9a-f]{6}([0-9a-f]{2})?\b
+      match: (?<![\w-])(?i)(#)(?:[0-9a-f]{3}){1,2}([0-9a-f]{2})?\b
       captures:
         '1': {name: punctuation.definition.constant.color.csscheme}
     - name: meta.function.color.csscheme

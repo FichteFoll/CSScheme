@@ -353,7 +353,7 @@ repository:
 
   constant_hex:
     name: constant.other.color-hash.csscheme
-    match: (?<=[\s,:])(?i)(#)(?:[0-9a-f]{3}){1,2}([0-9a-f]{2})?\b
+    match: (?<![\w-])(?i)(#)(?:[0-9a-f]{3}){1,2}([0-9a-f]{2})?\b
     captures:
       '1': {name: punctuation.definition.constant.color.csscheme}
 
@@ -590,7 +590,7 @@ repository:
     - include: '#values'
 
   variables_function:
-    match: (?<!\w)(\$[\w_-]+)(\.{3})?(?!\w)
+    match: (?<!\w)(\$[\w_-]+(\.{3})?)(?!\w)
     captures:
       '1': {name: variable.other.csscheme}
       '2': {name: support.variable.argument.csscheme}
