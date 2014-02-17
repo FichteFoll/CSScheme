@@ -1,7 +1,7 @@
 # [PackageDev] target_format: plist, ext: tmLanguage
 ---
 name: SCSScheme
-scopeName: source.csscheme # .scss TODO
+scopeName: source.csscheme.scss
 fileTypes: [scsscheme]
 
 patterns:
@@ -137,7 +137,7 @@ repository:
 ### AT-RULES BLOCKS ############################################################
 
   at_rule_each:
-    name: meta.at-rule.each.scss
+    name: meta.at-rule.each.csscheme
     begin: ((@)each)\b
     beginCaptures:
       '1': {name: keyword.control.at_rule.each.csscheme}
@@ -183,7 +183,7 @@ repository:
     - include: '#rule_block'
 
   at_rule_function:
-    name: meta.at-rule.function.scss
+    name: meta.at-rule.function.csscheme
     begin: ((@)function)\s+([\w-]+)\b
     beginCaptures:
       '1': {name: storage.type.function.csscheme}
@@ -207,7 +207,7 @@ repository:
     - include: '#rule_block'
 
   at_rule_mixin:
-    name: meta.at-rule.mixin.scss
+    name: meta.at-rule.mixin.csscheme
     begin: ((@)mixin)\s+([\w-]+)\b
     beginCaptures:
       '1': {name: storage.type.mixin.csscheme}
@@ -219,7 +219,7 @@ repository:
     - include: '#rule_block'
 
   at_rule_while:
-    name: meta.at-rule.while.scss
+    name: meta.at-rule.while.csscheme
     begin: ((@)while)\b
     beginCaptures:
       '1': {name: keyword.control.at_rule.while.csscheme}

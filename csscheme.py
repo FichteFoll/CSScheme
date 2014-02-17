@@ -3,10 +3,10 @@ import os
 import subprocess
 
 import sublime
-import sublime_plugin
 
 # TODO incorporate
 from sublime_lib.view import OutputPanel
+from sublime_lib import WindowAndTextCommand
 
 try:
     from .tinycsscheme.parser import CSSchemeParser, ParseError
@@ -14,8 +14,6 @@ try:
 except:
     from tinycsscheme.parser import CSSchemeParser, ParseError
     from tinycsscheme.dumper import CSSchemeDumper, DumpError
-
-DEBUG = True
 
 
 # Returns a function for use with `re.sub`, requires matches in groups 1 and 2
@@ -27,7 +25,20 @@ def swap_path_line(pattern, rel_dir):
     return repl
 
 
-class convert_csscheme(sublime_plugin.TextCommand):
+def settings():
+    # We can safely call this over and over because it caches internally
+    return sublime.load_settings("csscheme.sublime-settings")
+
+
+def status(msg):
+    package = "CSScheme"  # sublime_lib.path.get_package_name()
+    sublime.status_message("%s: %s" % (package, msg))
+    print("[%s] %s" % (package, msg))
+
+
+# Use window (and text) command to be able to call this command from both sources
+# (build systems are always window commands).
+class convert_csscheme(WindowAndTextCommand):
     """docs
     """
     def is_enabled(self):
@@ -39,9 +50,9 @@ class convert_csscheme(sublime_plugin.TextCommand):
         m = re.search(r'\.((?:sc|sa|c)ss)cheme$', self.view.file_name())
         return m and m.group(1)
 
-    def run(self, edit):
+    def run(self, edit=None):
         if self.view.is_dirty():
-            return sublime.status_message("Save the file first")
+            return status("Save the file first")
 
         in_file = self.view.file_name()
         in_ext = self.get_in_ext()
@@ -49,10 +60,12 @@ class convert_csscheme(sublime_plugin.TextCommand):
         out_file = os.path.splitext(in_file)[0] + '.tmTheme'
 
         # TODO do this in oop style (with error reporting and cmd and stuff)
+        # Will probably do when more convertion options are added, if at all (syntaxes are a pita)
+        sass_path = settings().get('sass_path', 'sass')
         commands = dict(
-            sass=['sass', '-l'],
-            scss=['sass', '-l',  '--scss'],
-            # less='less',  # TODO?
+            sass=[sass_path, '-l'],
+            scss=[sass_path, '-l',  '--scss'],
+            # less='less',
             # stylus= ...
         )
 
@@ -97,7 +110,7 @@ class convert_csscheme(sublime_plugin.TextCommand):
                 text = self.view.substr(sublime.Region(0, self.view.size()))
 
             # DEBUG
-            if DEBUG and in_ext != 'css':
+            if settings().get('preview_compiled_css') and in_ext != 'css':
                 v = self.view.window().new_file()
                 v.set_scratch(True)
                 v.set_syntax_file("Packages/CSScheme/CSScheme.tmLanguage")
@@ -170,5 +183,7 @@ class convert_csscheme(sublime_plugin.TextCommand):
                     out.write_line("Error in data:\n  %s%s\n" % (e.reason, e.location))
                 return
 
-            # Open out_file; TODO option
-            self.view.window().open_file(out_file)
+            status("Build successful")
+            # Open out_file
+            if settings().get('open_after_build'):
+                self.view.window().open_file(out_file)

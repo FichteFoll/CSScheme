@@ -130,7 +130,7 @@
 			<key>end</key>
 			<string>\}</string>
 			<key>name</key>
-			<string>meta.at-rule.each.scss</string>
+			<string>meta.at-rule.each.csscheme</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -322,7 +322,7 @@
 			<key>end</key>
 			<string>\}</string>
 			<key>name</key>
-			<string>meta.at-rule.function.scss</string>
+			<string>meta.at-rule.function.csscheme</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -519,7 +519,7 @@
 			<key>end</key>
 			<string>\}</string>
 			<key>name</key>
-			<string>meta.at-rule.mixin.scss</string>
+			<string>meta.at-rule.mixin.csscheme</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -626,7 +626,7 @@
 			<key>end</key>
 			<string>\}</string>
 			<key>name</key>
-			<string>meta.at-rule.while.scss</string>
+			<string>meta.at-rule.while.csscheme</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -1548,6 +1548,6 @@
 		</dict>
 	</dict>
 	<key>scopeName</key>
-	<string>source.csscheme</string>
+	<string>source.csscheme.scss</string>
 </dict>
 </plist>
