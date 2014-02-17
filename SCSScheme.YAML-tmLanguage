@@ -252,11 +252,11 @@ repository:
     - name: punctuation.separator.selector.csscheme
       match: ','
     - name: invalid.illegal.selector.csscheme
-      match: '[^\s\w*.-]'
+      match: '[^\s\w*.-]|(?<=\s)-(?=\s)' # highlight wrong use of -
 
   selector_subtract:
     name: meta.selector.subtract.csscheme
-    begin: (?<![\w}])- # } for interpolation
+    begin: (?<!\w)'-'
     beginCaptures:
       '0': {name: keyword.control.selector.subtract.csscheme}
     end: (?=[{,%])

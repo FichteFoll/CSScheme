@@ -1287,7 +1287,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>[^\s\w*.-]</string>
+					<string>[^\s\w*.-]|(?&lt;=\s)-(?=\s)</string>
 					<key>name</key>
 					<string>invalid.illegal.selector.csscheme</string>
 				</dict>
@@ -1311,7 +1311,7 @@
 		<key>selector_subtract</key>
 		<dict>
 			<key>begin</key>
-			<string>(?&lt;![\w}])-</string>
+			<string>(?&lt;!\w)'-'</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
