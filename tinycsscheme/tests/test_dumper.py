@@ -177,17 +177,17 @@ def test_datafy_ruleset_errors(ruleset, expected_error):
      ('background', [('HASH', "#BF4040")])),
 
     (DC('background', "hsla(123.4, 250%, 13.54%, 0.1)"),
-     ('background', [('HASH', "#004504E6")])),
+     ('background', [('HASH', "#0045041A")])),
 
     # style list
     (DC('fontStyle', 'bold italic underline stippled_underline'),
-     ('fontStyle', [('IDENT',  "bold"),
-                    ('S',      " "),
+     ('fontStyle', [('IDENT', "bold"),
+                    ('S',     " "),
                     ('IDENT', "italic"),
-                    ('S',      " "),
-                    ('IDENT',  "underline"),
-                    ('S',      " "),
-                    ('IDENT',  "stippled_underline")])),
+                    ('S',     " "),
+                    ('IDENT', "underline"),
+                    ('S',     " "),
+                    ('IDENT', "stippled_underline")])),
 
 ])
 def test_validify_decl(decl, expected_decl):

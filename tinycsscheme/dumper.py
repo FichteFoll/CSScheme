@@ -211,7 +211,7 @@ class CSSchemeDumper(object):
                     elif fn[i] == 'a':
                         if p.type not in ('NUMBER', 'INTEGER'):
                             unexpected_value(i, v, p)
-                        params.append(1 - clamp(0, p.value, 1))
+                        params.append(clamp(0, p.value, 1))
                     elif fn[i] == 'h':
                         if p.type not in ('NUMBER', 'INTEGER'):
                             unexpected_value(i, v, p)
