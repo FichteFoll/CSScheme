@@ -4,9 +4,13 @@ import subprocess
 
 import sublime
 
-# TODO incorporate
-from sublime_lib.view import OutputPanel
-from sublime_lib import WindowAndTextCommand
+try:
+    # Try relative first because on ST3 we would possibly get the AAAPackageDev version otherwise
+    from .sublime_lib.view import OutputPanel
+    from .sublime_lib import WindowAndTextCommand
+except:
+    from sublime_lib.view import OutputPanel
+    from sublime_lib import WindowAndTextCommand
 
 try:
     from .tinycsscheme.parser import CSSchemeParser, ParseError
