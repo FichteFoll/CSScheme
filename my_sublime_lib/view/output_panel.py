@@ -150,10 +150,14 @@ class OutputPanel(object):
         # the view so read it before and re-write its contents afterwards. Cache
         # selection as well.
         contents = get_text(self.view)
-        sel = list(self.view.sel())
+        rset = self.view.sel()
+        sel = list(rset)
+
         self.view = self.window.get_output_panel(self.panel_name)
-        self.view.sel().clear()
-        self.view.sel().add_all(sel)
+
+        rset.clear()
+        for r in sel:
+            rset.add(r)
         self.write(contents)
 
     def write(self, text):

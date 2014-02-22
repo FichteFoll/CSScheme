@@ -117,7 +117,7 @@ class CSSchemeParser(CSS21Parser):
         selector = []
         for token in chain([first_token], tokens):
             if token.type == '{':
-                # Parse/validate once we’ve read the whole rule
+                # Parse/validate once we've read the whole rule
                 selector = strip_whitespace(selector)
                 if not selector:
                     raise ParseError(first_token, 'empty selector')

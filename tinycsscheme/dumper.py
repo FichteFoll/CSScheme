@@ -20,7 +20,13 @@
 """
 
 import re
-from collections import OrderedDict
+try:
+    from collections import OrderedDict  # ST3
+except:
+    from .ordereddict import OrderedDict  # ST2
+
+# Need to load it at the beginning because ST2 would fail to import it later
+from .css_colors import css_colors
 
 from .parser import StringRule
 from .tinycss.parsing import split_on_comma, strip_whitespace
@@ -162,7 +168,6 @@ class CSSchemeDumper(object):
             color = None
             if v.type == 'IDENT':
                 # Lookup css color names and replace them with their HASH
-                from .css_colors import css_colors
                 if not v.value in css_colors:
                     raise DumpError(v, "unknown color name '{1}' for property {0}"
                                        .format(decl.name, v.value), sel)
@@ -226,7 +231,7 @@ class CSSchemeDumper(object):
                     import colorsys
                     params[:3] = colorsys.hls_to_rgb(params[0], params[2], params[1])
 
-                color = "#" + ''.join("{:02X}".format(round(c * 255)) for c in params)
+                color = "#" + ''.join("{0:02X}".format(int(round(c * 255))) for c in params)
             elif v.type == 'STRING':
                 if re.match(r"^#[a-f\d]+$", v.value):
                     color = v.value

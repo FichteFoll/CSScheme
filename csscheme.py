@@ -6,12 +6,13 @@ import sublime
 import sublime_plugin
 
 try:
-    # Try relative first because on ST3 we would possibly get the AAAPackageDev version otherwise
-    from .sublime_lib.view import OutputPanel
-    from .sublime_lib import WindowAndTextCommand
+    # Use a different name because PackageDev adds it to the path and that
+    # takes precedence over local paths (for some reason).
+    from .my_sublime_lib.view import OutputPanel
+    from .my_sublime_lib import WindowAndTextCommand
 except:
-    from sublime_lib.view import OutputPanel
-    from sublime_lib import WindowAndTextCommand
+    from my_sublime_lib.view import OutputPanel
+    from my_sublime_lib import WindowAndTextCommand
 
 try:
     from .tinycsscheme.parser import CSSchemeParser, ParseError
@@ -38,7 +39,7 @@ def settings():
 
 
 def status(msg):
-    package = "CSScheme"  # sublime_lib.path.get_package_name()
+    package = "CSScheme"  # my_sublime_lib.path.get_package_name()
     sublime.status_message("%s: %s" % (package, msg))
     print("[%s] %s" % (package, msg))
 
@@ -121,7 +122,7 @@ class convert_csscheme(WindowAndTextCommand):
                 v = self.view.window().new_file()
                 v.set_scratch(True)
                 v.set_syntax_file("Packages/CSScheme/CSScheme.tmLanguage")
-                from sublime_lib.edit import Edit
+                from my_sublime_lib.edit import Edit
                 with Edit(v) as edit:
                     edit.append(text)
 
