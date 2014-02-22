@@ -1,0 +1,8 @@
+---
+description: @if
+tabTrigger:  if
+scope:       source.csscheme.scss
+---
+@if ${1:conditions} {
+	$0
+}

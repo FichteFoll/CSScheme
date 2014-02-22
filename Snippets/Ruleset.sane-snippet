@@ -1,0 +1,10 @@
+---
+description: Ruleset
+tabTrigger:  r
+scope:       source.csscheme
+---
+${1:source} {
+	foreground: $2;
+	background: $3;
+	fontStyle:  $4;$0
+}
