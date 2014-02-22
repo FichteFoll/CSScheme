@@ -4,7 +4,9 @@
 *.coverage
 *.dmp
 
-; Other irrelevant files
+; Other irrelevant files and folders
 *.sublime-project
 *.sublime-workspace
-*/htmlcov
+*__pycache__/
+*.sass-cache/
+*htmlcov/
