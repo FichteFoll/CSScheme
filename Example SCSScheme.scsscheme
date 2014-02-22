@@ -7,6 +7,7 @@
 $punctuation: true;
 
 // The color palette (from http://serennu.com/colour/colourcalculator.php)
+// Don't try these at home!
 $back:  #202020;
 $fore:  #FFF;
 
@@ -24,7 +25,7 @@ $col10: #B368FF;
 $col11: #FE68FF; // (adjacent)
 
 // This '*' rule is required too, it will serve as the general-purpose settings
-// such as the global background color
+// such as the global background color and line highlight background color.
 * {
     background: $back;
     foreground: $fore;
