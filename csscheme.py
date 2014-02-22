@@ -3,6 +3,7 @@ import os
 import subprocess
 
 import sublime
+import sublime_plugin
 
 try:
     # Try relative first because on ST3 we would possibly get the AAAPackageDev version otherwise
@@ -15,9 +16,11 @@ except:
 try:
     from .tinycsscheme.parser import CSSchemeParser, ParseError
     from .tinycsscheme.dumper import CSSchemeDumper, DumpError
+    from .scope_data import COMPILED_HEADS
 except:
     from tinycsscheme.parser import CSSchemeParser, ParseError
     from tinycsscheme.dumper import CSSchemeDumper, DumpError
+    from scope_data import COMPILED_HEADS
 
 
 # Returns a function for use with `re.sub`, requires matches in groups 1 and 2
@@ -31,7 +34,7 @@ def swap_path_line(pattern, rel_dir):
 
 def settings():
     # We can safely call this over and over because it caches internally
-    return sublime.load_settings("csscheme.sublime-settings")
+    return sublime.load_settings("CSScheme.sublime-settings")
 
 
 def status(msg):
@@ -191,3 +194,80 @@ class convert_csscheme(WindowAndTextCommand):
             # Open out_file
             if settings().get('open_after_build'):
                 self.view.window().open_file(out_file)
+
+
+###############################################################################
+
+
+# TODO completions (scope_data from PackageDev in selectors, known properties (from dumper))
+class CSSchemeCompletionListener(sublime_plugin.EventListener):
+    def __init__(self):
+        properties = []
+        for l in CSSchemeDumper.known_properties.values():
+            properties.extend(l)
+
+        self.property_completions = list(("{0}\t{0}:".format(s), s + ": $0;") for s in properties)
+
+    def get_scope(self, view, l):
+        # Do some string math (instead of regex because fastness)
+        _, col = view.rowcol(l)
+        begin  = view.line(l).begin()
+        line   = view.substr(sublime.Region(begin, l))
+        scope  = line.rsplit(' ', 1)[-1]
+        return scope.lstrip('-')
+
+        # Provide a selection of naming convention from TextMate and/or property names
+    def on_query_completions(self, view, prefix, locations):
+
+        match_sel = lambda s: all(view.match_selector(l, s) for l in locations)
+
+        # import spdb ; spdb.start()
+        # Check context
+        if not match_sel("source.csscheme - comment - string - variable"):
+            return
+
+        if match_sel("meta.ruleset"):
+            # No nested rulesets for CSS
+            return self.property_completions
+
+        if not match_sel("meta.selector, meta.property_list - meta.property"):
+            return
+
+        scope = self.get_scope(view, locations[0])
+
+        # We can't work with different scopes
+        for l in locations:
+            if self.get_scope(view, l) != scope:
+                return
+
+        # Tokenize the current selector (only to the cursor)
+        tokens = scope.split(".")
+
+        if len(tokens) > 1:
+            del tokens[-1]  # The last token is either incomplete or empty
+
+            # Browse the nodes and their children
+            nodes = COMPILED_HEADS
+            for i, token in enumerate(tokens):
+                node = nodes.find(token)
+                if not node:
+                    status("Warning: `%s` not found in scope naming conventions"
+                           % '.'.join(tokens[:i + 1]))
+                    break
+                nodes = node.children
+                if not nodes:
+                    break
+
+            if nodes and node:
+                return (nodes.to_completion(), sublime.INHIBIT_WORD_COMPLETIONS)
+            else:
+                status("No nodes available in scope naming conventions after `%s`"
+                       % '.'.join(tokens))
+                return  # Should I inhibit here?
+
+        # Triggered completion on whitespace:
+        elif match_sel("source.csscheme.scss"):
+            # For SCSS just return all the head nodes + property completions
+            return self.property_completions + COMPILED_HEADS.to_completion()
+        else:
+            return COMPILED_HEADS.to_completion()

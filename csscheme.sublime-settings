@@ -23,5 +23,16 @@
      * executable here. `shell` is set to true, so you don't have to include the
      * extension on Windows.
      */
-    "sass_path": "sass"
+    "sass_path": "sass",
+
+    /* Makes "." dots trigger the auto completion popup. You usually don't want
+     * to modify this.
+     */
+    "auto_complete_triggers":
+    [
+        {
+            "characters": ".",
+            "selector": "source.csscheme meta.selector"
+        }
+    ]
 }
