@@ -1,0 +1,33 @@
+/* @settings is a special at-rule that expects a body with the allowed meta
+ *  settings (like background and foreground color).
+ *
+ *  All other @rules are arbitrary as long as only an identifier or a string
+ *  follows, e.g. name and uuid or "foldingStartMatches" or whatever, if you need
+ *  that. They will be added as an arbitrary dict entry with a string value.
+ */
+
+@name "Test Scheme"; /* a string */
+
+@uuid pls-no; /* an ident */
+
+* {
+    background: #111111;
+    foreground: #888888:;
+    lineHighlight: #12345678;
+}
+
+
+/* no name (must be supported) */
+source {
+    foreground: #FF00002;
+    fontStyle: bold italicc;
+    @random-at-rule yeah;
+}
+
+
+/* name in at-rule (this is already supported, see above) */
+text {
+    @name "Text";
+    foreground: #00FF00;
+    fontStyle: bold italic;
+}

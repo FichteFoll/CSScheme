@@ -1,0 +1,601 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+---
+name: SCSScheme
+scopeName: source.csscheme.scss
+fileTypes: [scsscheme]
+
+patterns:
+- include: '#at_rule_mixin'
+- include: '#at_rule_function'
+- include: '#rules'
+
+repository:
+
+### COMMENTS ###################################################################
+
+  comment_block:
+    name: comment.block.csscheme
+    begin: /\*
+    beginCaptures:
+      '0': {name: punctuation.definition.begin.comment.csscheme}
+    end: \*/
+    endCaptures:
+      '0': {name: punctuation.definition.end.comment.csscheme}
+
+  comment_line:
+    name: comment.line.double-slash.csscheme
+    match: (//).*
+    captures:
+      '1': {name: punctuation.definition.line-comment.csscheme}
+
+### AT-RULES LINE###############################################################
+
+  at_rule_arbitrary:
+    name: meta.at_rule.arbitrary.csscheme
+    begin: ((@)\w[\w_-]*)\b
+    beginCaptures:
+      # keyword.control.at_rule.arbitrary.csscheme
+      '1': {name: variable.other.at_rule.csscheme}
+      '2': {name: punctuation.definition.at_rule.csscheme}
+    end: (;)|(?=[{}])
+    endCaptures:
+      '1': {name: keyword.control.at_rule.end.csscheme}
+    patterns:
+    - include: '#values'
+
+  at_rule_content:
+    name: meta.at-rule.content.csscheme
+    begin: ((@)content)\b
+    beginCaptures:
+      '1': {name: keyword.control.at_rule.content.csscheme}
+      '2': {name: punctuation.definition.at_rule.csscheme}
+    end: (;)|(?=[{}])
+    endCaptures:
+      '1': {name: keyword.control.at_rule.end.csscheme}
+    patterns:
+    # Not sure on this one, the examples were not detailed enough
+    - include: '#selector'
+    - include: '#values'
+
+  at_rule_extend:
+    name: meta.at-rule.extend.csscheme
+    begin: ((@)extend)\b
+    beginCaptures:
+      '1': {name: keyword.control.at_rule.extend.csscheme}
+      '2': {name: punctuation.definition.at_rule.csscheme}
+    end: (;)|(?=[{}])
+    endCaptures:
+      '1': {name: keyword.control.at_rule.end.csscheme}
+    patterns:
+    - include: '#selector'
+    - include: '#constant_optional'
+    - include: '#values'
+
+  at_rule_import:
+    name: meta.at-rule.import.csscheme
+    begin: ((@)import)\b
+    beginCaptures:
+      '1': {name: keyword.control.at_rule.import.csscheme}
+      '2': {name: punctuation.definition.at_rule.csscheme}
+    end: (;)|(?=[{}])
+    endCaptures:
+      '1': {name: keyword.control.at_rule.end.csscheme}
+    patterns:
+    - include: '#string_double'
+    - include: '#string_single'
+    - begin: \b(url)\s*(\()
+      beginCaptures:
+        '1': {name: support.function.url.csscheme}
+        '2': {name: punctuation.section.function.begin.csscheme}
+      end: \)
+      endCaptures:
+        '0': {name: punctuation.section.function.end.csscheme}
+      patterns:
+      - name: string.unquoted.parameter.url.csscheme
+        match: '[^''") \t]+'
+      - include: '#string_single'
+      - include: '#string_double'
+
+  at_rule_include:
+    name: meta.at-rule.include.csscheme
+    begin: ((@)include)\s+([\w-]+)\b
+    beginCaptures:
+      '1': {name: keyword.control.at_rule.include.csscheme}
+      '2': {name: punctuation.definition.at_rule.csscheme}
+      # No idea how to color
+      # '3': {name: storage.type.include.csscheme}
+    end: (;)|(?=[{}])
+    endCaptures:
+      '1': {name: keyword.control.at_rule.end.csscheme}
+    patterns:
+    - include: '#function_signature'
+
+  at_rule_return:
+    name: meta.at-rule.return.csscheme
+    begin: ((@)return)\b
+    beginCaptures:
+      '1': {name: keyword.control.at_rule.return.csscheme}
+      '2': {name: punctuation.definition.at_rule.csscheme}
+    end: (;)|(?=[{}])
+    endCaptures:
+      '1': {name: keyword.control.at_rule.end.csscheme}
+    patterns:
+    - include: '#values'
+
+  at_rule_warn_debug:
+    name: meta.at-rule.warn-debug.csscheme
+    begin: ((@)(?:warn|debug))\b
+    beginCaptures:
+      '1': {name: keyword.control.at_rule.warn-debug.csscheme}
+      '2': {name: punctuation.definition.at_rule.csscheme}
+    end: (;)|(?=[{}])
+    endCaptures:
+      '1': {name: keyword.control.at_rule.end.csscheme}
+    patterns:
+    - include: '#values'
+
+### AT-RULES BLOCKS ############################################################
+
+  at_rule_each:
+    name: meta.at-rule.each.csscheme
+    begin: ((@)each)\b
+    beginCaptures:
+      '1': {name: keyword.control.at_rule.each.csscheme}
+      '2': {name: punctuation.definition.at_rule.csscheme}
+    end: \}
+    patterns:
+    - name: keyword.control.operator
+      match: \b(in|\,)\b
+    - include: '#values'
+    - include: '#rule_block'
+
+  at_rule_else:
+    name: meta.at-rule.else.csscheme
+    begin: ((@)else)\b
+    beginCaptures:
+      '1': {name: keyword.control.at_rule.else.csscheme}
+      '2': {name: punctuation.definition.at_rule.csscheme}
+    end: \}
+    patterns:
+    - include: '#rule_block'
+    - name: invalid.illegal.else.csscheme
+      match: \S
+
+  at_rule_for:
+    name: meta.at-rule.for.csscheme
+    begin: ((@)for)\b
+    beginCaptures:
+      '1': {name: keyword.control.at_rule.for.csscheme}
+      '2': {name: punctuation.definition.at_rule.csscheme}
+    end: \}
+    patterns:
+    - include: '#variables'
+    - include: '#comment_block'
+    - include: '#comment_line'
+    - begin: \bfrom\b
+      beginCaptures:
+        '0': {name: keyword.operator.for.csscheme}
+      end: (?=\{)
+      patterns:
+      - name: keyword.control.operator.for.csscheme
+        match: \b(through|to)\b
+      - include: '#values'
+    - include: '#rule_block'
+
+  at_rule_function:
+    name: meta.at-rule.function.csscheme
+    begin: ((@)function)\s+([\w-]+)\b
+    beginCaptures:
+      '1': {name: storage.type.function.csscheme}
+      '2': {name: punctuation.definition.at_rule.csscheme}
+      '3': {name: entity.name.function.csscheme}
+    end: \}
+    patterns:
+    - include: '#function_signature'
+    - include: '#rule_block_function'
+
+  at_rule_if:
+    name: meta.at-rule.if.csscheme
+    begin: ((@)(?:else\s*)?if)\b
+    beginCaptures:
+      '1': {name: keyword.control.at_rule.if.csscheme}
+      '2': {name: punctuation.definition.at_rule.csscheme}
+    end: \}
+    patterns:
+    - include: '#logical_operators'
+    - include: '#values'
+    - include: '#rule_block'
+
+  at_rule_mixin:
+    name: meta.at-rule.mixin.csscheme
+    begin: ((@)mixin)\s+([\w-]+)\b
+    beginCaptures:
+      '1': {name: storage.type.mixin.csscheme}
+      '2': {name: punctuation.definition.at_rule.csscheme}
+      '3': {name: entity.name.function.mixin.csscheme}
+    end: \}
+    patterns:
+    - include: '#function_signature'
+    - include: '#rule_block'
+
+  at_rule_while:
+    name: meta.at-rule.while.csscheme
+    begin: ((@)while)\b
+    beginCaptures:
+      '1': {name: keyword.control.at_rule.while.csscheme}
+      '2': {name: punctuation.definition.at_rule.csscheme}
+    end: \}
+    patterns:
+    - include: '#logical_operators'
+    - include: '#values'
+    - include: '#rule_block'
+
+### BASIC ELEMENTS #############################################################
+
+  selector:
+    name: meta.selector.csscheme
+    begin: (?=[a-zA-Z()*&%-])
+    end: (?=[{};!]) # ! for "!optional" in @extend
+    patterns:
+    - include: '#selector_patterns'
+
+  selector_patterns:
+    patterns:
+    - include: '#comment_block'
+    - include: '#selector_placeholder'
+    - include: '#selector_subtract'
+    - include: '#interpolation'
+    - name: entity.name.tag.wildcard.csscheme
+      match: \*
+    - name: variable.other.reference.csscheme
+      match: '&'
+    - name: punctuation.separator.selector.csscheme
+      match: ','
+    - name: invalid.illegal.selector.csscheme
+      match: '[^\s\w*.-]|(?<=\s)-(?=\s)' # highlight wrong use of -
+
+  selector_subtract:
+    name: meta.selector.subtract.csscheme
+    begin: (?<!\w)'-'
+    beginCaptures:
+      '0': {name: keyword.control.selector.subtract.csscheme}
+    end: (?=[{,%])
+    patterns:
+    - include: '#selector_patterns'
+
+  selector_placeholder:
+    name: entity.other.attribute-name.placeholder.csscheme
+    match: (\%)[\w_-]+
+    captures:
+      '1': {name: punctuation.definition.entity.csscheme}
+
+  property_list:
+    name: meta.property_list.csscheme
+    begin: \{
+    beginCaptures:
+      '0': {name: punctuation.definition.section.property_list.begin.csscheme}
+    end: \}
+    endCaptures:
+      '0': {name: punctuation.definition.section.property_list.end.csscheme}
+    patterns:
+    - include: '#comment_block'
+    - include: '#comment_line'
+    - include: '#properties'
+    - include: '#rules'
+
+  properties:
+    name: meta.property.csscheme
+    begin: |
+      (?x)
+      \b(?:(background|foreground|caret|invisibles|lineHighlight|selection|
+            activeGuide|fontStyle|tagsOptions)
+        |([a-zA-Z_-]+)
+        )
+      \s*(:)
+    beginCaptures:
+      '1': {name: support.other.property.known.csscheme}
+      '2': {name: support.other.property.arbitrary.csscheme}
+      '3': {name: keyword.control.property.assertion.csscheme}
+    end: (;)|(?=[{}])
+    endCaptures:
+      '1': {name: keyword.control.property.end.csscheme}
+    patterns:
+    - include: '#values'
+
+  rule_block:
+    name: meta.rule-block.csscheme
+    begin: \{
+    end: (?=\})
+    patterns:
+    - include: '#properties'
+    - include: '#rules'
+
+  rule_block_function:
+    name: meta.function-rule-block.csscheme
+    begin: \{
+    end: (?=\})
+    patterns:
+    - include: '#comment_block'
+    - include: '#comment_line'
+    - include: '#at_rule_return'
+    - include: '#variable_setting'
+
+  logical_operators:
+    name: keyword.control.operator.logic.csscheme
+    match: ([=!<>]=|<|>)|(?<=\s|^)(not|or|and)(?=\s|$)
+
+### CONSTANTS ##################################################################
+
+  string_double:
+    name: string.quoted.double.css
+    begin: '"'
+    beginCaptures:
+      '0': {name: punctuation.definition.string.begin.csscheme}
+    end: '"'
+    endCaptures:
+      '0': {name: punctuation.definition.string.end.csscheme}
+    patterns:
+    - name: constant.character.escape.css
+      match: \\.
+    - include: '#interpolation'
+
+  string_single:
+    name: string.quoted.single.css
+    begin: "'"
+    beginCaptures:
+      '0': {name: punctuation.definition.string.begin.csscheme}
+    end: "'"
+    endCaptures:
+      '0': {name: punctuation.definition.string.end.csscheme}
+    patterns:
+    - match: \\.
+      name: constant.character.escape.csscheme
+
+  constant_hex:
+    name: constant.other.color-hash.csscheme
+    match: (?<![\w-])(?i)(#)(?:[0-9a-f]{3}){1,2}([0-9a-f]{2})?\b
+    captures:
+      '1': {name: punctuation.definition.constant.color.csscheme}
+
+  constant_color:
+    name: support.constant.color.csscheme
+    match: |
+      (?x)
+         (?# http://www.w3.org/TR/CSS21/syndata.html#value-def-color)
+      \b(aqua|black|blue|fuchsia|gray|green|lime|maroon|navy|olive|orange|
+         purple|red|silver|teal|white|yellow
+         (?# http://www.w3schools.com/css/css_colornames.asp)
+         aliceblue|antiquewhite|aquamarine|azure|beige|bisque|blanchedalmond|
+         blueviolet|brown|burlywood|cadetblue|chartreuse|chocolate|coral|
+         cornflowerblue|cornsilk|crimson|cyan|darkblue|darkcyan|darkgoldenrod|
+         darkgray|darkgreen|darkgrey|darkkhaki|darkmagenta|darkolivegreen|
+         darkorange|darkorchid|darkred|darksalmon|darkseagreen|darkslateblue|
+         darkslategray|darkslategrey|darkturquoise|darkviolet|deeppink|
+         deepskyblue|dimgray|dimgrey|dodgerblue|firebrick|floralwhite|
+         forestgreen|gainsboro|ghostwhite|gold|goldenrod|greenyellow|grey|
+         honeydew|hotpink|indianred|indigo|ivory|khaki|lavender|lavenderblush|
+         lawngreen|lemonchiffon|lightblue|lightcoral|lightcyan|
+         lightgoldenrodyellow|lightgray|lightgreen|lightgrey|lightpink|
+         lightsalmon|lightseagreen|lightskyblue|lightslategray|lightslategrey|
+         lightsteelblue|lightyellow|limegreen|linen|magenta|mediumaquamarine|
+         mediumblue|mediumorchid|mediumpurple|mediumseagreen|mediumslateblue|
+         mediumspringgreen|mediumturquoise|mediumvioletred|midnightblue|
+         mintcream|mistyrose|moccasin|navajowhite|oldlace|olivedrab|orangered|
+         orchid|palegoldenrod|palegreen|paleturquoise|palevioletred|papayawhip
+         |peachpuff|peru|pink|plum|powderblue|rosybrown|royalblue|saddlebrown|
+         salmon|sandybrown|seagreen|seashell|sienna|skyblue|slateblue|
+         slategray|slategrey|snow|springgreen|steelblue|tan|thistle|tomato|
+         turquoise|violet|wheat|whitesmoke|yellowgreen)\b
+
+  constant_style:
+    name: constant.language.style.csscheme
+    match: \b(bold|italic|underline|stippled_underline)\b
+
+  constant_sass_functions:
+    name: meta.function.sass.csscheme
+    begin: |
+      (?x) (?<!\w)
+      (headings|stylesheet-url|rgba?|hsla?|ie-hex-str|red|green|blue|alpha|
+       opacity|hue|saturation|lightness|prefixed|prefix|-moz|-svg|-css2|-pie|
+       -webkit|-ms|-o|-khtml|font-(?:files|url)|grid-image|
+       image-(?:width|height|url|color)|sprites?|
+       sprite-(?:map|map-name|file|url|position)|inline-(?:font-files|image)|
+       opposite-position|grad-point|grad-end-position|color-stops|
+       color-stops-in-percentages|grad-color-stops|
+       (?:radial|linear)-(?:gradient|svg-gradient)|opacify|fade-?in|
+       transparentize|fade-?out|lighten|darken|saturate|desaturate|grayscale|
+       adjust-(?:hue|lightness|saturation|color)|
+       scale-(?:lightness|saturation|color)|change-color|spin|complement|invert|
+       mix|-compass-(?:list|space-list|slice|nth|list-size)|blank|compact|nth|
+       first-value-of|join|length|append|nest|append-selector|headers|enumerate|
+       range|percentage|unitless|unit|if|type-of|comparable|elements-of-type|
+       quote|unquote|escape|e|sin|cos|tan|abs|round|ceil|floor|pi|
+       translate(?:X|Y))
+      \s*(\()
+    beginCaptures:
+      '1': {name: support.function.misc.csscheme}
+      '2': {name: punctuation.section.function.begin.csscheme}
+    end: \)
+    endCaptures:
+      '0': {name: punctuation.section.function.end.csscheme}
+    patterns:
+    - include: '#parameters'
+
+  constant_functions:
+    name: meta.function.arbitrary.csscheme
+    begin: (?<!\w)([\w-]+)\s*(\()
+    beginCaptures:
+      # '1': {name: support.function.misc.csscheme}
+      '2': {name: punctuation.section.function.begin.csscheme}
+    end: (\))
+    endCaptures:
+      '1': {name: punctuation.section.function.end.csscheme}
+    patterns:
+    - include: '#parameters'
+
+  constant_ident:
+    name: string.unquoted.ident.csscheme
+    match: \b([\w-][\w_-]*)\b
+
+  constant_uuid:
+    name: constant.numeric.uuid.csscheme
+    match: |
+      (?ix) \b
+      [a-f0-9]{8} - [a-f0-9]{4} - 4[a-f0-9]{3} - [89ab][a-f0-9]{3} - [a-f0-9]{12}
+      \b
+
+  constant_integer:
+    name: constant.numeric.integer.csscheme
+    match: |
+      (?x)
+      (?<!\w)
+      [-+]? (0|[1-9]\d*)
+      (?!\w)
+
+  constant_number:
+    patterns:
+    - name: constant.numeric.floating-number.csscheme
+      match: |
+        (?x)
+        (?<!\w)
+        [-+]? (0|[1-9]\d*)? \. \d+
+        (?!\w)
+    - include: '#constant_integer'
+
+  constant_percentage:
+    name: constant.numeric.percentage.csscheme
+    match: |
+      (?x)
+      (?<!\w)
+      [-+]? ((0|[1-9]\d*) (?:\. \d+)? | \. \d+)
+      (%)
+      (?!\w)
+    captures:
+      '4': {name: punctuation.definition.percentage.csscheme}
+
+  constant_default:
+    name: keyword.other.default.csscheme
+    match: (\!)default
+
+  constant_optional:
+    name: keyword.other.optional.csscheme
+    match: (\!)optional
+
+  constant_property_value:
+    name: constant.language.csscheme
+    match: \b(false|true|null)
+
+  arithmetic_symbols:
+    name: keyword.operator.arithmetic-symbols.csscheme
+    match: ([+*/]|(?<!\w)-)
+
+  function_signature:
+    name: meta.function-signature.csscheme
+    begin: \(
+    beginCaptures:
+      '0': {name: punctuation.section.parameters.begin.csscheme}
+    end: \)
+    beginCaptures:
+      '0': {name: punctuation.section.parameters.end.csscheme}
+    patterns:
+    - include: '#parameters'
+
+### CONVENIENCE STUFF ##########################################################
+
+  general: # Stuff that should be everywhere
+    patterns:
+    - include: '#variable'
+    - include: '#comment_block'
+    - include: '#comment_line'
+
+  flow_control:
+    patterns:
+    - include: '#at_rule_if'
+    - include: '#at_rule_else'
+    - include: '#at_rule_warn_debug'
+    - include: '#at_rule_for'
+    - include: '#at_rule_while'
+    - include: '#at_rule_each'
+
+  rules:
+    # This stuff is allowed in every block, including the main scope
+    patterns:
+    - include: '#variable_setting' # before #variable, which is in #general
+    - include: '#general'
+    - include: '#flow_control'
+    - include: '#at_rule_extend'
+    - include: '#at_rule_content'
+    - include: '#at_rule_include'
+    - include: '#at_rule_import'
+    - include: '#at_rule_arbitrary' # must be the last at-rule
+    # - include: '#properties' # Not allowed in global scope
+    - include: '#selector'
+    - include: '#property_list'
+
+  parameters:
+    patterns:
+    - name: punctuation.definition.parameter.csscheme
+      match: ':'
+    - name: punctuation.separator.parameters.csscheme
+      match: ','
+    - include: '#variables_function'
+    - include: '#general'
+    - include: '#values'
+    - name: invalid.illegal.csscheme
+      match: '[=\{\}\?\;\@]'
+
+  values:
+    # Stuff that should only be available on values.
+    patterns:
+    - include: '#general'
+    - include: '#string_single'
+    - include: '#string_double'
+    - include: '#constant_sass_functions'
+    - include: '#constant_functions'
+    - include: '#constant_hex'
+    - include: '#constant_default'
+    - include: '#constant_uuid'
+    - include: '#constant_style'
+    - include: '#constant_property_value'
+    - include: '#constant_percentage'
+    - include: '#constant_number'
+    - include: '#constant_color'
+    - include: '#constant_ident'
+    - include: '#arithmetic_symbols'
+
+### VARIABLES #######################################################!\w
+
+  interpolation:
+    name: variable.other.interpolation.csscheme
+    begin: '#\{'
+    end: \}
+    patterns:
+    - include: '#values'
+
+  variable:
+    patterns:
+    - include: '#variables'
+    - include: '#interpolation'
+
+  variable_setting:
+    name: meta.set.variable
+    begin: (?<!\w)(\$[\w_-]+)\s*(\:)
+    beginCaptures:
+      '1': {name: variable.other.csscheme}
+      '2': {name: keyword.control.variable.assertion.csscheme}
+    end: (;)|(?=[{}])
+    endCaptures:
+      '1': {name: keyword.control.property.end.csscheme}
+    patterns:
+    - include: '#values'
+
+  variables_function:
+    match: (?<!\w)(\$[\w_-]+(\.{3})?)(?!\w)
+    captures:
+      '1': {name: variable.other.csscheme}
+      '2': {name: support.variable.argument.csscheme}
+
+  variables:
+    name: variable.other.csscheme
+    match: (?<!\w)(\$[\w_-]+)\b
+...

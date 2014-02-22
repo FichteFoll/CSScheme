@@ -1,0 +1,112 @@
+@purpose "This is just an example file to show how you can use this tool";
+
+// This at-rule is required
+@name "Example SCSScheme";
+
+// FLAGS
+$punctuation: true;
+
+// The color palette (from http://serennu.com/colour/colourcalculator.php)
+// Don't try these at home!
+$back:  #202020;
+$fore:  #FFF;
+
+$col0:  #FF69B4; // Hotpink Colour Wheel
+$col1:  #FF6868; // (adjacent)
+$col2:  #FFB368;
+$col3:  #FFFE68;
+$col4:  #B4FF68; // (triad)
+$col5:  #69FF68; // (split complementary)
+$col6:  #68FFB3; // (complementary)
+$col7:  #68FFFE; // (split complementary)
+$col8:  #68B4FF; // (triad)
+$col9:  #6869FF;
+$col10: #B368FF;
+$col11: #FE68FF; // (adjacent)
+
+// This '*' rule is required too, it will serve as the general-purpose settings
+// such as the global background color and line highlight background color.
+* {
+    background: $back;
+    foreground: $fore;
+
+    caret: complement($col0); // same as $col6, probably
+    lineHighlight: transparentize($col1, 0.8);
+    selection: transparentize($col1, 0.7);
+}
+
+@mixin contrast($col) {
+    foreground: $col;
+    background: transparentize(complement($col), .6); // or invert()
+}
+
+string {
+    foreground: $col1;
+
+    @if $punctuation {
+        punctuation {
+            foreground: complement($col1);
+        }
+    }
+
+    &.constant {
+        foreground: saturate($col1, 20%);
+    }
+}
+
+constant {
+    foreground: desaturate($col2, 30%);
+
+    &.numeric {
+        foreground: $col2;
+    }
+}
+
+comment {
+    foreground: $col3;
+    fontStyle: italic;
+
+    @if $punctuation {
+        punctuation {
+            foreground: darken($col3, 40%);
+        }
+    }
+}
+
+support {
+    foreground: $col4;
+
+    &.constant {
+        foreground: desaturate($col2, 20%);
+    }
+}
+
+entity {
+    foreground: $col5;
+
+    // We need to escape the subtract operator here because SASS wants to do arithmetics.
+    // The dumper will take care of it.
+    &.name '-' &.name.tag {
+        background: transparentize(desaturate($col5, 30%), .75);
+    }
+}
+
+invalid {
+    foreground: $col7;
+
+    &.illegal {
+        @include contrast($col7); // alt. $back
+    }
+}
+
+keyword {
+    foreground: $col8;
+}
+
+storage {
+    foreground: $col9;
+}
+
+variable, support.variable {
+    foreground: $col10;
+}

@@ -1,0 +1,8 @@
+---
+description: @mixin
+tabTrigger:  mixin
+scope:       source.csscheme.scss
+---
+@mixin ${1:mixin-name}${2:(${3:\$params})} {
+	$0
+}

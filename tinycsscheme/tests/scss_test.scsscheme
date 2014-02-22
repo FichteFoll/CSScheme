@@ -1,0 +1,114 @@
+/* `*` is a special selector that expects a body with the general settings (like
+ * background and foreground color, indent guides ...).
+ *
+ * All other @rules are arbitrary as long as only an identifier or a string
+ * follows, e.g. name and uuid or "foldingStartMatches" or whatever, if you need
+ * that. They will be added as an arbitrary dict entry with a string value.
+ */
+
+// to be commented out
+//@import "yeah", 'single', url(it werks);
+
+// line comment
+$fore: #888888;
+$boolean-list: true, false, null;
+$i: 1;
+$i: 2 !default;
+
+@debug $i;
+
+@name "Test Scheme"; /* a string */
+
+@uuid 16ebecdd-4dc2-4d5b-8847-0eb6c8c47f3c; /* a uuid */
+
+
+@function grid-width($n) {
+    $z: 123; // makes no sense
+    @return $n * 2 + ($n - 1) * $z;
+}
+
+@mixin red($background: true) {
+    foreground: red;
+    @if $background {
+        background: #F00;
+    }
+}
+
+@mixin bolded-red($args...) {
+    font-weight: bold;
+    @include red($args...);
+}
+
+* {
+    @if 1 + 1 == $i { border: solid;  }
+    @else if $i < 3 { border: dotted; }
+    @else           { border: double; }
+
+    background: #111111;
+    // inline commend
+    foreground: /**/ $fore
+        // here as well
+    ;
+    // will generate a string because SASS doesn't like literal hashes with length 8
+    lineHighlight: '#12345678';
+    // will generate a hash but is unnecessarily verbose
+    caret: unquote('#12345678') // no final ;
+}
+
+source {
+    foreground: darken($fore, 20/$i - 2+2); // #555555
+    fontStyle: bold italic;
+    @random-at-rule yeah; // an ident
+}
+
+/* optional name in at-rule */
+text%default {
+    @name "Text";
+    @comment "nothing of \n interest";
+    @interpolation "string with #{$boolean-list} interpolation";
+    foreground: #00FF00;
+    fontStyle: bold italic;
+}
+
+
+string {
+    @extend %default !optional;
+    foreground: rgba(0,0,0,/**/0.2);
+    some-color: hsl($hue: 150, $saturation: 100%, $lightness: 50%);
+    width: "#{grid-width((1 + 2) * 3)}"; // gotta be string
+
+    /* nested */
+    & constant {
+        foreground: darken($fore, 70);
+    }
+
+    red {
+        @include bolded-red($background: false);
+    }
+
+    &, &.nope {
+        @include red(true);
+    }
+}
+
+/* interpolation in selector */
+String and Number #{hsl(0, 30%, 20%)} string, number {
+    foreground: #0000FF;
+    fontStyle: /**/underline ;
+}
+
+@for $i from 1 through 3 {
+  item-1-#{$i} { width: "#{2 * $i}"; } // gotta be string
+}
+
+@each $animal in puma, sea-slug, egret, salamander {
+  #{$animal}-icon {
+    background-image: "/images/#{$animal}.png";
+  }
+}
+
+
+@while $i < 4 {
+  item-2-#{$i} { height: "#{4 * $i}"; } // gotta be string
+  $i: $i + 1;
+}

@@ -1,0 +1,16 @@
+env:
+  # Do not do speed tests since they won't work and would generate a failure
+  - TINYCSS_SKIP_SPEEDUPS_TESTS
+
+python:
+  # ST2 and ST3
+  - "2.6"
+  - "3.3"
+
+# pytest is already deployed on Travis's VMs
+# install:
+#   - pip install pytest
+
+script:
+  # Tests tinycss and tinycsscheme
+  - py.test

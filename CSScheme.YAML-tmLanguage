@@ -1,0 +1,210 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+---
+name: CSScheme
+scopeName: source.csscheme
+fileTypes: [csscheme]
+
+patterns:
+- include: '#comment-block'
+- include: '#at-rule'
+- include: '#selector'
+- include: '#ruleset'
+
+repository:
+  comment-block:
+    name: comment.block.css
+    begin: /\*
+    beginCaptures:
+      '0': {name: punctuation.definition.begin.comment.csscheme}
+    end: \*/
+    endCaptures:
+      '0': {name: punctuation.definition.end.comment.csscheme}
+
+  at-rule:
+    name: meta.at-rule.arbitrary.csscheme
+    begin: ((@)\w[\w_-]*)\b
+    beginCaptures:
+      # keyword.control.at-rule.arbitrary.csscheme
+      '1': {name: variable.other.at-rule.csscheme}
+      '2': {name: punctuation.definition.begin.at-rule.csscheme}
+    end: ;
+    endCaptures:
+      '0': {name: keyword.control.at-rule.end.csscheme}
+    patterns:
+    - include: '#string'
+    - include: '#uuid'
+    - include: '#number'
+    - include: '#ident'
+
+  selector:
+    name: meta.selector.csscheme
+    begin: \s*(?=[*a-zA-Z()-])
+    end: (?=\{)
+    patterns:
+    - include: '#selector-patterns'
+
+  selector-patterns:
+    patterns:
+    - include: '#comment-block'
+    - name: entity.name.tag.wildcard.csscheme
+      match: \*
+    - name: punctuation.parameter-sep.csscheme
+      match: ','
+    - name: meta.selector.subtract.csscheme
+      begin: (?<!\w)-
+      beginCaptures:
+        '0': {name: keyword.control.selector.subtract.csscheme}
+      end: (?=[{,])
+      patterns:
+      - include: '#selector-patterns'
+    - name: invalid.illegal.selector.csscheme
+      match: '[^\s\w*.-]'
+
+  ruleset:
+    name: meta.ruleset.csscheme
+    begin: \{
+    beginCaptures:
+      '0': {name: punctuation.definition.begin.ruleset.csscheme}
+    end: \}
+    endCaptures:
+      '0': {name: punctuation.definition.end.ruleset.csscheme}
+    patterns:
+    - include: '#comment-block'
+    - include: '#at-rule'
+    - name: meta.property-name.css
+      begin: |
+        (?x)
+        \b(?:(background|foreground|caret|invisibles|lineHighlight|selection|
+              activeGuide|fontStyle|tagsOptions)
+          |([a-zA-Z_-]+)
+          )
+        \s*(:)
+      beginCaptures:
+        '1': {name: keyword.other.property.known.csscheme}
+        '2': {name: keyword.other.property.arbitrary.csscheme}
+        '3': {name: keyword.control.property.assertion.csscheme}
+      end: (;)|(?=\})
+      endCaptures:
+        '1': {name: keyword.control.property.end.csscheme}
+      patterns:
+      - include: '#comment-block'
+      - include: '#number'
+      - include: '#color'
+      - include: '#style'
+      - include: '#string'
+
+  string:
+    patterns:
+    - name: string.quoted.double.css
+      begin: '"'
+      beginCaptures:
+        '0': {name: punctuation.definition.string.begin.csscheme}
+      end: '"'
+      endCaptures:
+        '0': {name: punctuation.definition.string.end.csscheme}
+      patterns:
+      - name: constant.character.escape.css
+        match: \\.
+
+    - name: string.quoted.single.css
+      begin: "'"
+      beginCaptures:
+        '0': {name: punctuation.definition.string.begin.csscheme}
+      end: "'"
+      endCaptures:
+        '0': {name: punctuation.definition.string.end.csscheme}
+      patterns:
+      - match: \\.
+        name: constant.character.escape.csscheme
+
+  color:
+    patterns:
+    - name: constant.other.color-hash.csscheme
+      match: (?<![\w-])(?i)(#)(?:[0-9a-f]{3}){1,2}([0-9a-f]{2})?\b
+      captures:
+        '1': {name: punctuation.definition.constant.color.csscheme}
+    - name: meta.function.color.csscheme
+      begin: (?<=[\s,:])(hsla?|rgba?)\s*(\()
+      beginCaptures:
+        '1': {name: support.function.color.csscheme}
+        '2': {name: punctuation.definition.function.begin.csscheme}
+      end: \)
+      endCaptures:
+        '0': {name: punctuation.definition.function.end.csscheme}
+      patterns:
+      - include: '#comment-block'
+      - include: '#percentage'
+      - include: '#number'
+    - name: support.constant.color.csscheme
+      match: |
+        (?x)
+           (?# http://www.w3.org/TR/CSS21/syndata.html#value-def-color)
+        \b(aqua|black|blue|fuchsia|gray|green|lime|maroon|navy|olive|orange|
+           purple|red|silver|teal|white|yellow
+           (?# http://www.w3schools.com/css/css_colornames.asp)
+           aliceblue|antiquewhite|aquamarine|azure|beige|bisque|blanchedalmond|
+           blueviolet|brown|burlywood|cadetblue|chartreuse|chocolate|coral|
+           cornflowerblue|cornsilk|crimson|cyan|darkblue|darkcyan|darkgoldenrod|
+           darkgray|darkgreen|darkgrey|darkkhaki|darkmagenta|darkolivegreen|
+           darkorange|darkorchid|darkred|darksalmon|darkseagreen|darkslateblue|
+           darkslategray|darkslategrey|darkturquoise|darkviolet|deeppink|
+           deepskyblue|dimgray|dimgrey|dodgerblue|firebrick|floralwhite|
+           forestgreen|gainsboro|ghostwhite|gold|goldenrod|greenyellow|grey|
+           honeydew|hotpink|indianred|indigo|ivory|khaki|lavender|lavenderblush|
+           lawngreen|lemonchiffon|lightblue|lightcoral|lightcyan|
+           lightgoldenrodyellow|lightgray|lightgreen|lightgrey|lightpink|
+           lightsalmon|lightseagreen|lightskyblue|lightslategray|lightslategrey|
+           lightsteelblue|lightyellow|limegreen|linen|magenta|mediumaquamarine|
+           mediumblue|mediumorchid|mediumpurple|mediumseagreen|mediumslateblue|
+           mediumspringgreen|mediumturquoise|mediumvioletred|midnightblue|
+           mintcream|mistyrose|moccasin|navajowhite|oldlace|olivedrab|orangered|
+           orchid|palegoldenrod|palegreen|paleturquoise|palevioletred|papayawhip
+           |peachpuff|peru|pink|plum|powderblue|rosybrown|royalblue|saddlebrown|
+           salmon|sandybrown|seagreen|seashell|sienna|skyblue|slateblue|
+           slategray|slategrey|snow|springgreen|steelblue|tan|thistle|tomato|
+           turquoise|violet|wheat|whitesmoke|yellowgreen)\b
+
+  style:
+    name: constant.language.style.csscheme
+    match: \b(bold|italic|underline|stippled_underline)\b
+
+  ident:
+    name: string.unquoted.ident.csscheme
+    match: \b(\w[\w_-]*)\b
+
+  uuid:
+    name: constant.numeric.uuid.csscheme
+    match: |
+      (?ix) \b
+      [a-f0-9]{8} - [a-f0-9]{4} - 4[a-f0-9]{3} - [89ab][a-f0-9]{3} - [a-f0-9]{12}
+      \b
+
+  integer:
+    name: constant.numeric.integer.csscheme
+    match: |
+      (?x)
+      (?<=[\s,:(/])
+      [-+]? (0|[1-9]\d*)
+      (?=[\s,;)}/])
+
+  number:
+    patterns:
+    - name: constant.numeric.floating-number.csscheme
+      match: |
+        (?x)
+        (?<=[\s,:(/])
+        [-+]? (0|[1-9]\d*)? \. \d+
+        (?=[\s,;)}/])
+    - include: '#integer'
+
+  percentage:
+    name: constant.numeric.percentage.csscheme
+    match: |
+      (?x)
+      (?<=[\s,:(/])
+      [-+]? ((0|[1-9]\d*) (?:\. \d+)? | \. \d+)
+      (%)
+      (?=[\s,;)}/])
+    captures:
+      '4': {name: punctuation.definition.percentage.csscheme}
+...

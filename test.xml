@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>name</key>
+    <string>Vibrant Ink</string>
+    <key>settings</key>
+    <array>
+        <dict>
+            <key>settings</key>
+            <dict>
+                <key>background</key>
+                <string>#000</string>
+                <key>caret</key>
+                <string>#000</string>
+                <key>foreground</key>
+                <string>#000</string>
+                <key>invisibles</key>
+                <string>#000</string>
+                <key>linehighlight</key>
+                <string>#000</string>
+                <key>selection</key>
+                <string>#000</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>name</key>
+            <string>Comment</string>
+            <key>scope</key>
+            <string>comment</string>
+            <key>settings</key>
+            <dict>
+                <key>fontstyle</key>
+                <string>bold</string>
+                <key>foreground</key>
+                <string>#000</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>name</key>
+            <string>String</string>
+            <key>scope</key>
+            <string>string</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>#000</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>name</key>
+            <string>Number</string>
+            <key>scope</key>
+            <string>constant.numeric</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>#F8F8F8</string>
+            </dict>
+        </dict>
+    </array>
+    <key>uuid</key>
+    <string>4b7a9aa6-c472-4460-ba48-199e2624956b</string>
+</dict>
+</plist>

@@ -1,0 +1,9 @@
+{
+    "auto_complete_triggers":
+    [
+        {
+            "characters": ".",
+            "selector": "source.csscheme meta.selector"
+        }
+    ]
+}
