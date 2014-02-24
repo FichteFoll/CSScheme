@@ -5,5 +5,8 @@
             "characters": ".",
             "selector": "source.csscheme meta.selector"
         }
-    ]
+    ],
+    // Characters that are considered to separate words
+    // Same as default except $
+    "word_separators": "./\\()\"'-:,.;<>~!@#%^&*|+=[]{}`~?"
 }
