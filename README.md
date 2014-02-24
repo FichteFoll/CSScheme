@@ -93,6 +93,9 @@ Here is a bunch of links that might help you when working on your color scheme.
 - [Overview of SASS functions with example colors](http://jackiebalzer.com/color)
 - [HSL to RGB converter](http://serennu.com/colour/hsltorgb.php)
 - [Color Scheme Calculator](http://serennu.com/colour/colourcalculator.php)
+- [Hue scales using HCL](http://vis4.net/blog/posts/avoid-equidistant-hsv-colors/)
+- [Multi-hued color scales](https://vis4.net/blog/posts/mastering-multi-hued-color-scales/)
+- [Tool for multi-hued color scales](https://vis4.net/labs/multihue/)
 
 
 ## Example File
