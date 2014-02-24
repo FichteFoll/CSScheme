@@ -1,0 +1,13 @@
+CSScheme Changelog
+==================
+
+v0.1.1 (2014-02-24)
+-------------------
+
+- Removed `$` form the SCSS word separator list
+
+
+v0.1.0 (2014-02-22)
+-------------------
+
+- Initial release
