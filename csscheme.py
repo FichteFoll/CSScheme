@@ -86,7 +86,7 @@ class convert_csscheme(WindowAndTextCommand):
                     process = subprocess.Popen(commands[in_ext] + [in_file],
                                                stdout=subprocess.PIPE,
                                                stderr=subprocess.PIPE,
-                                               shell=True,
+                                               shell=sublime.platform() == 'windows',
                                                universal_newlines=True)
                     text, stderr = process.communicate()
                 except Exception as e:
@@ -106,7 +106,7 @@ class convert_csscheme(WindowAndTextCommand):
                                           flags=re.M))
                     return
 
-                elif text is None:
+                elif not text:
                     out.write_line("Unexpected error converting from %s to CSS:\nNo output"
                                    % in_ext)
                     return
@@ -175,6 +175,10 @@ class convert_csscheme(WindowAndTextCommand):
                     for e in stylesheet.errors:
                         out.write_line("%s:%s:%s:\n  %s\n"
                                        % (in_base, e.line, e.column, e.reason))
+                return
+            elif not stylesheet.rules:
+                # The CSS seems to be ... empty?
+                out.write_line("No CSS data was found")
                 return
 
             # Dump CSS data as plist into out_file

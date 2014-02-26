@@ -1,6 +1,13 @@
 CSScheme Changelog
 ==================
 
+~current iteration~
+-------------------
+
+- Fixed incorrect error messages for empty output from running `sass`
+- Fixed unexpected behavior from running `sass` on non-Windows
+
+
 v0.1.1 (2014-02-24)
 -------------------
 

@@ -19,9 +19,9 @@
     "preview_compiled_css": false,
 
     /* If you plan on using SCSS (or SASS) for conversion to tmTheme you have to
-     * make sure that "sass" is availale on your PATH or specify the path to the
-     * executable here. `shell` is set to true, so you don't have to include the
-     * extension on Windows.
+     * make sure that "sass" is availale on your PATH or specify the path to
+     * the executable here. (`shell` is set to true on Windows, so you don't
+     * have to include the extension.)
      */
     "sass_path": "sass",
 
