@@ -59,6 +59,16 @@ class DummyToken(object):
 
 
 class CSSchemeDumper(object):
+
+    # Dict for properties that we will test for the validity of their value.
+    # Other properties are not checked.
+    known_properties = dict(
+        color=('foreground', 'background', 'caret', 'invisibles', 'lineHighlight', 'selection',
+               'activeGuide'),
+        style_list=('fontStyle', 'tagsOptions')
+        # Maybe some more?
+    )
+
     # I could test this, but it is like one line and I only forward anyway. I'll just leave this
     # comment here to remind myself.
     def dump_stylesheet_file(self, out_file, stylesheet):  # pragma: no cover
@@ -74,7 +84,7 @@ class CSSchemeDumper(object):
         asterisk = None
         dummy = DummyToken(0, 0)
 
-        # Save all at-rules and rulesets separately
+        # Save all at-rules and rulesets separately and extract them from the stylesheet
         for r in stylesheet.rules:
             if r.at_keyword:
                 at_rules[r.at_keyword.strip('@')] = r
@@ -142,24 +152,21 @@ class CSSchemeDumper(object):
         # Add real declarations to a sub-'settings' dict
         s = OrderedDict()
         for decl in rset.declarations:
+            # Convert function and string color definitions to HASHes
+            self.translate_colors(decl, sel)
+            # Check if we know the property and throw if the input is invalid (e.g. css names)
             self.validify_declaration(decl, sel)
             # One or multiple HASH, STRING or IDENT (separated by S) tokens
             s[decl.name] = "".join(v.value for v in decl.value)
+
         rdict['settings'] = s
 
         return rdict
 
-    known_properties = dict(
-        color=('foreground', 'background', 'caret', 'invisibles', 'lineHighlight', 'selection',
-               'activeGuide'),
-        style_list=('fontStyle', 'tagsOptions')
-        # Maybe some more?
-    )
-
     def validify_declaration(self, decl, sel):
         # Check for property characteristics (if we know its type)
         if decl.name in self.known_properties['color']:
-            if len(decl.value) > 1:
+            if len(decl.value) != 1:
                 # We only expect one token for colors
                 raise DumpError(decl.value[1], 'expected 1 token for property {0}, got {1}'
                                                .format(decl.name, len(decl.value)), sel)
@@ -173,13 +180,36 @@ class CSSchemeDumper(object):
                                        .format(decl.name, v.value), sel)
 
                 color = css_colors[v.value]
+                decl.value[0] = Token('HASH', v.as_css(), color, None, v.line, v.column)
 
+            elif v.type != 'HASH':
+                raise DumpError(v, "unexpected {1} value for property {0}"
+                                   .format(decl.name, v.type),
+                                '%s; %s' % (sel, decl.name))
+
+        elif decl.name in self.known_properties['style_list']:
+            for token in decl.value:
+                if token.type == 'S':
+                    continue
+                elif token.type != 'IDENT':
+                    raise DumpError(token, "unexpected {1} token for property {0}"
+                                           .format(decl.name, token.type), sel)
+                elif token.value not in ('bold', 'italic', 'underline', 'stippled_underline'):
+                    raise DumpError(token, "invalid value '{1}' for property {0}"
+                                           .format(decl.name, token.value), sel)
+
+    def translate_colors(self, decl, sel):
+
+        for j, v in enumerate(decl.value):
+            color = None
+            if v.type in ('IDENT', 'S'):
+                continue
             elif v.type == 'FUNCTION':
                 # Apparently, tinycss.color3 does this too but with no exception messages and I
                 # found out about it after I finished my own implementation anyway.
                 fn = v.function_name
                 if fn not in ('rgb', 'hsl', 'rgba', 'hsla'):
-                    raise DumpError(v, "unknown function '{1}()' for property {0}"
+                    raise DumpError(v, "unknown function '{1}()' in property {0}"
                                        .format(decl.name, fn), sel)
 
                 # Parse parameters
@@ -232,20 +262,17 @@ class CSSchemeDumper(object):
                     params[:3] = colorsys.hls_to_rgb(params[0], params[2], params[1])
 
                 color = "#" + ''.join("{0:02X}".format(int(round(c * 255))) for c in params)
+
             elif v.type == 'STRING':
                 if re.match(r"^#[a-f\d]+$", v.value):
                     color = v.value
                 else:
-                    raise DumpError(v, "unexpected value for property {0}, expected color hash"
-                                       .format(decl.name),
-                                    '%s; %s' % (sel, decl.name))
+                    continue
+
             elif v.type == 'HASH':
                 color = v.value
-            # No other types are allowed from the parser
-            # else:
-            #     raise DumpError(v, "unexpected {1} value for property {0}"
-            #                        .format(decl.name, v.type),
-            #                     '%s; %s' % (sel, decl.name))
+
+            # We should either have a color or already moved on
             assert color
 
             if (len(color) - 1) not in (3, 6, 8):
@@ -259,15 +286,4 @@ class CSSchemeDumper(object):
 
             # Replace the old value
             if v.type != 'HASH' or color != v.value:
-                decl.value[0] = Token('HASH', v.as_css(), color, None, v.line, v.column)
-
-        elif decl.name in self.known_properties['style_list']:
-            for token in decl.value:
-                if token.type == 'S':
-                    continue
-                elif token.type != 'IDENT':
-                    raise DumpError(token, "unexpected {1} token for property {0}"
-                                           .format(decl.name, token.type), sel)
-                elif token.value not in ('bold', 'italic', 'underline', 'stippled_underline'):
-                    raise DumpError(token, "invalid value '{1}' for property {0}"
-                                           .format(decl.name, token.value), sel)
+                decl.value[j] = Token('HASH', v.as_css(), color, None, v.line, v.column)

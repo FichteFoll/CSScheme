@@ -4,6 +4,7 @@ CSScheme Changelog
 ~current iteration~
 -------------------
 
+- Fixed errors when using functions in "unknown" properties (#1)
 - Fixed incorrect error messages for empty output from running `sass`
 - Fixed unexpected behavior from running `sass` on non-Windows
 
