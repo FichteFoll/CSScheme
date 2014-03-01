@@ -196,7 +196,8 @@ class CSSchemeDumper(object):
                 elif token.type != 'IDENT':
                     raise DumpError(token, "unexpected {1} token for property {0}"
                                            .format(decl.name, token.type), sel)
-                elif token.value not in ('bold', 'italic', 'underline', 'stippled_underline'):
+                elif token.value not in ('bold', 'italic', 'underline', 'stippled_underline',
+                                         'foreground'):
                     raise DumpError(token, "invalid value '{1}' for property {0}"
                                            .format(decl.name, token.value), sel)
 

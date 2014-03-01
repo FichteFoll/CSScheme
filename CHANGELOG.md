@@ -1,6 +1,12 @@
 CSScheme Changelog
 ==================
 
+~current iteration~
+-------------------
+
+- Added "foreground" to allowed style list properties (.g. "bracketsOptions")
+
+
 v0.2.0 (2014-02-24)
 -------------------
 

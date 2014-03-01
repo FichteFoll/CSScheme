@@ -172,8 +172,10 @@ def test_datafy_ruleset_errors(ruleset, expected_error):
      ('background', [('HASH', "#00FFFF")])),
 
     # style list
-    (DC('fontStyle', 'bold italic underline stippled_underline'),
+    (DC('fontStyle', 'bold foreground italic underline stippled_underline'),
      ('fontStyle', [('IDENT', "bold"),
+                    ('S',     " "),
+                    ('IDENT', "foreground"),
                     ('S',     " "),
                     ('IDENT', "italic"),
                     ('S',     " "),
