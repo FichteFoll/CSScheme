@@ -41,6 +41,10 @@ $col11: #FE68FF; // (adjacent)
 }
 
 string {
+    /* This is the name that will be displayed when editing the file in a different
+     * color scheme editor - after compilation. Usually you won't need this. */
+    @name "String";
+
     foreground: $col1;
 
     @if $punctuation {
