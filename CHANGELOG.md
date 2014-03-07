@@ -7,6 +7,7 @@ CSScheme Changelog
 - Differentiate between style and options list ("fontStyle" vs e.g.
   "tagsOptions") for validation (also #2)
 - Allow `"fontStyle": none;` for empty style list (#4)
+- Highlight SASS's `index` function
 
 
 v0.2.1 (2014-03-01)

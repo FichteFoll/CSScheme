@@ -858,10 +858,10 @@
  adjust-(?:hue|lightness|saturation|color)|
  scale-(?:lightness|saturation|color)|change-color|spin|complement|invert|
  mix|-compass-(?:list|space-list|slice|nth|list-size)|blank|compact|nth|
- first-value-of|join|length|append|nest|append-selector|headers|enumerate|
- range|percentage|unitless|unit|if|type-of|comparable|elements-of-type|
- quote|unquote|escape|e|sin|cos|tan|abs|round|ceil|floor|pi|
- translate(?:X|Y))
+ first-value-of|index|join|length|append|nest|append-selector|headers|
+ enumerate|range|percentage|unitless|unit|if|type-of|comparable|
+ elements-of-type|quote|unquote|escape|e|sin|cos|tan|abs|round|ceil|floor|
+ pi|translate(?:X|Y))
 \s*(\()
 </string>
 			<key>beginCaptures</key>
