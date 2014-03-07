@@ -2,12 +2,12 @@ CSScheme - Sublime Text Plugin
 ==============================
 
 Ever thought handwriting `.tmTheme` files sucks? But the other options to
-editing color schemes are not programmatical enough? Then this is for you.
+editing color schemes are not programmatical enough? Then this is for you!
 
 CSScheme converts a custom CSS-like syntax into the `.tmTheme` files we all
 love, but it does not end there. CSScheme can also take care of **compiling
-SCSS** code into CSS and then into a color scheme using all features from SASS,
-such as variables or conditionals.
+SCSS** into CSS and then into a color scheme using all features from SASS, such
+as variables or conditionals.
 
 *Check the [example file](#example-file) for what's possible!*
 
@@ -26,6 +26,17 @@ the corresponding syntax for your file. Building (<kbd>ctrl+b</kbd> or
 <kbd>command+b</kbd>) will convert the file to CSS, if necessary, and then into
 a `.tmTheme` file. Errors during conversion are captured in an output panel.
 
+Things you need to consider when using CSScheme:
+
+- `@` at-rules will be added as string values to the outer dictionary. Thus, you
+  need to specify a global `@name` rule to specify the scheme's name. `@name`
+  rules in a ruleset will show as the name for various color scheme editing
+  tools after compilation. You usually don't need it but it doesn't hurt either.
+- If you want a property to have no font styles you have to specify 
+  `fontStyle: none;`. This will be translated to the empty
+  `<key>fontStyle</key><string></string>`.
+
+
 Things you need to consider when using **SCSS**cheme (or SASScheme):
 
 - Make sure that `sass` is available on your PATH or adjust the path to the
@@ -39,7 +50,7 @@ Things you need to consider when using **SCSS**cheme (or SASScheme):
 
 I won't outline conventions or the structure of color schemes in general (for
 now), but you should probably check out the following
-[Useful resources](#useful-resources) section though if you have some questions.
+[Useful resources](#useful-resources) section if you have some questions.
 
 
 ### Supported Syntaxes
@@ -69,11 +80,16 @@ Just press <kbd>ctrl+r</kbd> (<kbd>command+r</kbd>).
 
 **Snippets**
 
-- `if` - *only for SCSScheme*
-- `mixin` - *only for SCSScheme*
-- `=` (short for `mixin`) - *only for SCSScheme*
 - `*` (`*` ruleset)
 - `r` (general purpose ruleset)
+
+*SCSScheme*
+
+- `mixin`, `=` (short for `mixin`)
+- `if`, `elif`, `else`
+- `for` (from ... to), `fort` (from ... through)
+- `each`
+- `while`
 
 **Completions**
 
