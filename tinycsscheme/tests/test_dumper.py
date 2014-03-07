@@ -177,6 +177,9 @@ def test_datafy_ruleset_errors(ruleset, expected_error):
                     ('S',     " "),
                     ('IDENT', "italic")])),
 
+    (DC('fontStyle', 'none'),
+     ('fontStyle', [('IDENT', "")])),
+
     # options list
     (DC('tagsOptions', 'foreground underline squiggly_underline stippled_underline'),
      ('tagsOptions', [('IDENT', "foreground"),
@@ -216,6 +219,9 @@ def test_validify_decl(decl, expected_decl):
 
     (DC('fontStyle', "underline"),
      "invalid value 'underline' for style property fontStyle"),
+
+    (DC('fontStyle', "bold none"),
+     "'none' may not be used together with other styles"),
 
     # options list
     (DC('tagsOptions', "#000001"),

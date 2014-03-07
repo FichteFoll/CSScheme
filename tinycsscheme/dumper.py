@@ -78,7 +78,7 @@ class CSSchemeDumper(object):
     known_properties['list'] = known_properties['style_list'] + known_properties['options_list']
 
     # Allowed values for the list type properties
-    style_list_values = ('bold', 'italic')
+    style_list_values = ('bold', 'italic', 'none')  # 'none' is a custom style
     options_list_values = ('foreground', 'underline', 'stippled_underline', 'squiggly_underline')
 
     # I could test this, but it is like one line and I only forward anyway. I'll just leave this
@@ -207,10 +207,18 @@ class CSSchemeDumper(object):
                     raise DumpError(token, "unexpected {1} token for property {0}"
                                            .format(decl.name, token.type), sel)
 
-                elif (decl.name in self.known_properties['style_list']
-                        and token.value not in self.style_list_values):
-                    raise DumpError(token, "invalid value '{1}' for style property {0}"
-                                           .format(decl.name, token.value), sel)
+                elif decl.name in self.known_properties['style_list']:
+                    if token.value not in self.style_list_values:
+                        raise DumpError(token, "invalid value '{1}' for style property {0}"
+                                               .format(decl.name, token.value), sel)
+                    # Make the value empty because that's what it's supposed to be - CSS just
+                    # doesn't support it
+                    elif token.value == 'none':
+                        if len(decl.value) != 1:
+                            raise DumpError(token,
+                                            "'none' may not be used together with other styles",
+                                            sel)
+                        token.value = ''
                 elif (decl.name in self.known_properties['options_list']
                         and token.value not in self.options_list_values):
                     raise DumpError(token, "invalid value '{1}' for options property {0}"
