@@ -24,15 +24,22 @@ $col9:  #6869FF;
 $col10: #B368FF;
 $col11: #FE68FF; // (adjacent)
 
+$caret: complement($col0); // same as $col6, probably
+
 // This '*' rule is required too, it will serve as the general-purpose settings
 // such as the global background color and line highlight background color.
 * {
     background: $back;
     foreground: $fore;
 
-    caret: complement($col0); // same as $col6, probably
+    caret: $caret;
     lineHighlight: transparentize($col1, 0.8);
     selection: transparentize($col1, 0.7);
+
+    @each $pre in bracketContents, brackets, tags {
+        #{$pre}Foreground: $caret;
+        #{$pre}Options:    underline;
+    }
 }
 
 @mixin contrast($col) {
