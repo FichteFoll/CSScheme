@@ -78,7 +78,7 @@ class CSSchemeDumper(object):
     known_properties['list'] = known_properties['style_list'] + known_properties['options_list']
 
     # Allowed values for the list type properties
-    style_list_values = ('bold', 'italic', 'none')  # 'none' is a custom style
+    style_list_values = ('bold', 'italic', 'underline', 'none')  # 'none' is a custom style
     options_list_values = ('foreground', 'underline', 'stippled_underline', 'squiggly_underline')
 
     # I could test this, but it is like one line and I only forward anyway. I'll just leave this

@@ -172,10 +172,12 @@ def test_datafy_ruleset_errors(ruleset, expected_error):
      ('background', [('HASH', "#00FFFF")])),
 
     # style list
-    (DC('fontStyle', 'bold italic'),
+    (DC('fontStyle', 'bold italic underline'),
      ('fontStyle', [('IDENT', "bold"),
                     ('S',     " "),
-                    ('IDENT', "italic")])),
+                    ('IDENT', "italic"),
+                    ('S',     " "),
+                    ('IDENT', "underline")])),
 
     (DC('fontStyle', 'none'),
      ('fontStyle', [('IDENT', "")])),
@@ -189,7 +191,6 @@ def test_datafy_ruleset_errors(ruleset, expected_error):
                       ('IDENT', "squiggly_underline"),
                       ('S',     " "),
                       ('IDENT', "stippled_underline")])),
-
 ])
 def test_validify_decl(decl, expected_decl):
     CSSchemeDumper().validify_declaration(decl, '')
@@ -217,8 +218,8 @@ def test_validify_decl(decl, expected_decl):
     (DC('fontStyle', "\"hi\""),
      "unexpected STRING token for property fontStyle"),
 
-    (DC('fontStyle', "underline"),
-     "invalid value 'underline' for style property fontStyle"),
+    (DC('fontStyle', "foreground"),
+     "invalid value 'foreground' for style property fontStyle"),
 
     (DC('fontStyle', "bold none"),
      "'none' may not be used together with other styles"),
