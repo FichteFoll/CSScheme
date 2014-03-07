@@ -22,7 +22,7 @@
 import re
 try:
     from collections import OrderedDict  # ST3
-except:
+except:  # pragma: no cover
     from .ordereddict import OrderedDict  # ST2
 
 # Need to load it at the beginning because ST2 would fail to import it later
@@ -230,6 +230,7 @@ class CSSchemeDumper(object):
             color = None
             if v.type in ('IDENT', 'S'):
                 continue
+
             elif v.type == 'FUNCTION':
                 # Apparently, tinycss.color3 does this too but with no exception messages and I
                 # found out about it after I finished my own implementation anyway.
@@ -293,7 +294,8 @@ class CSSchemeDumper(object):
                 if re.match(r"^#[a-f\d]+$", v.value):
                     color = v.value
                 else:
-                    continue
+                    None      # I need this due to a bug with pytest-cov, otherwise the `continue`
+                    continue  # would be marked as "not covered".
 
             elif v.type == 'HASH':
                 color = v.value

@@ -155,10 +155,10 @@ def test_datafy_ruleset_errors(ruleset, expected_error):
 @pytest.mark.parametrize(('decl', 'expected_decl'), [
     # pass through
     (DC('prop', "#123456 #12345678 cyan"),
-     ('prop', [('HASH', "#123456"),
-               ('S',    " "),
-               ('HASH', "#12345678"),
-               ('S',    " "),
+     ('prop', [('HASH',  "#123456"),
+               ('S',     " "),
+               ('HASH',  "#12345678"),
+               ('S',     " "),
                ('IDENT', "cyan")])),
 
     # color
@@ -242,11 +242,12 @@ def test_validify_decl_errors(decl, expected_error):
 @pytest.mark.parametrize(('decl', 'expected_decl'), [
     # Does not access a declaration's name, only values
     # pass through
-    (DC('prop', "'hi there'"),
-     ('prop', [('STRING', "hi there")])),
-
-    (DC('prop', "#123456"),
-     ('prop', [('HASH', "#123456")])),
+    (DC('prop', "'hi there' #123456 ident"),
+     ('prop', [('STRING', "hi there"),
+               ('S',      " "),
+               ('HASH',   "#123456"),
+               ('S',      " "),
+               ('IDENT',  "ident")])),
 
     # changes
     (DC('prop', "'#12345678'"),
