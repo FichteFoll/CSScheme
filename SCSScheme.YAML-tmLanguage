@@ -174,7 +174,7 @@ repository:
     - include: '#comment_line'
     - begin: \bfrom\b
       beginCaptures:
-        '0': {name: keyword.operator.for.csscheme}
+        '0': {name: keyword.control.operator.for.from.csscheme}
       end: (?=\{)
       patterns:
       - name: keyword.control.operator.for.csscheme
