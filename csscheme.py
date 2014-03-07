@@ -143,9 +143,9 @@ class convert_csscheme(WindowAndTextCommand):
                         assert isinstance(e, ParseError)
                         out.write_line("ParseError from CSS on line %d:" % e.line)
 
-                        # Search for last known line number (max 10)
+                        # Search for last known line number (max 20)
                         start_dump = 0
-                        for i in range(e.line, e.line - 10, -1):
+                        for i in range(e.line, e.line - 20, -1):
                             if i < 0:
                                 break
                             m = re.match(r"\s*/\* line (\d+),", lines[i])
