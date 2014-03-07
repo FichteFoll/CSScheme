@@ -67,9 +67,19 @@ class CSSchemeDumper(object):
                'caret', 'findHighlight', 'findHighlightForeground', 'foreground', 'guide', 'gutter',
                'gutterForeground', 'inactiveSelection', 'invisibles', 'lineHighlight', 'selection',
                'selectionBorder', 'shadow', 'stackGuide', 'tagsForeground'),
-        style_list=('bracketContentsOptions', 'bracketsOptions', 'fontStyle', 'tagsOptions')
+
+        style_list=('fontStyle',),
+
+        options_list=('bracketsOptions', 'bracketContentsOptions', 'tagsOptions')
         # Maybe some more?
     )
+
+    # Combine the list types for easier lookup
+    known_properties['list'] = known_properties['style_list'] + known_properties['options_list']
+
+    # Allowed values for the list type properties
+    style_list_values = ('bold', 'italic')
+    options_list_values = ('foreground', 'underline', 'stippled_underline', 'squiggly_underline')
 
     # I could test this, but it is like one line and I only forward anyway. I'll just leave this
     # comment here to remind myself.
@@ -189,16 +199,21 @@ class CSSchemeDumper(object):
                                    .format(decl.name, v.type),
                                 '%s; %s' % (sel, decl.name))
 
-        elif decl.name in self.known_properties['style_list']:
+        elif decl.name in self.known_properties['list']:
             for token in decl.value:
                 if token.type == 'S':
                     continue
                 elif token.type != 'IDENT':
                     raise DumpError(token, "unexpected {1} token for property {0}"
                                            .format(decl.name, token.type), sel)
-                elif token.value not in ('bold', 'italic', 'underline', 'stippled_underline',
-                                         'foreground'):
-                    raise DumpError(token, "invalid value '{1}' for property {0}"
+
+                elif (decl.name in self.known_properties['style_list']
+                        and token.value not in self.style_list_values):
+                    raise DumpError(token, "invalid value '{1}' for style property {0}"
+                                           .format(decl.name, token.value), sel)
+                elif (decl.name in self.known_properties['options_list']
+                        and token.value not in self.options_list_values):
+                    raise DumpError(token, "invalid value '{1}' for options property {0}"
                                            .format(decl.name, token.value), sel)
 
     def translate_colors(self, decl, sel):

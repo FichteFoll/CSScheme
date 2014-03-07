@@ -172,16 +172,20 @@ def test_datafy_ruleset_errors(ruleset, expected_error):
      ('background', [('HASH', "#00FFFF")])),
 
     # style list
-    (DC('fontStyle', 'bold foreground italic underline stippled_underline'),
+    (DC('fontStyle', 'bold italic'),
      ('fontStyle', [('IDENT', "bold"),
                     ('S',     " "),
-                    ('IDENT', "foreground"),
-                    ('S',     " "),
-                    ('IDENT', "italic"),
-                    ('S',     " "),
-                    ('IDENT', "underline"),
-                    ('S',     " "),
-                    ('IDENT', "stippled_underline")])),
+                    ('IDENT', "italic")])),
+
+    # options list
+    (DC('tagsOptions', 'foreground underline squiggly_underline stippled_underline'),
+     ('tagsOptions', [('IDENT', "foreground"),
+                      ('S',     " "),
+                      ('IDENT', "underline"),
+                      ('S',     " "),
+                      ('IDENT', "squiggly_underline"),
+                      ('S',     " "),
+                      ('IDENT', "stippled_underline")])),
 
 ])
 def test_validify_decl(decl, expected_decl):
@@ -197,8 +201,8 @@ def test_validify_decl(decl, expected_decl):
     (DC('background', "'hi there'"),
      "unexpected STRING value for property background"),
 
-    (DC('background', "\"#12345\""),
-     "unexpected STRING value for property background"),
+    (DC('bracketsForeground', "\"#12345\""),
+     "unexpected STRING value for property bracketsForeground"),
 
     (DC('foreground', "not-a-color"),
      "unknown color name 'not-a-color' for property foreground"),
@@ -210,8 +214,15 @@ def test_validify_decl(decl, expected_decl):
     (DC('fontStyle', "\"hi\""),
      "unexpected STRING token for property fontStyle"),
 
-    (DC('tagsOptions', "italicc"),
-     "invalid value 'italicc' for property tagsOptions")
+    (DC('fontStyle', "underline"),
+     "invalid value 'underline' for style property fontStyle"),
+
+    # options list
+    (DC('tagsOptions', "#000001"),
+     "unexpected HASH token for property tagsOptions"),
+
+    (DC('bracketsOptions', "italic"),
+     "invalid value 'italic' for options property bracketsOptions"),
 ])
 def test_validify_decl_errors(decl, expected_error):
     try:

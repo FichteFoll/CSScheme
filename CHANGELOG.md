@@ -1,6 +1,13 @@
 CSScheme Changelog
 ==================
 
+~current iteration~
+-------------------
+
+- Differentiate between style and options list ("fontStyle" vs e.g.
+  "tagsOptions") for validation (also #2)
+
+
 v0.2.1 (2014-03-01)
 -------------------
 
@@ -10,7 +17,7 @@ v0.2.1 (2014-03-01)
 v0.2.0 (2014-02-24)
 -------------------
 
-- Added more known_properties to check values against
+- Added more known_properties to check values against (#2)
 - Fixed errors when using functions in "unknown" properties (#1)
 - Fixed incorrect error messages for empty output from running `sass`
 - Fixed unexpected behavior from running `sass` on non-Windows
