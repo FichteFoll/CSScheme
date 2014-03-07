@@ -1,0 +1,5 @@
+<snippet><description>@for ... to</description><tabTrigger>for</tabTrigger><scope>source.csscheme.scss</scope><content><![CDATA[
+@for \$${1:i} from ${2:1} to ${3:4} {
+	$0
+}
+]]></content></snippet>

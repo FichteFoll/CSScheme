@@ -1,0 +1,8 @@
+---
+description: @for ... through
+tabTrigger:  fort
+scope:       source.csscheme.scss
+---
+@for \$${1:i} from ${2:1} through ${3:4} {
+	$0
+}

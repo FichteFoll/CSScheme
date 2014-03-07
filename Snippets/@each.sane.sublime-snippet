@@ -1,0 +1,5 @@
+<snippet><description>@each</description><tabTrigger>each</tabTrigger><scope>source.csscheme.scss</scope><content><![CDATA[
+@each \$${1:el} in ${2:list} {
+	$0
+}
+]]></content></snippet>

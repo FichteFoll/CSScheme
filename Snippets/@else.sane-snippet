@@ -1,0 +1,8 @@
+---
+description: @else
+tabTrigger:  else
+scope:       source.csscheme.scss
+---
+@else {
+	$0
+}

@@ -1,0 +1,8 @@
+---
+description: @each
+tabTrigger:  each
+scope:       source.csscheme.scss
+---
+@each \$${1:el} in ${2:list} {
+	$0
+}

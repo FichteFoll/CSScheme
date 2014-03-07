@@ -1,0 +1,5 @@
+<snippet><description>@while</description><tabTrigger>while</tabTrigger><scope>source.csscheme.scss</scope><content><![CDATA[
+@while ${1:\$i > 0} {
+	$0
+}
+]]></content></snippet>

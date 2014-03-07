@@ -1,0 +1,8 @@
+---
+description: @while
+tabTrigger:  while
+scope:       source.csscheme.scss
+---
+@while ${1:\$i > 0} {
+	$0
+}

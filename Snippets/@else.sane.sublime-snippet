@@ -1,0 +1,5 @@
+<snippet><description>@else</description><tabTrigger>else</tabTrigger><scope>source.csscheme.scss</scope><content><![CDATA[
+@else {
+	$0
+}
+]]></content></snippet>

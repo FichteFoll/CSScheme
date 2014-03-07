@@ -10,6 +10,7 @@ CSScheme Changelog
 - Highlight SASS's `index` function
 - Fix not showing error message if a line number was not found from the compiled
   SCSS (within the last x lines)
+- Add snippets for `@for`, `@each`, `@else if`, `@else`, `@while`
 
 v0.2.1 (2014-03-01)
 -------------------
