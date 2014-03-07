@@ -166,7 +166,7 @@ repository:
 
   style:
     name: constant.language.style.csscheme
-    match: \b(bold|italic|underline|stippled_underline)\b
+    match: \b(bold|italic|((stippled|squiggly)_)?underline|foreground|none)\b
 
   ident:
     name: string.unquoted.ident.csscheme

@@ -498,7 +498,7 @@
 		<key>style</key>
 		<dict>
 			<key>match</key>
-			<string>\b(bold|italic|underline|stippled_underline)\b</string>
+			<string>\b(bold|italic|((stippled|squiggly)_)?underline|foreground|none)\b</string>
 			<key>name</key>
 			<string>constant.language.style.csscheme</string>
 		</dict>
