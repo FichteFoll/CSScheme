@@ -8,7 +8,8 @@ CSScheme Changelog
   "tagsOptions") for validation (also #2)
 - Allow `"fontStyle": none;` for empty style list (#4)
 - Highlight SASS's `index` function
-
+- Fix not showing error message if a line number was not found from the compiled
+  SCSS (within the last x lines)
 
 v0.2.1 (2014-03-01)
 -------------------

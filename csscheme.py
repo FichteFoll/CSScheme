@@ -159,10 +159,9 @@ class convert_csscheme(WindowAndTextCommand):
                             )
                             break
 
-                        # Nothing found in the past 10 lines
+                        # Nothing found in the past lines, just print the erroneous line then
                         if not start_dump:
-                            out.write_line()
-                            continue
+                            start_dump = e.line - 2
 
                         for i in range(start_dump + 1, e.line):
                             out.write_line("  " + lines[i])
