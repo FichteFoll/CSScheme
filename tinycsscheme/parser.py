@@ -183,7 +183,7 @@ class CSSchemeParser(CSS21Parser):
         value = strip_whitespace(list(tokens))
         if not value:
             raise ParseError(name_token,
-                             "expected a property value for property {}".format(property_name))
+                             "expected a property value for property {0}".format(property_name))
 
         # Only allow a list of HASH, IDENT, STRING, FUNCTION (and S) (minimal requirements)
         # STRING is for arbitrary properties
