@@ -2,6 +2,7 @@
 omit =
   *tests/*
   *tinycss/*
+  *_ordereddict.py
 
 
 #branch = True

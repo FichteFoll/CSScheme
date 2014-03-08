@@ -23,7 +23,7 @@ import re
 try:
     from collections import OrderedDict  # ST3
 except:  # pragma: no cover
-    from .ordereddict import OrderedDict  # ST2
+    from ._ordereddict import OrderedDict  # ST2
 
 # Need to load it at the beginning because ST2 would fail to import it later
 from .css_colors import css_colors
