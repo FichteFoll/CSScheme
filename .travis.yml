@@ -7,10 +7,28 @@ python:
   - "2.6"
   - "3.3"
 
-# pytest is already deployed on Travis's VMs
-# install:
-#   - pip install pytest
+install:
+  # pytest is already deployed on Travis's VMs
+  # - pip install pytest
+  - pip install flake8
+  - pip install coveralls
+
+before_script:
+  # Run flake8 on everything except tinycss
+  # Technically this only needs to run once (3.3), but :effort:
+  - >
+    flake8 .
+      --exclude=./tinycsscheme/tinycss*,./my_sublime_lib\view\__init__.py
+      --ignore=E241,E221
+      --max-line-length=100
 
 script:
-  # Tests tinycss and tinycsscheme
-  - py.test
+  # Run tinycss and tinycsscheme tests
+  - >
+    py.test tinycsscheme/tests/
+      --cov-config tinycsscheme/.coveragerc
+      --cov tinycsscheme
+      --cov-report term-missing
+
+after_success:
+  - coveralls
