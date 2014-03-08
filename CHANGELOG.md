@@ -1,7 +1,7 @@
 CSScheme Changelog
 ==================
 
-~current iteration~
+v0.3.0 (2014-03-08)
 -------------------
 
 - Differentiate between style and options list ("fontStyle" vs e.g.
