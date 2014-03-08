@@ -1,6 +1,12 @@
 CSScheme - Sublime Text Plugin
 ==============================
 
+[![Build Status][]](https://travis-ci.org/FichteFoll/CSScheme)
+[![Coverage Status][]](https://coveralls.io/r/FichteFoll/CSScheme)
+
+[Build Status]: https://travis-ci.org/FichteFoll/CSScheme.png
+[Coverage Status]: https://coveralls.io/repos/FichteFoll/CSScheme/badge.png
+
 Ever thought handwriting `.tmTheme` files sucks? But the other options to
 editing color schemes are not programmatical enough? Then this is for you!
 
