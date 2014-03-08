@@ -1,9 +1,6 @@
 [
-    {   "caption": "CSScheme: Build XML",
-        "command": "css_xml"
-    },
     {
-        "caption": "CSScheme: Build CSS",
-        "command": "xml_css"
+        "caption": "CSScheme: Build",
+        "command": "convert_csscheme"
     }
 ]
