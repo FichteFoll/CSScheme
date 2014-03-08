@@ -11,6 +11,7 @@ CSScheme Changelog
 - Fix not showing error message if a line number was not found from the compiled
   SCSS (within the last x lines)
 - Add snippets for `@for`, `@each`, `@else if`, `@else`, `@while`
+- All "package" related files were moved to a sub-directory
 
 v0.2.1 (2014-03-01)
 -------------------

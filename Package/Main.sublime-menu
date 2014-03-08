@@ -26,13 +26,13 @@
                             {
                                 "caption": "Settings – Default",
                                 "command": "open_file",
-                                "args": {"file": "${packages}/CSScheme/csscheme.sublime-settings"}
+                                "args": {"file": "${packages}/CSScheme/Package/CSScheme.sublime-settings"}
                             },
                             // Settings - User
                             {
                                 "caption": "Settings – User",
                                 "command": "open_file",
-                                "args": {"file": "${packages}/User/csscheme.sublime-settings"}
+                                "args": {"file": "${packages}/User/CSScheme.sublime-settings"}
                             }
                         ]
                     }
