@@ -2,5 +2,21 @@
     {
         "caption": "CSScheme: Build",
         "command": "convert_csscheme"
+    },
+    {
+        "caption": "CSScheme: Open README",
+        "command": "open_file",
+        "args": {"file": "${packages}/CSScheme/README.md"}
+    },
+    { "caption": "-"},
+    {
+        "caption": "Preferences: CSScheme Settings - Default",
+        "command": "open_file",
+        "args": {"file": "${packages}/CSScheme/Package/CSScheme.sublime-settings"}
+    },
+    {
+        "caption": "Preferences: CSScheme Settings - User",
+        "command": "open_file",
+        "args": {"file": "${packages}/User/CSScheme.sublime-settings", "contents": "{\n\t$0\n}"}
     }
 ]

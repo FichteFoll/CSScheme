@@ -32,7 +32,7 @@
                             {
                                 "caption": "Settings – User",
                                 "command": "open_file",
-                                "args": {"file": "${packages}/User/CSScheme.sublime-settings"}
+                                "args": {"file": "${packages}/User/CSScheme.sublime-settings", "contents": "{\n\t$0\n}"}
                             }
                         ]
                     }
