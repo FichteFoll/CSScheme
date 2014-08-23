@@ -83,7 +83,7 @@ def append(view, text, scroll=False):
         view.show(view.size())
 
 
-def clear(view, edit=None):
+def clear(view):
     """Removes all the text in ``view``. Won't work if the view is read-only.
     """
     with Edit(view) as edit:
