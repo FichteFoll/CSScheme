@@ -51,7 +51,7 @@ repository:
     - name: punctuation.parameter-sep.csscheme
       match: ','
     - name: meta.selector.subtract.csscheme
-      begin: (?<!\w)-
+      begin: (?<!\w)('?)-(\1)
       beginCaptures:
         '0': {name: keyword.control.selector.subtract.csscheme}
       end: (?=[{,])
