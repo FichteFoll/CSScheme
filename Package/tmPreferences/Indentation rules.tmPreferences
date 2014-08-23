@@ -8,10 +8,10 @@
 	<string>source.csscheme</string>
 	<key>settings</key>
 	<dict>
-		<key>decreaseIndentPattern</key>
-		<string>^\s*\}</string>
 		<key>increaseIndentPattern</key>
-		<string>\{[^}]*$</string>
+		<string>^.*\{[^}]*?$</string>
+		<key>decreaseIndentPattern</key>
+		<string>^[^{\n]*?\}</string>
 	</dict>
 </dict>
 </plist>
