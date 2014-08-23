@@ -4,6 +4,9 @@ CSScheme Changelog
 ~current iteration~
 -------------------
 
+- The settings management for executable paths has been changed!
+  If you depend on this, you'll have to revisit.
+- SCSScheme files now show the same output on DumpErrors as on ParseErrors
 - Added commands for the command palette to open the readme and settings files
 
 

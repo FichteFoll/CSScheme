@@ -24,7 +24,9 @@
      * the executable here. (`shell` is set to true on Windows, so you don't
      * have to include the extension.)
      */
-    "sass_path": "sass",
+    "executables": {
+        "sass": "sass"
+    },
 
     /* Makes "." dots trigger the auto completion popup. You usually don't want
      * to modify this.
