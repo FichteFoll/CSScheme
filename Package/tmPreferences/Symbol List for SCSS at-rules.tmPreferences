@@ -10,6 +10,10 @@
 		<integer>1</integer>
 		<key>symbolTransformation</key>
 		<string>s/\s+\{.*//</string>
+		<key>showInIndexedSymbolList</key>
+		<integer>1</integer>
+		<key>symbolIndexTransformation</key>
+		<string>s/\s+\{.*//</string>
 	</dict>
 </dict>
 </plist>
