@@ -31,6 +31,7 @@ class BaseConverter(object):
 
     """abstract base class."""
 
+    name = ""
     ext = ""
     default_executable = ""
     cmd_params = ()
@@ -76,8 +77,8 @@ class BaseConverter(object):
                                        universal_newlines=True)
             stdout, stderr = process.communicate()
         except Exception as e:
-            out.write_line("Error converting from %s to CSS:\n"
-                           "%s: %s" % (cls.ext, e.__class__.__name__, e))
+            out.write_line("Error converting from %s to CSScheme:\n"
+                           "%s: %s" % (cls.name, e.__class__.__name__, e))
             return
 
         # Process results
@@ -85,14 +86,14 @@ class BaseConverter(object):
             cls.report_convert_errors(out, file_path, process.returncode, stderr)
         elif not stdout:
             out.write_line("Unexpected error converting from %s to CSS:\nNo output"
-                           % cls.ext)
+                           % cls.name)
         else:
             return stdout
 
     @classmethod
     def report_convert_errors(cls, out, file_path, returncode, stderr):
         out.write_line("Errors converting from %s to CSS, return code: %s\n"
-                       % (cls.ext, returncode))
+                       % (cls.name, returncode))
 
         out.write_line(stderr)
 
@@ -114,6 +115,7 @@ class CSSConverter(BaseConverter):
 
     """Convert CSScheme to tmTheme."""
 
+    name = "CSScheme"
     ext = "csscheme"
 
 
@@ -121,6 +123,7 @@ class SCSSConverter(BaseConverter):
 
     """Convert SCSScheme to tmTheme."""
 
+    name = "SCSScheme"
     ext = "scsscheme"
     default_executable = "sass"
     cmd_params = ('-l', '--scss')
@@ -134,7 +137,7 @@ class SCSSConverter(BaseConverter):
         out.set_regex(r"^\s+in (.*?) on line (\d+)$")
 
         out.write_line("Errors converting from %s to CSS, return code: %s\n"
-                       % (cls.ext, returncode))
+                       % (cls.name, returncode))
 
         # Swap line and path because sublime can't parse them otherwise
         out.write_line(re.sub(r"on line (\d+) of (.*?)$",
@@ -212,6 +215,7 @@ class SASSConverter(SCSSConverter):
 
     """Convert SASScheme to tmTheme."""
 
+    name = "SASScheme"
     ext = "sasscheme"
     cmd_params = ('-l',)
 
