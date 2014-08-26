@@ -8,6 +8,7 @@ CSScheme Changelog
   If you depend on this, you'll have to revisit.
 - SCSScheme files now show the same output on DumpErrors as on ParseErrors
 - Added commands for the command palette to open the readme and settings files
+- Fixed long relative path references in some situations (mainly stylus)
 
 
 v0.3.0 (2014-03-08)
