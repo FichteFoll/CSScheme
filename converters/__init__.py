@@ -18,7 +18,13 @@ def swap_path_line(pattern, rel_dir):
     """
     def repl(m):
         # Make path relative because we don't need long paths if in same dir
-        path = os.path.relpath(m.group(2), rel_dir)
+        path = m.group(2)
+        try:
+            path = os.path.relpath(m.group(2), rel_dir)
+        except ValueError:
+            # In case the file is on a different drive
+            pass
+
         # Don't make relative if going up more than N folders
         if path.startswith((".." + os.sep) * 3):
             path = m.group(2)
