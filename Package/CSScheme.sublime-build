@@ -1,4 +1,4 @@
 {
     "target": "convert_csscheme",
-    "selector": "source.csscheme"
+    "selector": "source.csscheme, source.stylus.styluscheme"
 }

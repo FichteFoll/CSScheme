@@ -25,7 +25,8 @@
      * have to include the extension.)
      */
     "executables": {
-        "sass": "sass"
+        "sass": "sass",
+        "stylus": "stylus"
     },
 
     /* Makes "." dots trigger the auto completion popup. You usually don't want

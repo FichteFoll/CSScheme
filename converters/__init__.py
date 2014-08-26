@@ -7,7 +7,7 @@ from collections import abc
 
 import sublime
 
-__all__ = ('all', 'CSSConverter', 'SCSSConverter', 'SASSConverter')
+__all__ = ('all', 'CSSConverter', 'SCSSConverter', 'SASSConverter', 'StylusConverter')
 
 
 def swap_path_line(pattern, rel_dir):
@@ -67,8 +67,6 @@ class BaseConverter(object):
                 out.write_line("Error reading %s:\n%s" % (file_path, e))
                 return
 
-        in_dir, in_base = os.path.split(file_path)
-
         # Construct command
         executable = cls.default_executable
         if isinstance(executables, abc.Mapping) and cls.default_executable in executables:
@@ -76,6 +74,7 @@ class BaseConverter(object):
         cmd = (executable,) + cls.cmd_params + (file_path,)
 
         try:
+            # TODO fix encoding from stylus output, mainly paths
             process = subprocess.Popen(cmd,
                                        stdout=subprocess.PIPE,
                                        stderr=subprocess.PIPE,
@@ -134,8 +133,6 @@ class SCSSConverter(BaseConverter):
     default_executable = "sass"
     cmd_params = ('-l', '--scss')
 
-    lineno_reg = re.compile(r"/\* line (\d+), (.*?) \*/", re.M)
-
     @classmethod
     def report_convert_errors(cls, out, file_path, returncode, stderr):
         in_dir = os.path.dirname(file_path)
@@ -186,6 +183,8 @@ class SCSSConverter(BaseConverter):
         out.write_line("  %s^" % ('-' * (e.column - 1)))
         out.write_line("%s%s\n" % (e.reason, e.location))
 
+    lineno_reg = re.compile(r"/\* line (\d+), (.+?) \*/", re.M)
+
     @classmethod
     def get_lines_till_last_lineno(cls, lines, lineno, in_dir):
         printlines = []
@@ -195,7 +194,7 @@ class SCSSConverter(BaseConverter):
         for i in range(lineno, lineno - 20, -1):
             if i < 0:
                 break
-            m = re.match(r"\s*/\* line (\d+),", lines[i])
+            m = re.match(r"\s*/\* line (\d+)", lines[i])
             if not m:
                 continue
 
@@ -225,5 +224,23 @@ class SASSConverter(SCSSConverter):
     ext = "sasscheme"
     cmd_params = ('-l',)
 
+
+class StylusConverter(SCSSConverter):
+
+    """Convert Styluscheme to tmTheme."""
+
+    name = "StyluScheme"
+    ext = "styluscheme"
+    default_executable = "stylus"
+    cmd_params = ('-l', '-p')
+
+    lineno_reg = re.compile(r"/\* line (\d+) : (.+?) \*/", re.M)
+
+    @classmethod
+    def report_convert_errors(cls, out, *args, **kwargs):
+        out.set_regex(r"^Error: (.+?):(\d+)$")
+        # The error is already well-formatted so we just need to print it
+        BaseConverter.report_convert_errors(out, *args, **kwargs)
+
 # For exporting
-all = (CSSConverter, SCSSConverter, SASSConverter)
+all = (CSSConverter, SCSSConverter, SASSConverter, StylusConverter)
