@@ -67,7 +67,7 @@ class CSSchemeParser(CSS21Parser):
     def _check_at_rule_occurences(self, rule, previous_rules):
         for previous_rule in previous_rules:
             if previous_rule.at_keyword == rule.at_keyword:
-                raise ParseError(previous_rule,
+                raise ParseError(rule,
                                  '{0} only allowed once, previously line {1}'
                                  .format(rule.at_keyword, previous_rule.line))
 
