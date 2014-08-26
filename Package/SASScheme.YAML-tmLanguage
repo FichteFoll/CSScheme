@@ -1,0 +1,11 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+---
+name: SASScheme
+scopeName: source.sass.sasscheme
+fileTypes: [sasscheme]
+uuid: 0e8ef586-2e86-48f6-9637-f7d17144d09b
+
+# We only use this to mask our files with a special scope
+patterns:
+- include: source.sass
+...
