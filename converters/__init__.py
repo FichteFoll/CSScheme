@@ -205,6 +205,8 @@ class SCSSConverter(BaseConverter):
         for i in range(start_dump + 1, lineno):
             printlines.append(lines[i])
 
+        return printlines
+
 
 class SASSConverter(SCSSConverter):
 
