@@ -92,7 +92,7 @@ class convert_csscheme(WindowAndTextCommand):
             if settings().get('preview_compiled_css') and not conv.ext == 'csscheme':
                 v = self.view.window().new_file()
                 v.set_scratch(True)
-                v.set_syntax_file("Packages/%s/CSScheme.tmLanguage" % PACKAGE)
+                v.set_syntax_file("Packages/%s/Package/CSScheme.tmLanguage" % PACKAGE)
                 try:
                     from .my_sublime_lib.edit import Edit
                 except:
