@@ -7,6 +7,7 @@ try:
     # Use a different name because PackageDev adds it to the path and that
     # takes precedence over local paths (for some reason).
     from .my_sublime_lib import WindowAndTextCommand
+    from .my_sublime_lib.path import file_path_tuple
     from .my_sublime_lib.view import OutputPanel
 
     from .tinycsscheme.parser import CSSchemeParser
@@ -16,6 +17,7 @@ try:
     from . import converters
 except:
     from my_sublime_lib import WindowAndTextCommand
+    from my_sublime_lib.path import file_path_tuple
     from my_sublime_lib.view import OutputPanel
 
     from tinycsscheme.parser import CSSchemeParser
@@ -62,9 +64,10 @@ class convert_csscheme(WindowAndTextCommand):
         if self.view.is_dirty():
             return status("Save the file first.")
 
+        self.preview_opened = False
         in_file = self.view.file_name()
-        in_dir, in_base = os.path.split(in_file)
-        out_file = os.path.splitext(in_file)[0] + '.tmTheme'
+        in_tuple = file_path_tuple(in_file)
+        out_file = in_tuple.no_ext + '.tmTheme'
 
         # Open up output panel and auto-finalize it when we are done
         with OutputPanel(self.view.window(), "csscheme") as out:
@@ -80,7 +83,7 @@ class convert_csscheme(WindowAndTextCommand):
             assert len(conv) == 1
             conv = conv[0]
 
-            out.set_path(in_dir)
+            out.set_path(in_tuple.path)
             executables = settings().get("executables")  # TOTEST
 
             # Run converter
@@ -89,16 +92,8 @@ class convert_csscheme(WindowAndTextCommand):
                 return
 
             # Preview converted css for debugging, optionally
-            if settings().get('preview_compiled_css') and not conv.ext == 'csscheme':
-                v = self.view.window().new_file()
-                v.set_scratch(True)
-                v.set_syntax_file("Packages/%s/Package/CSScheme.tmLanguage" % PACKAGE)
-                try:
-                    from .my_sublime_lib.edit import Edit
-                except:
-                    from my_sublime_lib.edit import Edit
-                with Edit(v) as edit:
-                    edit.append(text)
+            if settings().get('preview_compiled_css'):
+                self.preview_compiled_css(text, conv, in_tuple.base_name)
 
             # Parse the CSS
             stylesheet = CSSchemeParser().parse_stylesheet(text)
@@ -106,6 +101,7 @@ class convert_csscheme(WindowAndTextCommand):
             # Do some awesome error printing action
             if stylesheet.errors:
                 conv.report_parse_errors(out, in_file, text, stylesheet.errors)
+                self.preview_compiled_css(text, conv, in_tuple.base_name)
                 return
             elif not stylesheet.rules:
                 # The CSS seems to be ... empty?
@@ -117,11 +113,30 @@ class convert_csscheme(WindowAndTextCommand):
                 CSSchemeDumper().dump_stylesheet_file(out_file, stylesheet)
             except DumpError as e:
                 conv.report_dump_error(out, in_file, text, e)
+                self.preview_compiled_css(text, conv, in_tuple.base_name)
+                return
 
             status("Build successful")
             # Open out_file
             if settings().get('open_after_build'):
                 self.view.window().open_file(out_file)
+
+    def preview_compiled_css(self, text, conv, base_name):
+        if conv.ext == 'csscheme' or self.preview_opened:
+            return
+
+        v = self.view.window().new_file()
+        v.set_scratch(True)
+        v.set_syntax_file("Packages/%s/Package/CSScheme.tmLanguage" % PACKAGE)
+        v.set_name("Preview: %s.csscheme" % base_name)
+        try:
+            from .my_sublime_lib.edit import Edit
+        except:
+            from my_sublime_lib.edit import Edit
+        with Edit(v) as edit:
+            edit.append(text)
+
+        self.preview_opened = True
 
 
 ###############################################################################
