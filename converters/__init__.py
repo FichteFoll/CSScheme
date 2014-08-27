@@ -87,12 +87,15 @@ class BaseConverter(object):
             return
 
         # Process results
-        if process.returncode or stderr:
+        if process.returncode:
             cls.report_convert_errors(out, file_path, process.returncode, stderr)
         elif not stdout:
             out.write_line("Unexpected error converting from %s to CSS:\nNo output"
                            % cls.name)
         else:
+            # e.g. "warn(msg)" in stylus
+            if stderr:
+                out.write_line(stderr)
             return stdout
 
     @classmethod
