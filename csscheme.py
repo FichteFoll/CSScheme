@@ -75,12 +75,15 @@ class convert_csscheme(WindowAndTextCommand):
             # Determine our converter
             conv = tuple(c for c in converters.all if c.valid_file(in_file))
             if len(conv) > 1:
-                print(conv)
                 out.write_line("Found multiple contenders for conversion.\n"
                                "If this happened to you, please tell the developer "
                                "(me) to add code for this case. Thanks.")
                 return
-            assert len(conv) == 1
+            elif not conv:
+                out.write_line("Couldn't match extension against a known converter.\n"
+                               "Known extensions are: %s"
+                               % ', '.join("." + c.ext for c in converters.all))
+                return
             conv = conv[0]
 
             out.set_path(in_tuple.path)
