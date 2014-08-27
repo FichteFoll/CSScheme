@@ -19,6 +19,7 @@ CSScheme Changelog
   build system (same for stylus)
 - Fixed wrong line number being displayed when an at-rule was encountered
   multiple times
+- Added punctuation scopes to auto completion (csscheme, scsscheme)
 
 
 v0.3.0 (2014-03-08)

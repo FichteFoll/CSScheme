@@ -1,4 +1,3 @@
-# https://manual.macromates.com/en/language_grammars#naming_conventions
 import sys
 
 if sys.version_info[0] > 2:
@@ -6,6 +5,8 @@ if sys.version_info[0] > 2:
 
 __all__ = ["COMPILED_NODES", "COMPILED_HEADS"]
 
+
+# https://manual.macromates.com/en/language_grammars#naming_conventions
 DATA = """
     comment
         line
@@ -88,6 +89,12 @@ DATA = """
     source
 
     text
+
+    punctuation
+        definition
+        section
+        separator
+        terminator
 """
 
 
