@@ -6,10 +6,19 @@ CSScheme Changelog
 
 - The settings management for executable paths has been changed!
   If you depend on this, you'll have to revisit.
-- SCSScheme files now show the same output on DumpErrors as on ParseErrors
+- Added support for stylus (an example file has been bundled as well)
+
+- If running a pre-compiler, the compiled result will always be shown if there
+  was an error parsing it
 - Added commands for the command palette to open the readme and settings files
+- DumpErrors now show the same debug output as ParseErrors
 - Fixed long relative path references in some situations (mainly stylus)
 - Fixed wrong syntax file reference with `"preview_compiled_css": true`
+- SASScheme files now also get a dedicated syntax (that only includes the
+  separate "SASS" syntax) which allows CSScheme to more accurately match its
+  build system (same for stylus)
+- Fixed wrong line number being displayed when an at-rule was encountered
+  multiple times
 
 
 v0.3.0 (2014-03-08)
@@ -19,8 +28,8 @@ v0.3.0 (2014-03-08)
   "tagsOptions") for validation (also #2)
 - Allow `"fontStyle": none;` for empty style list (#4)
 - Highlight SASS's `index` function
-- Fix not showing error message if a line number was not found from the compiled
-  SCSS (within the last x lines)
+- Fix not showing error message if a line number was not found from the
+  compiled SCSS (within the last x lines)
 - Added snippets for `@for`, `@each`, `@else if`, `@else`, `@while`
 - All "package" related files were moved to a sub-directory
 
