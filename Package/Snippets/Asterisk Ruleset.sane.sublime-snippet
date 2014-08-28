@@ -2,7 +2,7 @@
 * {
 	foreground:    $1;
 	background:    $2;
-	fontStyle:     $3;
+
 	caret:         $4;
 	lineHighlight: $5;
 	selection:     $6;$0
