@@ -1,14 +1,16 @@
 [
+    // Convert (also, and mainly, as build system)
     {
         "caption": "CSScheme: Build",
         "command": "convert_csscheme"
     },
+
+    // Open readme and settings
     {
         "caption": "CSScheme: Open README",
         "command": "open_file",
         "args": {"file": "${packages}/CSScheme/README.md"}
     },
-    { "caption": "-"},
     {
         "caption": "Preferences: CSScheme Settings - Default",
         "command": "open_file",
@@ -18,5 +20,27 @@
         "caption": "Preferences: CSScheme Settings - User",
         "command": "open_file",
         "args": {"file": "${packages}/User/CSScheme.sublime-settings", "contents": "{\n\t$0\n}"}
+    },
+
+    // Commands for new file creation
+    {
+        "caption": "CSScheme: Create new CSScheme file",
+        "command": "create_csscheme",
+        "args": {"syntax": "CSScheme"}
+    },
+    {
+        "caption": "CSScheme: Create new SCSScheme file",
+        "command": "create_csscheme",
+        "args": {"syntax": "SCSScheme"}
+    },
+    {
+        "caption": "CSScheme: Create new SASScheme file",
+        "command": "create_csscheme",
+        "args": {"syntax": "SASScheme"}
+    },
+    {
+        "caption": "CSScheme: Create new StyluScheme file",
+        "command": "create_csscheme",
+        "args": {"syntax": "StyluScheme"}
     }
 ]

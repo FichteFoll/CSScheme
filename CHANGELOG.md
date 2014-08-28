@@ -10,13 +10,14 @@ CSScheme Changelog
 
 - If running a pre-compiler, the compiled result will always be shown if there
   was an error parsing it
-- Added commands for the command palette to open the readme and settings files
+- Added commands to create a new csscheme file (or variation) based on templates
+- Added command palette entries to open the readme and settings files
 - DumpErrors now show the same debug output as ParseErrors
 - Fixed long relative path references in some situations (mainly stylus)
 - Fixed wrong syntax file reference with `"preview_compiled_css": true`
-- SASScheme files now also get a dedicated syntax (that only includes the
-  separate "SASS" syntax) which allows CSScheme to more accurately match its
-  build system (same for stylus)
+- SASScheme files now also get a dedicated syntax which allows CSScheme to more
+  accurately match its build system (same for stylus). This relies on the
+  external "Sass" package.
 - Fixed wrong line number being displayed when an at-rule was encountered
   multiple times
 - Added punctuation scopes to auto completion (csscheme, scsscheme)
