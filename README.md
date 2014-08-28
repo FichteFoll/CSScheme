@@ -12,38 +12,47 @@ editing color schemes are not programmatical enough? Then this is for you!
 
 CSScheme converts a custom CSS-like syntax into the `.tmTheme` files we all
 love, but it does not end there. CSScheme can also take care of **compiling
-SCSS** into CSS and then into a color scheme using all features from SASS, such
-as variables or conditionals.
+SCSS, SASS or stylus** into CSScheme (the syntax) and *then* into a color scheme
+using all features of these pre-compilers, such as variables, conditionals or
+functions.
 
-*Check the [example file](#example-file) for what's possible!*
+*Check the [example files](#example-files) for what's possible!*
 
 
 ## Installation
 
-Use [Package Control][] to install CSScheme.
+Use [Package Control][] to [install][] "CSScheme".
 
 [Package Control]: https://sublime.wbond.net/installation
+[install]: https://sublime.wbond.net/docs/usage
 
 
 ## Usage
 
-Create a new file with the `.csscheme` or `.scsscheme` extension, or just select
-the corresponding syntax for your file. Building (<kbd>ctrl+b</kbd> or
-<kbd>command+b</kbd>) will convert the file to CSS, if necessary, and then into
-a `.tmTheme` file. Errors during conversion are captured in an output panel.
+![What it looks like](http://i.imgur.com/0LTV2xq.gif)
 
-Things you need to consider when using CSScheme:
+You can etiher create a new file with the **CSScheme: Create new \*Scheme file**
+commands or open a file with the `.csscheme`, `.scsscheme`, `.sasscheme` or
+`.styluscheme` extension. Building (<kbd>ctrl+b</kbd> or <kbd>⌘b</kbd>) will
+convert the file to CSScheme, if necessary, and then into a `.tmTheme` file.
+Errors during conversion are captured in an output panel. For automation
+purposes, the command is named `convert_csscheme.`
 
-- `@` at-rules will be added as string values to the outer dictionary. Thus, you
-  need to specify a global `@name` rule to specify the scheme's name. `@name`
+Things you need to consider when using **CSScheme**:
+
+- `@` at-rules will be added as string values to the "outer dictionary". You
+  **must** specify a global `@name` rule to specify the scheme's name. `@name`
   rules in a ruleset will show as the name for various color scheme editing
   tools after compilation. You usually don't need it but it doesn't hurt either.
 - If you want a property to have no font styles you have to specify 
-  `fontStyle: none;`. This will be translated to the empty
-  `<key>fontStyle</key><string></string>`.
+  `fontStyle: none;`. This will be translated to
+  `<key>fontStyle</key><string />`.
+- The general settings (like main background color) are read from a general-
+  purpose block with a `*` selector. This is required.
+- Specifying a uuid (via `@uuid`) is optional because Sublime Text ignores it.
 
 
-Things you need to consider when using **SCSS**cheme (or SASScheme):
+Things you need to consider when using CSScheme with **SCSS** (or **SASS**):
 
 - Make sure that `sass` is available on your PATH or adjust the path to the
   executable in the settings.
@@ -51,45 +60,64 @@ Things you need to consider when using **SCSS**cheme (or SASScheme):
   them in a string, e.g. `'#12345678'`, or just use the `rgba()` notation.
 - The SASS parser will also not work with the `-` subtract scope seletor
   operator, so you need to enclose it in a string if you want to use it (`'-'`).
-  CSScheme will take care of removing the quotes in the resulting color scheme
-  file (an example for this can be found in the [example file](#example-file)).
 
-I won't outline conventions or the structure of color schemes in general (for
-now), but you should probably check out the following
-[Useful resources](#useful-resources) section if you have some questions.
+  CSScheme will take care of removing the quotes in the resulting color scheme
+  file (an example can be found in the [example files](#example-files)).
+
+
+Things you need to consider when using CSScheme with **stylus**:
+
+- Make sure that `stylus` is available on your PATH or adjust the path to the
+  executable in the settings.
+- At-rules, like the required global `@name` must be encapsulated with
+  `unquote()`. Example: `unquote('@name "Example StyluScheme";')`
+- At-rules in non-global scope **do not work**! You'd only need these for
+  `@name` or possibly `@comment` anyway, but stylus does some weird stuff that
+  does not translate into sane CSScheme.
+
 
 
 ### Supported Syntaxes
 
-CSScheme provides native support for CSS to `.tmTheme` conversion. Thus, all
-languages that compile to CSS will also work in some way. SCSS (and SASS) have a
-special treatment in that they are automatically built and SCSScheme even has
-its own syntax definition because the one from the SCSS package highlights
-unknown propoerties as invalid. Furthermore they provide snippets and
-completions. For SASSchemes, you can use the syntax from the [SASS Package][].
+CSScheme (the package) provides native support for CSScheme-to-`.tmTheme`
+conversion. Thus, all languages that compile to CSS will also work in one way or
+another. SCSS/SASS and stylus are automatically built from within Sublime Text,
+and SCSScheme even has its own syntax definition because the one from the SCSS
+package highlights unknown properties as invalid. Furthermore they provide
+snippets and completions.
 
-[SASS Package]: https://sublime.wbond.net/packages/Sass
+- Syntax highlighting for CSScheme and SCSScheme is bundled. Snippets and
+  completions are provided for both.
+- For SASScheme syntax highlighting you additionally need the [Sass][] package.
+- For StyluScheme syntax highlighting you additionally need the [Stylus][]
+  package.
 
-If you want to use something different than SCSS, feel free to file an issue (if
-there isn't one already). I initially considered supporting LESS too, but they
-don't really provide much over SCSS and it's quite some work to write the syntax
-definitions for each of them. The SASS package on Package Control provides
-decent syntax highlighting that doesn't break with the properties that color
-schemes use though, so you can at least use that if you prefer.
+[Sass]: https://sublime.wbond.net/packages/Sass
+[Stylus]: https://sublime.wbond.net/packages/Stylus
+
+If you want to use something a different pre-processor, you can do so by
+converting to CSScheme externally and then do conversion from CSScheme to
+tmTheme from within Sublime Text. Feel free to file an issue (if there isn't one
+already) if you'd like built-in support for an additional pre-processor.
 
 
 ### Utility for Scheme Creation
+*(only CSScheme and SCSScheme)*
 
-**Symbol List**
+#### Symbol List
 
-Just press <kbd>ctrl+r</kbd> (<kbd>command+r</kbd>).
+Just press <kbd>ctrl+r</kbd> (<kbd>⌘r</kbd>).
 
-**Snippets**
+In StyluScheme this is *somewhat* supported but since scope names are not
+regular html tags they don't get recognized (since I didn't bother to write a
+new syntax definition for stylus as well).
+
+#### Snippets
 
 - `*` (`*` ruleset)
 - `r` (general purpose ruleset)
 
-*SCSScheme*
+*only SCSScheme:*
 
 - `mixin`, `=` (short for `mixin`)
 - `if`, `elif`, `else`
@@ -97,10 +125,10 @@ Just press <kbd>ctrl+r</kbd> (<kbd>command+r</kbd>).
 - `each`
 - `while`
 
-**Completions**
+#### Completions
 
-A few commonly used properties are completed as well as the basic scopes from
-the [Text Mate scope naming conventions](#useful-resources) when specifying a
+All known properties are completed as well as the basic scopes from the
+[Text Mate scope naming conventions](#useful-resources) when specifying a 
 selector.
 
 
@@ -110,9 +138,12 @@ Here is a bunch of links that might help you when working on your color scheme.
 
 - [TextMate Manual - Scope Selectors](http://manual.macromates.com/en/scope_selectors)
 - [TextMate Manual - Scope Naming Conventions](http://manual.macromates.com/en/language_grammars.html#naming-conventions)
+
 - [SASS/SCSS](http://sass-lang.com/)
 - [SASS (color) function reference](http://sass-lang.com/documentation/Sass/Script/Functions.html)
 - [Overview of SASS functions with example colors](http://jackiebalzer.com/color)
+- [stylus reference](http://learnboost.github.io/stylus/)
+
 - [HSL to RGB converter](http://serennu.com/colour/hsltorgb.php)
 - [Color Scheme Calculator](http://serennu.com/colour/colourcalculator.php)
 - [Hue scales using HCL](http://vis4.net/blog/posts/avoid-equidistant-hsv-colors/)
@@ -120,25 +151,34 @@ Here is a bunch of links that might help you when working on your color scheme.
 - [Tool for multi-hued color scales](https://vis4.net/labs/multihue/)
 
 
-## Example File
+## Example Files
 
-I prepared an example file that is merely a proof of concept and shows a few of
-the features that are supported. The colors itself don't make much sense and are
-not good on the eyes because I picked them pretty much randomly, but it gives
-some great insight on what is possible.
+I prepared two example files that are merely a proof of concept and show a few
+of the features that are supported. The colors itself don't make much sense and
+are not good on the eyes because I picked them pretty much randomly, but it
+gives some great insight on what is possible.
 
-[**Example SCSScheme.scsscheme**](./Example SCSScheme.scsscheme)
+- [**Example SCSScheme.scsscheme**](./Example SCSScheme.scsscheme)
+- [**Example StyluScheme.scsscheme**](./Example StyluScheme.scsscheme)
+
+If you would like to see a real world example, refer to the [Writerly Scheme][]
+by [@alehandrof][] which heavily uses Sass's `@import` to make a larger scheme
+more manageable.
+
+[Writerly Scheme]: https://github.com/alehandrof/Writerly
+[@alehandrof]: https://github.com/alehandrof
 
 
 ## Other Efforts for Easing Color Scheme Creation
 
-Please note that all these aim to work directly on `.tmTheme` files and will not
-work together with CSScheme since it does not yet support converting existing
-schemes to CSS (and will never convert to SCSS).
+Please note that all these aim to work directly on `.tmTheme` files and will
+not work together with CSScheme since it does not yet support converting
+existing schemes to CSS (and will never convert to SCSS).
 
 - <https://github.com/facelessuser/ColorSchemeEditor/> - Cross platform Python
   application for editing color schemes in a GUI
 - <https://github.com/nilium/schemer> - OS X App, similar to the above
-- <http://tmtheme-editor.herokuapp.com/> - Webapp, similar to the above but with a
-  bunch of example color schemes to preview/edit and a nice preview
-- <https://github.com/bobef/ColorSchemeEditor-ST2> - Sublime Text plugin that syncronizes
+- <http://tmtheme-editor.herokuapp.com/> - Webapp, similar to the above but
+  with a bunch of example color schemes to preview/edit and a nice preview
+- <https://github.com/bobef/ColorSchemeEditor-ST2> - Sublime Text plugin that
+  syncronizes
