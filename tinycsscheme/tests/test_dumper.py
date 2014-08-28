@@ -41,14 +41,13 @@ def DC(name, value):
 
 
 @pytest.mark.parametrize(('stylesheet', 'expected_data'), [
-    (SS([
-        SR('@name', "Test"),
-        SR('@at-rule', "hi"),
-        RS('*', []),
-        # Should this be tested here?
-        RS('source', [DC('foreground', "#123456")]),
-        SR('@uuid', '2e3af29f-ebee-431f-af96-72bda5d4c144')
-        ]),
+    (SS([SR('@name', "Test"),
+         SR('@at-rule', "hi"),
+         RS('*', []),
+         # Should this be tested here?
+         RS('source', [DC('foreground', "#123456")]),
+         SR('@uuid', '2e3af29f-ebee-431f-af96-72bda5d4c144')
+         ]),
      {'name': "Test",
       'at-rule': "hi",
       'uuid': "2e3af29f-ebee-431f-af96-72bda5d4c144",
@@ -65,31 +64,27 @@ def test_datafy(stylesheet, expected_data):
 
 
 @pytest.mark.parametrize(('stylesheet', 'expected_error'), [
-    (SS([
-        SR('@name', "Test"),
-        ]),
+    (SS([SR('@name', "Test"),
+         ]),
      "Must contain '*' ruleset"
      ),
 
-    (SS([
-        RS('*', [])
-        ]),
+    (SS([RS('*', [])
+         ]),
      "Must contain 'name' at-rule"
      ),
 
-    (SS([
-        SR('@name', "Test"),
-        RS('*', []),
-        RS('*', [])
-        ]),
+    (SS([SR('@name', "Test"),
+         RS('*', []),
+         RS('*', [])
+         ]),
      "Only one *-rule allowed"
      ),
 
-    (SS([
-        SR('@settings', "value"),
-        SR('@name', "Test"),
-        RS('*', [])
-        ]),
+    (SS([SR('@settings', "value"),
+         SR('@name', "Test"),
+         RS('*', [])
+         ]),
      "Can not override 'settings' key using at-rules."
      ),
 ])
@@ -102,11 +97,10 @@ def test_datafy_errors(stylesheet, expected_error):
 
 
 @pytest.mark.parametrize(('ruleset', 'expected_data'), [
-    (RS('*', [
-        DC('foreground',  "#123456"),
-        DC('someSetting', "yeah"),
-        DC('another',     "rgb(0,0,0)"),  # Test if subcalls function properly
-        ],
+    (RS('*', [DC('foreground',  "#123456"),
+              DC('someSetting', "yeah"),
+              DC('another',     "rgb(0,0,0)"),  # Test if subcalls function properly
+              ],
         []),
      {'settings': {
          'foreground':  "#123456",
@@ -115,11 +109,11 @@ def test_datafy_errors(stylesheet, expected_error):
      }}
      ),
 
-    (RS("some    other \nruleset '-' subtract", [
-        DC('fontStyle', "bold"),
-        ], [
-        SR('@name', "\"Test name\"")
-        ]),
+    (RS("some    other \nruleset '-' subtract",
+        [DC('fontStyle', "bold"),
+         ],
+        [SR('@name', "\"Test name\"")
+         ]),
      {'name': "Test name",
       'scope': "some other ruleset - subtract",
       'settings': {
@@ -133,14 +127,15 @@ def test_datafy_ruleset(ruleset, expected_data):
 
 
 @pytest.mark.parametrize(('ruleset', 'expected_error'), [
-    (RS('*', [], [
-        SR('@settings', "a"),
-        ]),
+    (RS('*',
+        [],
+        [SR('@settings', "a"),
+         ]),
      "You can not override the 'settings' key using at-rules"
      ),
-    (RS('yeah', [], [
-        SR('@scope', "a"),
-        ]),
+    (RS('yeah', [],
+        [SR('@scope', "a"),
+         ]),
      "You can not override the 'scope' key using at-rules"
      ),
 ])

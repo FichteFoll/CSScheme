@@ -112,7 +112,7 @@ class CSSchemeDumper(object):
                     rulesets.append(r)
 
         # Make sure the name is at the top
-        if not 'name' in at_rules:
+        if 'name' not in at_rules:
             raise DumpError(dummy, "Must contain 'name' at-rule")
         data['name'] = strvalue(at_rules['name'].value)
         del at_rules['name']
@@ -187,7 +187,7 @@ class CSSchemeDumper(object):
             color = None
             if v.type == 'IDENT':
                 # Lookup css color names and replace them with their HASH
-                if not v.value in css_colors:
+                if v.value not in css_colors:
                     raise DumpError(v, "unknown color name '{1}' for property {0}"
                                        .format(decl.name, v.value), sel)
 
