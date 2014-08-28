@@ -1,5 +1,3 @@
-import os
-
 import sublime
 import sublime_plugin
 
@@ -87,7 +85,7 @@ class convert_csscheme(WindowAndTextCommand):
             conv = conv[0]
 
             out.set_path(in_tuple.path)
-            executables = settings().get("executables")  # TOTEST
+            executables = settings().get("executables")
 
             # Run converter
             text = conv.convert(out, in_file, executables)
