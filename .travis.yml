@@ -1,9 +1,7 @@
 language: python
 
 python:
-  # ST2 and ST3
-  - "2.6"
-  - "3.3"
+  - "3.3" # ST3
 
 env:
   # Do not do speed tests since they won't work and would generate a failure
@@ -18,7 +16,6 @@ install:
 
 script:
   # Run flake8 on everything except tinycss
-  # Technically this only needs to run once (3.3), but :effort:
   - >
     flake8 .
     --exclude=./tinycsscheme/tinycss*,./my_sublime_lib/view/__init__.py

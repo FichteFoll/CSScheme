@@ -1,34 +1,23 @@
 import sublime
 import sublime_plugin
 
-try:
-    # Use a different name because PackageDev adds it to the path and that
-    # takes precedence over local paths (for some reason).
-    from .my_sublime_lib import WindowAndTextCommand
-    from .my_sublime_lib.path import file_path_tuple
-    from .my_sublime_lib.view import OutputPanel
+# Use a different name because PackageDev adds it to the path and that
+# takes precedence over local paths (for some reason).
+from .my_sublime_lib import WindowAndTextCommand
+from .my_sublime_lib.path import file_path_tuple
+from .my_sublime_lib.view import OutputPanel
 
-    from .tinycsscheme.parser import CSSchemeParser
-    from .tinycsscheme.dumper import CSSchemeDumper, DumpError
+from .tinycsscheme.parser import CSSchemeParser
+from .tinycsscheme.dumper import CSSchemeDumper, DumpError
 
-    from .scope_data import COMPILED_HEADS
-    from . import converters
-except:
-    from my_sublime_lib import WindowAndTextCommand
-    from my_sublime_lib.path import file_path_tuple
-    from my_sublime_lib.view import OutputPanel
-
-    from tinycsscheme.parser import CSSchemeParser
-    from tinycsscheme.dumper import CSSchemeDumper, DumpError
-
-    from scope_data import COMPILED_HEADS
-    import converters
+from .scope_data import COMPILED_HEADS
+from . import converters
 
 
 ###############################################################################
 
 
-PACKAGE = "CSScheme"  # my_sublime_lib.path.get_package_name() # __package__
+PACKAGE = __package__
 
 
 def settings():
@@ -160,8 +149,8 @@ class CSSchemeCompletionListener(sublime_plugin.EventListener):
         scope  = line.rsplit(' ', 1)[-1]
         return scope.lstrip('-')
 
-        # Provide a selection of naming convention from TextMate and/or property names
     def on_query_completions(self, view, prefix, locations):
+        # Provide a selection of naming convention from TextMate and/or property names
 
         match_sel = lambda s: all(view.match_selector(l, s) for l in locations)
 

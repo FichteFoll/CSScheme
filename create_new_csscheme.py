@@ -4,7 +4,7 @@ from textwrap import dedent
 import sublime_plugin
 
 
-PACKAGE = "CSScheme"  # my_sublime_lib.path.get_package_name()
+PACKAGE = __package__
 
 
 csscheme_snippet = dedent("""\
@@ -148,9 +148,9 @@ scsscheme_snippet = dedent("""\
 """).replace("    ", "\t")
 
 # Do some dirty regex replaces because ... well, it's easy
-sasscheme_snippet = re.compile(r" \{$|\n\t*\}|;$", flags=re.M).sub('', scsscheme_snippet)
+sasscheme_snippet = re.sub(r" \{$|\n\t*\}|;$", '', scsscheme_snippet, flags=re.M)
 # Does anyone actually like removing these colons? I prefer them visible
-styluscheme_snippet = re.compile(r":(?= )", flags=re.M).sub('', sasscheme_snippet)
+styluscheme_snippet = re.sub(r":(?= )", '', sasscheme_snippet, flags=re.M)
 
 
 class create_csscheme(sublime_plugin.WindowCommand):
