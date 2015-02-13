@@ -1311,7 +1311,7 @@
 		<key>selector_subtract</key>
 		<dict>
 			<key>begin</key>
-			<string>(?&lt;!\w)'-'</string>
+			<string>(?&lt;!\w)(?:'-'|\\-)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>

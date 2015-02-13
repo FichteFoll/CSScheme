@@ -136,10 +136,14 @@ class CSSchemeDumper(object):
         # TODO test selector?
         sel = rset.selector.as_css()
         if sel != '*':
-            # We replace escaping of the subtract operator because SASS doesn't like the literal -
-            # Also replace multiple whitespaces (including newlines) with single space; we don't
-            # know how exactly it will perform otherwise.
-            rdict['scope'] = ' '.join(sel.replace("'-'", "-").split())
+            # We replace escaping of the subtract operator because SASS
+            # doesn't like the literal hyphen in selectors.
+            # '-' was not recognized anymore starting around Dec 2014, use \- now.
+            sel = sel.replace("'-'", "-").replace("\\-", "-")
+            # Also replace multiple whitespaces (including newlines) with
+            # single space; we don't know how exactly it will perform
+            # otherwise.
+            rdict['scope'] = ' '.join(sel.split())
 
         # Arbitrary at-rules -> add to dict
         for r in rset.at_rules:

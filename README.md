@@ -27,21 +27,21 @@ Use [Package Control][] to [install][] "CSScheme".
 [install]: https://packagecontrol.io/docs/usage
 
 
-## Usage
+## Usage (Please Read!)
 
 You can either create a new file with the **CSScheme: Create new \*Scheme file**
 commands, open a file with the `.csscheme`, `.scsscheme`, `.sasscheme` or
 `.styluscheme` extension or convert an existing `tmTheme` file using the
-**CSScheme: Convert to CSScheme** command in the command palette. Conversion to
-other syntaxes is not supported at the moment and likely won't in the future.
-Please convert manually and to your own preferences.
+**CSScheme: Convert to CSScheme** command. Conversion to other syntaxes is not
+supported at the moment and likely won't in the future. Please convert manually
+and to your own preferences.
 
 Building (<kbd>ctrl+b</kbd> or <kbd>⌘b</kbd>) will convert the file to CSScheme,
 if necessary, and then into a `.tmTheme` file. Errors during conversion are
 captured in an output panel. For automation purposes, the command is named
-`convert_csscheme.`
+`convert_csscheme`.
 
-Things you must consider when using **CSScheme**:
+Things you *must* consider when using **CSScheme**:
 
 - `@` at-rules will be added as string values to the "outer dictionary". You
   **must** specify a global `@name` rule to specify the scheme's name. `@name`
@@ -55,20 +55,25 @@ Things you must consider when using **CSScheme**:
 - Specifying a uuid (via `@uuid`) is optional because Sublime Text ignores it.
 
 
-Things you must consider when using CSScheme with **SCSS** (or **SASS**):
+Things you *must* consider additionally when using CSScheme with **SCSS** (or
+**SASS**):
 
 - Make sure that `sass` is available on your PATH or adjust the path to the
   executable in the settings.
 - The SASS parser will not accept raw `#RRGGBBAA` hashes. You must enclose
   them in a string, e.g. `'#12345678'`, or just use the `rgba()` notation.
-- The SASS parser will also not work with the `-` subtract scope seletor
-  operator, so you must enclose it in a string if you want to use it (`'-'`).
+- The SASS parser will also not work with the literal `-` subtract scope seletor
+  operator, so you must escape it with a backslash if you want to use it (`\-`).
 
-  CSScheme will take care of removing the quotes in the resulting color scheme
-  file (an example can be found in the [example files](#example-files)).
+  CSScheme will take care of removing the backslash in the resulting color
+  scheme file (an example can be found in the [example files](#example-files)).
+
+  *Note*: This used to be `'-'` but the SASS parser doesn't accept it anymore.
+  If you use an older version of SASS, CSScheme will still convert the old `'-'`
+  escape.
 
 
-Things you must consider when using CSScheme with **stylus**:
+Things you *must* consider additionally when using CSScheme with **stylus**:
 
 - Make sure that `stylus` is available on your PATH or adjust the path to the
   executable in the settings.
@@ -77,9 +82,6 @@ Things you must consider when using CSScheme with **stylus**:
 - At-rules in non-global scope **do not work**! You'd only need these for
   `@name` or possibly `@comment` anyway, but stylus does some weird stuff that
   does not translate into sane CSScheme.
-
-
-### Converting tmTheme to CSScheme
 
 
 ### Supported Syntaxes

@@ -95,9 +95,10 @@ support {
 entity {
     foreground: $col5;
 
-    // We need to escape the subtract operator here because SASS wants to do arithmetics.
+    // We need to escape the subtract operator here because SASS doesn't
+    // recognize it as a valid selector otherwise.
     // The dumper will take care of it.
-    &.name '-' &.name.tag {
+    &.name \- &.name.tag {
         background: transparentize(desaturate($col5, 30%), .75);
     }
 }
