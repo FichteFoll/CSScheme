@@ -101,6 +101,7 @@ def test_core_parser(css_source, expected_rules, expected_errors):
     ('@charset ascii;', 1, []),
     ('@charset #123456;', 1, []),
     ('@uuid 2e3af29f-ebee-431f-af96-72bda5d4c144;', 1, []),
+    ('@uuid 02019C6E-C747-44D5-94B5-110B867C1C22;', 1, []),  # starts with 0
     # Errors
     ('foo{} @lipsum{} bar{}', 2,
         ["expected ';', got a block"]),

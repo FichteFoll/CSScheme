@@ -28,18 +28,13 @@ except:  # pragma: no cover
 # Need to load it at the beginning (and not lazy) because ST2 would fail to import it later
 from .css_colors import css_colors
 
-from .parser import StringRule
+from .parser import StringRule, strvalue
 from .tinycss.parsing import split_on_comma, strip_whitespace
 from .tinycss.token_data import Token
 
 
 def clamp(minimum, x, maximum):
     return max(minimum, min(x, maximum))
-
-
-def strvalue(token):
-    # Required for uuids in at-rules which are represented as DIMENSION
-    return str(token.value) + (token.unit if token.unit else '')
 
 
 class DumpError(ValueError):

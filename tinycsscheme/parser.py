@@ -36,6 +36,13 @@ def is_uuid(test):
                          test, re.I))
 
 
+def strvalue(token):
+    if token.type == 'DIMENSION':
+        return token.as_css()
+    else:
+        return str(token.value)
+
+
 class StringRule(object):
     """Any parsed rule with a single STRING head (e.g. @comment).
 
@@ -98,15 +105,16 @@ class CSSchemeParser(CSS21Parser):
         if len(head) > 1:
             raise ParseError(head[1], 'expected 1 token for {0} rule, got {1}'
                                       .format(rule.at_keyword, len(head)))
+        token = head[0]
 
-        # DIMENSION for uuids that start with a number
-        whole_value = str(head[0].value) + (head[0].unit if head[0].unit else '')
-        if not (head[0].type in ('STRING', 'IDENT', 'HASH')
-                or (head[0].type == 'DIMENSION' and is_uuid(whole_value))):
+        # DIMENSION is used for uuids that start with a number
+        whole_value = strvalue(token)
+        if not (token.type in ('STRING', 'IDENT', 'HASH')
+                or (token.type == 'DIMENSION' and is_uuid(whole_value))):
             raise ParseError(rule, 'expected STRING, IDENT or HASH token or a valid uuid4 for '
-                                   '{0} rule, got {1}'.format(rule.at_keyword, head[0].type))
+                                   '{0} rule, got {1}'.format(rule.at_keyword, token.type))
 
-        return StringRule(rule.at_keyword, head[0], rule.line, rule.column)
+        return StringRule(rule.at_keyword, token, rule.line, rule.column)
 
     def parse_ruleset(self, first_token, tokens):
         """Parse a ruleset: a selector followed by declaration block.
