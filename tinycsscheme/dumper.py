@@ -7,8 +7,8 @@
 
     - @name at-rule is required.
 
-    - You can not overwrite keys with the @settins at-rule, neither can you overwrite @scope keys in
-      rulesets.
+    - You can not overwrite keys with the @settings at-rule, neither can you overwrite @scope keys
+      in rulesets.
 
     - Known property names are checked for validity. This includes but is not limited to:
       + 'foreground', 'background', 'caret' which accept color values, and
@@ -25,7 +25,7 @@ try:
 except:  # pragma: no cover
     from ._ordereddict import OrderedDict  # ST2
 
-# Need to load it at the beginning because ST2 would fail to import it later
+# Need to load it at the beginning (and not lazy) because ST2 would fail to import it later
 from .css_colors import css_colors
 
 from .parser import StringRule
@@ -83,7 +83,7 @@ class CSSchemeDumper(object):
 
     # I could test this, but it is like one line and I only forward anyway. I'll just leave this
     # comment here to remind myself.
-    def dump_stylesheet_file(self, out_file, stylesheet):  # pragma: no cover
+    def dump_stylesheet_file(self, out_file, stylesheet):
         data = self.datafy_stylesheet(stylesheet)
         import plistlib
         plistlib.writePlist(data, out_file)
