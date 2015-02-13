@@ -95,8 +95,16 @@ def set_text(view, text, scroll=False):
 
     `scroll` parameter specifies whether the view should be scrolled to the end.
     """
-    clear(view)
-    append(text, scroll=scroll)
+
+    with Edit(view) as edit:
+        edit.erase(Region(0, view.size()))
+        edit.insert(0, text)
+
+    if scroll:
+        view.show(view.size())
+    else:
+        view.sel().clear()
+        view.sel().add(Region(0, 0))
 
 
 def has_sels(view):
