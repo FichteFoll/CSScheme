@@ -242,7 +242,8 @@ class StylusConverter(SCSSConverter):
     @classmethod
     def report_convert_errors(cls, out, *args, **kwargs):
         out.set_regex(r"Error: (.+?):(\d+)$")
-        # The error is already well-formatted so we just need to print it
+        # The error is already well-formatted so we just need to print it.
+        # If you didn't notice, this skips SCSSConverter's implementation.
         super(SCSSConverter, cls).report_convert_errors(out, *args, **kwargs)
 
 # For exporting

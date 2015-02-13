@@ -123,7 +123,6 @@ class Edit:
         self.step('insert', point, string)
 
     def append(self, string):
-        # import spdb ; spdb.start()
         self.step('insert', lambda v: v.size(), string)
 
     def erase(self, region):
