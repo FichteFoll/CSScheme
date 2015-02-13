@@ -63,17 +63,17 @@ def unset_read_only(view):
         view.set_read_only(True)
 
 
-def append(view, text, scroll=False):
+def append(view, text, scroll=None):
     """Appends text to `view`. Won't work if the view is read-only.
 
-    The `scroll_always` parameter may be one of these values:
+    The `scroll` parameter may be one of these values:
 
         True:  Always scroll to the end of the view.
-        False: Scroll only if the selecton is already at the end.
-        None:  Don't scroll.
+        False: Don't scroll.
+        None:  Scroll only if the selecton is already at the end.
     """
     size = view.size()
-    scroll = scroll or (scroll is not None and len(view.sel()) == 1 and
+    scroll = scroll or (scroll is not False and len(view.sel()) == 1 and
                         view.sel()[0] == Region(size))
 
     with Edit(view) as edit:
