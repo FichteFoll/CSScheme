@@ -1,6 +1,18 @@
 CSScheme Changelog
 ==================
 
+v1.1.0 (2015-02-14)
+-------------------
+
+- ST2 support has been removed! Old releases are still available but
+  development will continue only for ST3.
+- Added command to convert from tmTheme to CSScheme ("CSScheme: Convert to
+  CSScheme") (#8)
+- Changed hyphen escape sequence for SASS/SCSS from `'-'` to `\-`, which works
+  with the current SASS parser (#7)
+- Fixed a bug where uuids with leading zeros were not recognized
+
+
 v1.0.0 (2014-08-28)
 -------------------
 
