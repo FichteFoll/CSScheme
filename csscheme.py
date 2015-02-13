@@ -93,7 +93,8 @@ class convert_csscheme(WindowAndTextCommand):
                 return
 
             # Preview converted css for debugging, optionally
-            if settings().get('preview_compiled_css'):
+            previewed = settings().get('preview_compiled_css')
+            if previewed:
                 self.preview_compiled_css(text, conv, in_tuple.base_name)
 
             # Parse the CSS
@@ -102,7 +103,8 @@ class convert_csscheme(WindowAndTextCommand):
             # Do some awesome error printing action
             if stylesheet.errors:
                 conv.report_parse_errors(out, in_file, text, stylesheet.errors)
-                self.preview_compiled_css(text, conv, in_tuple.base_name)
+                if not previewed:
+                    self.preview_compiled_css(text, conv, in_tuple.base_name)
                 return
             elif not stylesheet.rules:
                 # The CSS seems to be ... empty?
@@ -114,7 +116,8 @@ class convert_csscheme(WindowAndTextCommand):
                 CSSchemeDumper().dump_stylesheet_file(out_file, stylesheet)
             except DumpError as e:
                 conv.report_dump_error(out, in_file, text, e)
-                self.preview_compiled_css(text, conv, in_tuple.base_name)
+                if not previewed:
+                    self.preview_compiled_css(text, conv, in_tuple.base_name)
                 return
 
             status("Build successful")
@@ -123,7 +126,7 @@ class convert_csscheme(WindowAndTextCommand):
                 self.view.window().open_file(out_file)
 
     def preview_compiled_css(self, text, conv, base_name):
-        if conv.ext == 'csscheme' or self.preview_opened:
+        if conv.ext == 'csscheme':
             return
 
         v = self.view.window().new_file()
@@ -136,8 +139,6 @@ class convert_csscheme(WindowAndTextCommand):
             from my_sublime_lib.edit import Edit
         with Edit(v) as edit:
             edit.append(text)
-
-        self.preview_opened = True
 
 
 ###############################################################################
