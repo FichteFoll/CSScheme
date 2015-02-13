@@ -5,8 +5,8 @@ from sublime import Region, View
 from .. import Settings
 from ..edit import Edit
 
-__all__ = ['ViewSettings', 'unset_read_only', 'append', 'clear', 'has_sels',
-           'has_file_ext', 'base_scope', 'rowcount', 'rowwidth',
+__all__ = ['ViewSettings', 'unset_read_only', 'append', 'clear', 'set_text',
+           'has_sels', 'has_file_ext', 'base_scope', 'rowcount', 'rowwidth',
            'relative_point', 'coorded_region', 'coorded_substr', 'get_text',
            'get_viewport_point', 'get_viewport_coords', 'set_viewport',
            'extract_selector']
@@ -88,6 +88,15 @@ def clear(view):
     """
     with Edit(view) as edit:
         edit.erase(Region(0, view.size()))
+
+
+def set_text(view, text, scroll=False):
+    """Replaces the entire content of view with the text specified.
+
+    `scroll` parameter specifies whether the view should be scrolled to the end.
+    """
+    clear(view)
+    append(text, scroll=scroll)
 
 
 def has_sels(view):
