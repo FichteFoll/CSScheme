@@ -1,8 +1,17 @@
 [
     // Convert (also, and mainly, as build system)
     {
-        "caption": "CSScheme: Build",
+        "caption": "CSScheme: Convert to tmTheme",
         "command": "convert_csscheme"
+    },
+    {
+        "caption": "CSScheme: Convert to CSScheme",
+        "command": "convert_tmtheme"
+    },
+    {
+        "caption": "CSScheme: Convert to CSScheme (skip @names)",
+        "command": "convert_tmtheme",
+        "args": {"skip_names": true}
     },
 
     // Open readme and settings

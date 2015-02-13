@@ -1,3 +1,5 @@
+import os
+
 import sublime
 import sublime_plugin
 
@@ -5,13 +7,14 @@ import sublime_plugin
 # takes precedence over local paths (for some reason).
 from .my_sublime_lib import WindowAndTextCommand
 from .my_sublime_lib.path import file_path_tuple
-from .my_sublime_lib.view import OutputPanel
+from .my_sublime_lib.view import OutputPanel, get_text, set_text
 
 from .tinycsscheme.parser import CSSchemeParser
 from .tinycsscheme.dumper import CSSchemeDumper, DumpError
 
 from .scope_data import COMPILED_HEADS
 from . import converters
+from .converters import tmtheme
 
 
 ###############################################################################
@@ -122,12 +125,57 @@ class convert_csscheme(WindowAndTextCommand):
         v.set_scratch(True)
         v.set_syntax_file("Packages/%s/Package/CSScheme.tmLanguage" % PACKAGE)
         v.set_name("Preview: %s.csscheme" % base_name)
-        try:
-            from .my_sublime_lib.edit import Edit
-        except:
-            from my_sublime_lib.edit import Edit
-        with Edit(v) as edit:
-            edit.append(text)
+        set_text(v, text)
+
+
+class convert_tmtheme(sublime_plugin.TextCommand):
+
+    """Convert a .tmTheme plist into a CSScheme file."""
+
+    def is_enabled(self):
+        path = self.view.file_name()
+        return path.endswith(".tmTheme")
+
+    def run(self, edit, overwrite=False, skip_names=False):
+        path = self.view.file_name()
+        new_path = os.path.splitext(path)[0] + '.csscheme'
+
+        if not overwrite and os.path.exists(new_path):
+            if not sublime.ok_cancel_dialog("The file %s already exists.\n"
+                                            "Do you want to overwrite?"
+                                            % new_path):
+                return
+
+        with OutputPanel(self.view.window(), "csscheme_tmtheme") as out:
+            # Load the tmTheme file
+            data = tmtheme.load(get_text(self.view), path, out)
+            if not data:
+                return
+
+            csscheme = tmtheme.to_csscheme(data, out, skip_names)
+            if not csscheme:
+                return
+
+            # View.insert respects the tab vs. spaces and tab_width settings,
+            # whch is why we use it instead of writing to the file directly.
+            v = self.view.window().open_file(new_path)
+
+            # open_file returns an oddly behaving view that does not accept
+            # inputs, unless invoked on a different thread e.g. using
+            # set_timeout: https://github.com/SublimeTextIssues/Core/issues/678
+            def continue_operation():
+                # Note that we would have needed to disable the custom syntax
+                # before inserting, because the 'insert' and 'insert_snippet'
+                # commands, as well as View.insert, would respect auto-indentation
+                # rules, which we don't want. View.insert is the only one which
+                # works correctly after that.
+                v.set_syntax_file('Packages/Text/Plain text.tmLanguage')
+                set_text(v, csscheme)
+                v.set_syntax_file("Packages/%s/Package/CSScheme.tmLanguage" % PACKAGE)
+
+                v.run_command("save")
+
+            sublime.set_timeout(continue_operation, 0)
 
 
 ###############################################################################
