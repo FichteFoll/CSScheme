@@ -2,19 +2,19 @@ CSScheme - Sublime Text Plugin
 ==============================
 
 [![Build Status][]](https://travis-ci.org/FichteFoll/CSScheme)
-[![Coverage Status][]](https://coveralls.io/r/FichteFoll/CSScheme)
 
 [Build Status]: https://travis-ci.org/FichteFoll/CSScheme.png
-[Coverage Status]: https://coveralls.io/repos/FichteFoll/CSScheme/badge.png
 
-Ever thought handwriting `.tmTheme` files sucks? But the other options to
+Ever thought handwriting `.tmTheme` files sucks? But the other options for
 editing color schemes are not programmatical enough? Then this is for you!
 
-CSScheme converts a custom CSS-like syntax into the `.tmTheme` files we all
-love, but it does not end there. CSScheme can also take care of **compiling
-SCSS, SASS or stylus** into CSScheme (the syntax) and *then* into a color scheme
-using all features of these pre-compilers, such as variables, conditionals or
-functions.
+![What it looks like](http://i.imgur.com/0LTV2xq.gif)
+
+CSScheme is a custom CSS-like syntax that converts into the `.tmTheme` files we
+all love, but it does not end there. CSScheme (the package) can also take care
+of **compiling SCSS, SASS or stylus** into CSScheme (the syntax) and *then* into
+a color scheme using all features of these pre-compilers, such as variables,
+conditionals or functions.
 
 *Check the [example files](#example-files) for what's possible!*
 
@@ -23,22 +23,25 @@ functions.
 
 Use [Package Control][] to [install][] "CSScheme".
 
-[Package Control]: https://sublime.wbond.net/installation
-[install]: https://sublime.wbond.net/docs/usage
+[Package Control]: https://packagecontrol.io/installation
+[install]: https://packagecontrol.io/docs/usage
 
 
 ## Usage
 
-![What it looks like](http://i.imgur.com/0LTV2xq.gif)
+You can either create a new file with the **CSScheme: Create new \*Scheme file**
+commands, open a file with the `.csscheme`, `.scsscheme`, `.sasscheme` or
+`.styluscheme` extension or convert an existing `tmTheme` file using the
+**CSScheme: Convert to CSScheme** command in the command palette. Conversion to
+other syntaxes is not supported at the moment and likely won't in the future.
+Please convert manually and to your own preferences.
 
-You can etiher create a new file with the **CSScheme: Create new \*Scheme file**
-commands or open a file with the `.csscheme`, `.scsscheme`, `.sasscheme` or
-`.styluscheme` extension. Building (<kbd>ctrl+b</kbd> or <kbd>⌘b</kbd>) will
-convert the file to CSScheme, if necessary, and then into a `.tmTheme` file.
-Errors during conversion are captured in an output panel. For automation
-purposes, the command is named `convert_csscheme.`
+Building (<kbd>ctrl+b</kbd> or <kbd>⌘b</kbd>) will convert the file to CSScheme,
+if necessary, and then into a `.tmTheme` file. Errors during conversion are
+captured in an output panel. For automation purposes, the command is named
+`convert_csscheme.`
 
-Things you need to consider when using **CSScheme**:
+Things you must consider when using **CSScheme**:
 
 - `@` at-rules will be added as string values to the "outer dictionary". You
   **must** specify a global `@name` rule to specify the scheme's name. `@name`
@@ -52,20 +55,20 @@ Things you need to consider when using **CSScheme**:
 - Specifying a uuid (via `@uuid`) is optional because Sublime Text ignores it.
 
 
-Things you need to consider when using CSScheme with **SCSS** (or **SASS**):
+Things you must consider when using CSScheme with **SCSS** (or **SASS**):
 
 - Make sure that `sass` is available on your PATH or adjust the path to the
   executable in the settings.
-- The SASS parser will not accept raw `#RRGGBBAA` hashes. You need to enclose
+- The SASS parser will not accept raw `#RRGGBBAA` hashes. You must enclose
   them in a string, e.g. `'#12345678'`, or just use the `rgba()` notation.
 - The SASS parser will also not work with the `-` subtract scope seletor
-  operator, so you need to enclose it in a string if you want to use it (`'-'`).
+  operator, so you must enclose it in a string if you want to use it (`'-'`).
 
   CSScheme will take care of removing the quotes in the resulting color scheme
   file (an example can be found in the [example files](#example-files)).
 
 
-Things you need to consider when using CSScheme with **stylus**:
+Things you must consider when using CSScheme with **stylus**:
 
 - Make sure that `stylus` is available on your PATH or adjust the path to the
   executable in the settings.
@@ -75,6 +78,8 @@ Things you need to consider when using CSScheme with **stylus**:
   `@name` or possibly `@comment` anyway, but stylus does some weird stuff that
   does not translate into sane CSScheme.
 
+
+### Converting tmTheme to CSScheme
 
 
 ### Supported Syntaxes
@@ -92,8 +97,8 @@ snippets and completions.
 - For StyluScheme syntax highlighting you additionally need the [Stylus][]
   package.
 
-[Sass]: https://sublime.wbond.net/packages/Sass
-[Stylus]: https://sublime.wbond.net/packages/Stylus
+[Sass]: https://packagecontrol.io/packages/Sass
+[Stylus]: https://packagecontrol.io/packages/Stylus
 
 If you want to use something a different pre-processor, you can do so by
 converting to CSScheme externally and then do conversion from CSScheme to
@@ -159,7 +164,7 @@ are not good on the eyes because I picked them pretty much randomly, but it
 gives some great insight on what is possible.
 
 - [**Example SCSScheme.scsscheme**](./Example SCSScheme.scsscheme)
-- [**Example StyluScheme.scsscheme**](./Example StyluScheme.scsscheme)
+- [**Example StyluScheme.scsscheme**](./Example StyluScheme.styluscheme)
 
 If you would like to see a real world example, refer to the [Writerly Scheme][]
 by [@alehandrof][] which heavily uses Sass's `@import` to make a larger scheme
@@ -171,9 +176,7 @@ more manageable.
 
 ## Other Efforts for Easing Color Scheme Creation
 
-Please note that all these aim to work directly on `.tmTheme` files and will
-not work together with CSScheme since it does not yet support converting
-existing schemes to CSS (and will never convert to SCSS).
+Please note that all these work directly on `.tmTheme` files.
 
 - <https://github.com/facelessuser/ColorSchemeEditor/> - Cross platform Python
   application for editing color schemes in a GUI
