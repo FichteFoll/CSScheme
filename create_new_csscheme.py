@@ -1,4 +1,5 @@
 import re
+from textwrap import dedent
 
 import sublime_plugin
 
@@ -6,150 +7,150 @@ import sublime_plugin
 PACKAGE = "CSScheme"  # my_sublime_lib.path.get_package_name()
 
 
-csscheme_snippet = """
-@name "${1:Name}";
+csscheme_snippet = dedent("""\
+    @name "${1:Name}";
 
-* {
-    background: ${2:#ddd};
-    foreground: ${3:#222};
+    * {
+        background: ${2:#ddd};
+        foreground: ${3:#222};
 
-    caret: ${4:#fff};
-    lineHighlight: ${5:#12345678};
-    selection: ${6:#f00};
-}
+        caret: ${4:#fff};
+        lineHighlight: ${5:#12345678};
+        selection: ${6:#f00};
+    }
 
-string {
-    foreground: ;
-}
-
-string punctuation.definition {
-    foreground: ;
-}
-
-string.constant {
-    foreground: ;
-}
-
-constant {
-    foreground: ;
-}
-
-constant.numeric {
-    foreground: ;
-}
-
-comment {
-    foreground: ;
-    fontStyle: italic;
-}
-
-support {
-    foreground: ;
-}
-
-support.constant {
-    foreground: ;
-}
-
-entity {
-    foreground: ;
-}
-
-invalid {
-    foreground: ;
-}
-
-invalid.illegal {
-    background: ;
-}
-
-keyword {
-    foreground: ;
-}
-
-storage {
-    foreground: ;
-}
-
-variable, support.variable {
-    foreground: ;
-}
-""".strip().replace("    ", "\t")
-
-scsscheme_snippet = """
-@name "${1:Name}";
-
-* {
-    background: ${2:#ddd};
-    foreground: ${3:#222};
-
-    caret: ${4:#fff};
-    lineHighlight: ${5:'#12345678'};
-    selection: ${6:#f00};
-}
-
-string {
-    foreground: ;
-
-    punctuation.definition {
+    string {
         foreground: ;
     }
 
-    &.constant {
+    string punctuation.definition {
         foreground: ;
     }
-}
 
-constant {
-    foreground: ;
-
-    &.numeric {
+    string.constant {
         foreground: ;
     }
-}
 
-comment {
-    foreground: ;
-    fontStyle: italic;
-}
-
-support {
-    foreground: ;
-
-    &.constant {
+    constant {
         foreground: ;
     }
-}
 
-entity {
-    foreground: ;
-}
+    constant.numeric {
+        foreground: ;
+    }
 
-invalid {
-    foreground: ;
+    comment {
+        foreground: ;
+        fontStyle: italic;
+    }
 
-    &.illegal {
+    support {
+        foreground: ;
+    }
+
+    support.constant {
+        foreground: ;
+    }
+
+    entity {
+        foreground: ;
+    }
+
+    invalid {
+        foreground: ;
+    }
+
+    invalid.illegal {
         background: ;
     }
-}
 
-keyword {
-    foreground: ;
-}
+    keyword {
+        foreground: ;
+    }
 
-storage {
-    foreground: ;
-}
+    storage {
+        foreground: ;
+    }
 
-variable, support.variable {
-    foreground: ;
-}
-""".strip().replace("    ", "\t")
+    variable, support.variable {
+        foreground: ;
+    }
+""").replace("    ", "\t")
+
+scsscheme_snippet = dedent("""\
+    @name "${1:Name}";
+
+    * {
+        background: ${2:#ddd};
+        foreground: ${3:#222};
+
+        caret: ${4:#fff};
+        lineHighlight: ${5:'#12345678'};
+        selection: ${6:#f00};
+    }
+
+    string {
+        foreground: ;
+
+        punctuation.definition {
+            foreground: ;
+        }
+
+        &.constant {
+            foreground: ;
+        }
+    }
+
+    constant {
+        foreground: ;
+
+        &.numeric {
+            foreground: ;
+        }
+    }
+
+    comment {
+        foreground: ;
+        fontStyle: italic;
+    }
+
+    support {
+        foreground: ;
+
+        &.constant {
+            foreground: ;
+        }
+    }
+
+    entity {
+        foreground: ;
+    }
+
+    invalid {
+        foreground: ;
+
+        &.illegal {
+            background: ;
+        }
+    }
+
+    keyword {
+        foreground: ;
+    }
+
+    storage {
+        foreground: ;
+    }
+
+    variable, support.variable {
+        foreground: ;
+    }
+""").replace("    ", "\t")
 
 # Do some dirty regex replaces because ... well, it's easy
-sasscheme_snippet = re.sub(r" \{$|\n\t*\}|;$", '', scsscheme_snippet, flags=re.M)
+sasscheme_snippet = re.compile(r" \{$|\n\t*\}|;$", flags=re.M).sub('', scsscheme_snippet)
 # Does anyone actually like removing these colons? I prefer them visible
-styluscheme_snippet = re.sub(r":(?= )", '', sasscheme_snippet, flags=re.M)
+styluscheme_snippet = re.compile(r":(?= )", flags=re.M).sub('', sasscheme_snippet)
 
 
 class create_csscheme(sublime_plugin.WindowCommand):
