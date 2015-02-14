@@ -200,7 +200,8 @@ class CSSchemeCompletionListener(sublime_plugin.EventListener):
     def on_query_completions(self, view, prefix, locations):
         # Provide a selection of naming convention from TextMate and/or property names
 
-        match_sel = lambda s: all(view.match_selector(l, s) for l in locations)
+        def match_sel(sel):
+            return all(view.match_selector(l, sel) for l in locations)
 
         # Check context
         if not match_sel("source.csscheme - comment - string - variable"):
