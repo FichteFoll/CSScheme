@@ -12,7 +12,6 @@ from .my_sublime_lib.view import OutputPanel, get_text, set_text
 from .tinycsscheme.parser import CSSchemeParser
 from .tinycsscheme.dumper import CSSchemeDumper, DumpError
 
-from .scope_data import COMPILED_HEADS
 from . import converters
 from .converters import tmtheme
 
@@ -77,7 +76,7 @@ class convert_csscheme(WindowAndTextCommand):
             conv = conv[0]
 
             out.set_path(in_tuple.path)
-            executables = settings().get("executables")
+            executables = settings().get("executables", {})
 
             # Run converter
             text = conv.convert(out, in_file, executables)
@@ -134,7 +133,7 @@ class convert_tmtheme(sublime_plugin.TextCommand):
 
     def is_enabled(self):
         path = self.view.file_name()
-        return path.endswith(".tmTheme")
+        return bool(path) and path.endswith(".tmTheme")
 
     def run(self, edit, overwrite=False, skip_names=False):
         path = self.view.file_name()
@@ -156,98 +155,20 @@ class convert_tmtheme(sublime_plugin.TextCommand):
             if not csscheme:
                 return
 
-            # View.insert respects the tab vs. spaces and tab_width settings,
-            # whch is why we use it instead of writing to the file directly.
-            v = self.view.window().open_file(new_path)
+        # View.insert respects the tab vs. spaces and tab_width settings,
+        # whch is why we use it instead of writing to the file directly.
+        v = self.view.window().open_file(new_path)
 
-            # open_file returns an oddly behaving view that does not accept
-            # inputs, unless invoked on a different thread e.g. using
-            # set_timeout: https://github.com/SublimeTextIssues/Core/issues/678
-            def continue_operation():
-                # Note that we would have needed to disable the custom syntax
-                # before inserting, because the 'insert' and 'insert_snippet'
-                # commands, as well as View.insert, would respect auto-indentation
-                # rules, which we don't want. View.insert is the only one which
-                # works correctly after that.
-                v.set_syntax_file('Packages/Text/Plain text.tmLanguage')
-                set_text(v, csscheme)
-                v.set_syntax_file("Packages/%s/Package/CSScheme.tmLanguage" % PACKAGE)
+        # open_file returns an oddly behaving view that does not accept
+        # inputs, unless invoked on a different thread e.g. using
+        # set_timeout: https://github.com/SublimeTextIssues/Core/issues/678
+        def continue_operation():
+            # The 'insert' and 'insert_snippet' commands and View.insert
+            # respect auto-indentation rules, which we don't want.
+            v.settings().set('auto_indent', False)
+            set_text(v, csscheme)
+            v.settings().erase('auto_indent')
 
-                v.run_command("save")
+            v.run_command('save')
 
-            sublime.set_timeout(continue_operation, 0)
-
-
-###############################################################################
-
-
-class CSSchemeCompletionListener(sublime_plugin.EventListener):
-    def __init__(self):
-        properties = set()
-        for l in CSSchemeDumper.known_properties.values():
-            properties |= l
-
-        self.property_completions = list(("{0}\t{0}:".format(s), s + ": $0;") for s in properties)
-
-    def get_scope(self, view, l):
-        # Do some string math (instead of regex because fastness)
-        _, col = view.rowcol(l)
-        begin  = view.line(l).begin()
-        line   = view.substr(sublime.Region(begin, l))
-        scope  = line.rsplit(' ', 1)[-1]
-        return scope.lstrip('-')
-
-    def on_query_completions(self, view, prefix, locations):
-        # Provide a selection of naming convention from TextMate and/or property names
-
-        def match_sel(sel):
-            return all(view.match_selector(l, sel) for l in locations)
-
-        # Check context
-        if not match_sel("source.csscheme - comment - string - variable"):
-            return
-
-        if match_sel("meta.ruleset"):
-            # No nested rulesets for CSS
-            return self.property_completions
-
-        if not match_sel("meta.selector, meta.property_list - meta.property"):
-            return
-
-        scope = self.get_scope(view, locations[0])
-
-        # We can't work with different prefixes
-        if any(self.get_scope(view, l) != scope for l in locations):
-            return
-
-        # Tokenize the current selector (only to the cursor)
-        tokens = scope.split(".")
-
-        if len(tokens) > 1:
-            del tokens[-1]  # The last token is either incomplete or empty
-
-            # Browse the nodes and their children
-            nodes = COMPILED_HEADS
-            for i, token in enumerate(tokens):
-                node = nodes.find(token)
-                if not node:
-                    status("Warning: `%s` not found in scope naming conventions"
-                           % '.'.join(tokens[:i + 1]))
-                    break
-                nodes = node.children
-                if not nodes:
-                    break
-
-            if nodes and node:
-                return (nodes.to_completion(), sublime.INHIBIT_WORD_COMPLETIONS)
-            else:
-                status("No nodes available in scope naming conventions after `%s`"
-                       % '.'.join(tokens))
-                return  # Should I inhibit here?
-
-        # Triggered completion on whitespace:
-        elif match_sel("source.csscheme.scss"):
-            # For SCSS just return all the head nodes + property completions
-            return self.property_completions + COMPILED_HEADS.to_completion()
-        else:
-            return COMPILED_HEADS.to_completion()
+        sublime.set_timeout(continue_operation, 0)
