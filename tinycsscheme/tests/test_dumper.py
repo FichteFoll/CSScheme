@@ -109,13 +109,13 @@ def test_datafy_errors(stylesheet, expected_error):
      }}
      ),
 
-    (RS("some    other \nruleset '-' subtract",
+    (RS("some    other \nruleset '-' subtract \- more subtract",
         [DC('fontStyle', "bold"),
          ],
         [SR('@name', "\"Test name\"")
          ]),
      {'name': "Test name",
-      'scope': "some other ruleset - subtract",
+      'scope': "some other ruleset - subtract - more subtract",
       'settings': {
           'fontStyle': "bold",
       }}
