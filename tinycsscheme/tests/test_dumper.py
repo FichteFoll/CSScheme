@@ -198,10 +198,13 @@ def test_validify_decl(decl, expected_decl):
      "expected 1 token for property background, got 3"),
 
     (DC('background', "'hi there'"),
-     "unexpected STRING value for property background"),
+     "unexpected STRING token for property background"),
 
     (DC('bracketsForeground', "\"#12345\""),
-     "unexpected STRING value for property bracketsForeground"),
+     "unexpected STRING token for property bracketsForeground"),
+
+    (DC('foreground', "2"),
+     "unexpected INTEGER token for property foreground"),
 
     (DC('foreground', "not-a-color"),
      "unknown color name 'not-a-color' for property foreground"),

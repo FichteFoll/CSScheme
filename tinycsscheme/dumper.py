@@ -189,7 +189,7 @@ class CSSchemeDumper(object):
                 decl.value[0] = Token('HASH', v.as_css(), color, None, v.line, v.column)
 
             elif v.type != 'HASH':
-                raise DumpError(v, "unexpected {1} value for property {0}"
+                raise DumpError(v, "unexpected {1} token for property {0}"
                                    .format(decl.name, v.type),
                                 '%s; %s' % (sel, decl.name))
 
