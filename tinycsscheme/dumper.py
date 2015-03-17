@@ -52,19 +52,19 @@ class CSSchemeDumper(object):
     # Dict for properties that we will test for the validity of their value.
     # Other properties are not checked.
     known_properties = dict(
-        color=('activeGuide', 'background', 'bracketContentsForeground', 'bracketsForeground',
+        color={'activeGuide', 'background', 'bracketContentsForeground', 'bracketsForeground',
                'caret', 'findHighlight', 'findHighlightForeground', 'foreground', 'guide', 'gutter',
                'gutterForeground', 'inactiveSelection', 'invisibles', 'lineHighlight', 'selection',
-               'selectionBorder', 'shadow', 'stackGuide', 'tagsForeground'),
+               'selectionBorder', 'shadow', 'stackGuide', 'tagsForeground'},
 
-        style_list=('fontStyle',),
+        style_list={'fontStyle',},
 
-        options_list=('bracketsOptions', 'bracketContentsOptions', 'tagsOptions')
+        options_list={'bracketsOptions', 'bracketContentsOptions', 'tagsOptions'}
         # Maybe some more?
     )
 
     # Combine the list types for easier lookup
-    known_properties['list'] = known_properties['style_list'] + known_properties['options_list']
+    known_properties['list'] = known_properties['style_list'] | known_properties['options_list']
 
     # Allowed values for the list type properties
     style_list_values = ('bold', 'italic', 'underline', 'none')  # 'none' is a custom style

@@ -183,9 +183,9 @@ class convert_tmtheme(sublime_plugin.TextCommand):
 
 class CSSchemeCompletionListener(sublime_plugin.EventListener):
     def __init__(self):
-        properties = []
+        properties = set()
         for l in CSSchemeDumper.known_properties.values():
-            properties.extend(l)
+            properties |= l
 
         self.property_completions = list(("{0}\t{0}:".format(s), s + ": $0;") for s in properties)
 
