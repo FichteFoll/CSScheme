@@ -20,6 +20,7 @@ from .converters import tmtheme
 
 
 PACKAGE = __package__
+DEBUG = False
 
 
 def settings():
@@ -107,14 +108,17 @@ class convert_csscheme(WindowAndTextCommand):
                 CSSchemeDumper().dump_stylesheet_file(out_file, stylesheet)
             except DumpError as e:
                 conv.report_dump_error(out, in_file, text, e)
+                if DEBUG:
+                    import traceback
+                    traceback.print_exc()
                 if not previewed:
                     self.preview_compiled_css(text, conv, in_tuple.base_name)
                 return
 
-            status("Build successful")
-            # Open out_file
-            if settings().get('open_after_build'):
-                self.view.window().open_file(out_file)
+        status("Build successful")
+        # Open out_file
+        if settings().get('open_after_build'):
+            self.view.window().open_file(out_file)
 
     def preview_compiled_css(self, text, conv, base_name):
         if conv.ext == 'csscheme':
