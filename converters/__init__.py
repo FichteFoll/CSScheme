@@ -99,13 +99,14 @@ class BaseConverter(object):
 
     @classmethod
     def report_convert_errors(cls, out, file_path, returncode, stderr):
-        out.write_line("Errors converting from %s to CSS, return code: %s\n"
+        out.write_line("Error(s) converting from %s to CSS, return code: %s\n"
                        % (cls.name, returncode))
 
         out.write_line(stderr)
 
     @classmethod
     def report_parse_errors(cls, out, file_path, source, errors):
+        out.write_line("Error(s) parsing CSScheme:\n")
         out.set_regex(r"^(.*):(\d+):(\d+):$")
         for e in errors:
             out.write_line("%s:%s:%s:\n  %s\n"
@@ -113,6 +114,7 @@ class BaseConverter(object):
 
     @classmethod
     def report_dump_error(cls, out, file_path, source, e):
+        out.write_line("Error in CSScheme data:\n")
         out.set_regex(r"^(.*):(\d+):(\d+):$")
         out.write_line("%s:%s:%s:\n  %s%s\n"
                        % (os.path.basename(file_path), e.line, e.column, e.reason, e.location))
@@ -176,7 +178,7 @@ class SCSSConverter(BaseConverter):
         out.set_regex(r"^\s*/\* (.*?), line (\d+) \*/")
 
         lines = source.split('\n')
-        out.write_line("Error in CSS data on line %d:" % e.line)
+        out.write_line("Error in CSScheme data on line %d:" % e.line)
 
         printlines = cls.get_lines_till_last_lineno(lines, e.line, in_dir)
         for l in printlines:
