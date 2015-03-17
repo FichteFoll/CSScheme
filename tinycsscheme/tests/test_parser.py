@@ -177,7 +177,7 @@ def test_at_rules(css_source, expected_rules, expected_errors):
           [])],
         []),
 
-    ('foo {list: mixed ident and "string list"}',
+    ('foo {list: mixed ident and "string list" and 1;}',
         [('foo',
           [('list', [('IDENT',  "mixed"),
                      ('S',      " "),
@@ -185,15 +185,19 @@ def test_at_rules(css_source, expected_rules, expected_errors):
                      ('S',      " "),
                      ('IDENT',  "and"),
                      ('S',      " "),
-                     ('STRING', "string list")])],
+                     ('STRING', "string list"),
+                     ('S',      " "),
+                     ('IDENT',  "and"),
+                     ('S',      " "),
+                     ('INTEGER', 1)])],
           [])],
         []),
 
 
     # Errors
-    ('foo {decl: 1; decl2: "str":; decl3: some ]}',
+    ('foo {decl: 1.2; decl2: "str":; decl3: some ]}',
         [('foo', [], [])],
-        ["unexpected INTEGER token for property decl",
+        ["unexpected NUMBER token for property decl",
          "unexpected : token for property decl2",
          "unmatched ] token for property decl3"]),
 

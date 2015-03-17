@@ -193,12 +193,13 @@ class CSSchemeParser(CSS21Parser):
             raise ParseError(name_token,
                              "expected a property value for property {0}".format(property_name))
 
-        # Only allow a list of HASH, IDENT, STRING, FUNCTION (and S) (minimal requirements)
-        # STRING is for arbitrary properties
-        # inside FUNCTIONS we also allow: DELIM, INTEGER, NUMBER and PERCENTAGE
+        # Only allow a list of HASH, IDENT, STRING, FUNCTION (and S) (minimal requirements).
+        # STRING is for arbitrary properties (since all scheme values are strings).
+        # IDENT and INTEGER are technically only short form and accepted for convenience.
+        # Inside FUNCTIONS we also allow: DELIM, INTEGER, NUMBER and PERCENTAGE.
         def check_token_types(tokens, fn=None):
             for token in tokens:
-                if not (token.type in ('S', 'IDENT', 'STRING', 'HASH', 'FUNCTION') or
+                if not (token.type in ('S', 'IDENT', 'STRING', 'HASH', 'FUNCTION', 'INTEGER') or
                         fn and token.type in ('DELIM', 'INTEGER', 'NUMBER', 'PERCENTAGE')):
                     match_type = token.type in ('}', ')', ']') and 'unmatched' or 'unexpected'
                     raise ParseError(token, '{0} {1} token for property {2}{3}'

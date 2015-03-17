@@ -99,12 +99,15 @@ def test_datafy_errors(stylesheet, expected_error):
 @pytest.mark.parametrize(('ruleset', 'expected_data'), [
     (RS('*', [DC('foreground',  "#123456"),
               DC('someSetting', "yeah"),
-              DC('another',     "rgb(0,0,0)"),  # Test if subcalls function properly
+              DC('anInteger',   "2"),
+              # Test if subcalls (translate_colors) function properly
+              DC('another',     "rgb(0,0,0)"),
               ],
         []),
      {'settings': {
          'foreground':  "#123456",
          'someSetting': "yeah",
+         'anInteger':   "2",  # converted to string
          'another':     "#000000",
      }}
      ),
@@ -186,6 +189,13 @@ def test_datafy_ruleset_errors(ruleset, expected_error):
                       ('IDENT', "squiggly_underline"),
                       ('S',     " "),
                       ('IDENT', "stippled_underline")])),
+
+    # integer
+    (DC('shadowWidth', '4'),
+     ('shadowWidth', [('INTEGER', 4)])),
+
+    (DC('shadowWidth', '\"-4\"'),
+     ('shadowWidth', [('STRING', "-4")])),
 ])
 def test_validify_decl(decl, expected_decl):
     CSSchemeDumper().validify_declaration(decl, '')
@@ -228,6 +238,15 @@ def test_validify_decl(decl, expected_decl):
 
     (DC('bracketsOptions', "italic"),
      "invalid value 'italic' for options property bracketsOptions"),
+
+    # integer
+    (DC('shadowWidth', "1 2"),
+     "expected 1 token for property shadowWidth, got 3"),
+    (DC('shadowWidth', "'a'"),
+     "expected number in string for property shadowWidth, got 'a'"),
+
+    (DC('shadowWidth', "1.23"),
+     "unexpected NUMBER token for property shadowWidth"),
 ])
 def test_validify_decl_errors(decl, expected_error):
     try:
@@ -240,12 +259,14 @@ def test_validify_decl_errors(decl, expected_error):
 @pytest.mark.parametrize(('decl', 'expected_decl'), [
     # Does not access a declaration's name, only values
     # pass through
-    (DC('prop', "'hi there' #123456 ident"),
-     ('prop', [('STRING', "hi there"),
-               ('S',      " "),
-               ('HASH',   "#123456"),
-               ('S',      " "),
-               ('IDENT',  "ident")])),
+    (DC('prop', "'hi there' #123456 ident 5"),
+     ('prop', [('STRING',  "hi there"),
+               ('S',       " "),
+               ('HASH',    "#123456"),
+               ('S',       " "),
+               ('IDENT',   "ident"),
+               ('S',       " "),
+               ('INTEGER', 5)])),
 
     # changes
     (DC('prop', "'#12345678'"),

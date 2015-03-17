@@ -57,10 +57,11 @@ class CSSchemeDumper(object):
                'gutterForeground', 'highlight', 'inactiveSelection', 'invisibles', 'lineHighlight',
                'selection', 'selectionBorder', 'shadow', 'stackGuide', 'tagsForeground'},
 
-        style_list={'fontStyle',},
+        integer={'shadowWidth'},
+
+        style_list={'fontStyle'},
 
         options_list={'bracketsOptions', 'bracketContentsOptions', 'tagsOptions'}
-        # Maybe some more?
     )
 
     # Combine the list types for easier lookup
@@ -161,8 +162,8 @@ class CSSchemeDumper(object):
             self.translate_colors(decl, sel)
             # Check if we know the property and throw if the input is invalid (e.g. css names)
             self.validify_declaration(decl, sel)
-            # One or multiple HASH, STRING or IDENT (separated by S) tokens
-            s[decl.name] = "".join(v.value for v in decl.value)
+            # One or multiple HASH, STRING, INTEGER or IDENT (separated by S) tokens
+            s[decl.name] = "".join(map(str, (v.value for v in decl.value)))
 
         rdict['settings'] = s
 
@@ -218,11 +219,28 @@ class CSSchemeDumper(object):
                     raise DumpError(token, "invalid value '{1}' for options property {0}"
                                            .format(decl.name, token.value), sel)
 
+        elif decl.name in self.known_properties['integer']:
+            if len(decl.value) != 1:
+                # We only expect one token for colors
+                raise DumpError(decl.value[1], "expected 1 token for property {0}, got {1}"
+                                               .format(decl.name, len(decl.value)), sel)
+            v = decl.value[0]
+            if v.type == 'STRING':
+                try:
+                    int(v.value)
+                except ValueError as e:
+                    raise DumpError(v, "expected number in string for property {0}, got {1!r}"
+                                       .format(decl.name, v.value),
+                                    sel) from e
+            elif v.type != 'INTEGER':
+                    raise DumpError(v, "unexpected {1} token for property {0}"
+                                       .format(decl.name, v.type), sel)
+
     def translate_colors(self, decl, sel):
 
         for j, v in enumerate(decl.value):
             color = None
-            if v.type in ('IDENT', 'S'):
+            if v.type in ('IDENT', 'INTEGER', 'S'):
                 continue
 
             elif v.type == 'FUNCTION':
