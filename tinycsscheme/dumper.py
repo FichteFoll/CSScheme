@@ -54,8 +54,8 @@ class CSSchemeDumper(object):
     known_properties = dict(
         color={'activeGuide', 'background', 'bracketContentsForeground', 'bracketsForeground',
                'caret', 'findHighlight', 'findHighlightForeground', 'foreground', 'guide', 'gutter',
-               'gutterForeground', 'inactiveSelection', 'invisibles', 'lineHighlight', 'selection',
-               'selectionBorder', 'shadow', 'stackGuide', 'tagsForeground'},
+               'gutterForeground', 'highlight', 'inactiveSelection', 'invisibles', 'lineHighlight',
+               'selection', 'selectionBorder', 'shadow', 'stackGuide', 'tagsForeground'},
 
         style_list={'fontStyle',},
 
