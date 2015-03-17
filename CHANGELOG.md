@@ -1,6 +1,14 @@
 CSScheme Changelog
 ==================
 
+v1.1.1 (2015-03-17)
+-------------------
+
+- 'shadowWidth' is now a known property (as integer) and its value is checked
+- Literal integers are now supported, such as `shadowWidth: 10;`
+- Completions have received an additional tab trigger to skip the semi colon
+
+
 v1.1.0 (2015-02-14)
 -------------------
 
