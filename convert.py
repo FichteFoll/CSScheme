@@ -9,7 +9,7 @@ from .my_sublime_lib import WindowAndTextCommand
 from .my_sublime_lib.path import file_path_tuple
 from .my_sublime_lib.view import OutputPanel, get_text, set_text
 
-from .tinycsscheme.parser import CSSchemeParser
+from .tinycsscheme.parser import CSSchemeParser, strvalue
 from .tinycsscheme.dumper import CSSchemeDumper, DumpError
 
 from . import converters
@@ -57,7 +57,7 @@ class convert_csscheme(WindowAndTextCommand):
         self.preview_opened = False
         in_file = self.view.file_name()
         in_tuple = file_path_tuple(in_file)
-        out_file = in_tuple.no_ext + '.tmTheme'
+        ext = '.tmTheme'
 
         # Open up output panel and auto-finalize it when we are done
         with OutputPanel(self.view.window(), "csscheme") as out:
@@ -103,7 +103,23 @@ class convert_csscheme(WindowAndTextCommand):
                 out.write_line("No CSS data was found")
                 return
 
+            # Check for "hidden" at-rule
+            for i, r in enumerate(stylesheet.rules):
+                if not r.at_keyword or r.at_keyword.strip('@') != 'hidden':
+                    continue
+                if strvalue(r.value) == 'true':
+                    ext = '.hidden-tmTheme'
+                    del stylesheet.rules[i]
+                else:
+                    e = DumpError(r, "Unrecognized value for 'hidden' "
+                                     "at-rule, expected 'true'")
+                    if not previewed:
+                        self.preview_compiled_css(text, conv, in_tuple.base_name)
+                    conv.report_dump_error(out, in_file, text, e)
+                    return
+
             # Dump CSS data as plist into out_file
+            out_file = in_tuple.no_ext + ext
             try:
                 CSSchemeDumper().dump_stylesheet_file(out_file, stylesheet)
             except DumpError as e:
