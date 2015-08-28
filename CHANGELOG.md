@@ -1,6 +1,17 @@
 CSScheme Changelog
 ==================
 
+v1.2.0 (2015-08-28)
+-------------------
+
+- You can create `.hidden-tmTheme` files by adding a global `@hidden: true;`
+  rule to the source. The rule is consumed and the output file's extension
+  adjusted. (#9)
+- The global `@name` rule is now optional. Sublime Text doesn't use it anyway.
+- The built example schemes are now hidden, so they don't pop up in the
+  "Prefereces > Color Scheme" menu anymore
+
+
 v1.1.1 (2015-03-17)
 -------------------
 
