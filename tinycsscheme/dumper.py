@@ -102,10 +102,9 @@ class CSSchemeDumper(object):
                     rulesets.append(r)
 
         # Make sure the name is at the top
-        if 'name' not in at_rules:
-            raise DumpError(dummy, "Must contain 'name' at-rule")
-        data['name'] = strvalue(at_rules['name'].value)
-        del at_rules['name']
+        if 'name' in at_rules:
+            data['name'] = strvalue(at_rules['name'].value)
+            del at_rules['name']
 
         # Then all remaining at-rules (should be subclasses of StringRule)
         for k, r in at_rules.items():
