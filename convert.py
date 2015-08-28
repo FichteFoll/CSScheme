@@ -112,6 +112,7 @@ class convert_csscheme(WindowAndTextCommand):
                 if strvalue(r.value) == 'true':
                     ext = '.hidden-tmTheme'
                     del stylesheet.rules[i]
+                    break
                 else:
                     e = DumpError(r, "Unrecognized value for 'hidden' "
                                      "at-rule, expected 'true'")
