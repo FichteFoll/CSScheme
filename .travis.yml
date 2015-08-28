@@ -1,5 +1,8 @@
 language: python
 
+# Run on container-based infrastructure
+sudo: false
+
 python:
   - "3.3" # ST3
 
