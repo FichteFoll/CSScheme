@@ -69,11 +69,6 @@ def test_datafy(stylesheet, expected_data):
      "Must contain '*' ruleset"
      ),
 
-    (SS([RS('*', [])
-         ]),
-     "Must contain 'name' at-rule"
-     ),
-
     (SS([SR('@name', "Test"),
          RS('*', []),
          RS('*', [])
