@@ -1,7 +1,10 @@
 @purpose "This is just an example file to show how you can use this tool";
 
-// This at-rule is required
-@name "Example SCSScheme";
+// This at-rule is optional
+// @name "Example SCSScheme";
+
+// This at-rule tells CSScheme to generate a `.hidden-tmTheme` file
+@hidden true;
 
 // FLAGS
 $punctuation: true;

@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>name</key>
-	<string>Example SCSScheme</string>
 	<key>purpose</key>
 	<string>This is just an example file to show how you can use this tool</string>
 	<key>settings</key>
@@ -43,7 +41,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#ff6868</string>
+				<string>#FF6868</string>
 			</dict>
 		</dict>
 		<dict>
@@ -79,7 +77,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#ffb368</string>
+				<string>#FFB368</string>
 			</dict>
 		</dict>
 		<dict>
@@ -90,7 +88,7 @@
 				<key>fontStyle</key>
 				<string>italic</string>
 				<key>foreground</key>
-				<string>#fffe68</string>
+				<string>#FFFE68</string>
 			</dict>
 		</dict>
 		<dict>
@@ -108,7 +106,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#b4ff68</string>
+				<string>#B4FF68</string>
 			</dict>
 		</dict>
 		<dict>
@@ -126,7 +124,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#69ff68</string>
+				<string>#69FF68</string>
 			</dict>
 		</dict>
 		<dict>
@@ -144,7 +142,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#68fffe</string>
+				<string>#68FFFE</string>
 			</dict>
 		</dict>
 		<dict>
@@ -155,7 +153,7 @@
 				<key>background</key>
 				<string>#FF686966</string>
 				<key>foreground</key>
-				<string>#68fffe</string>
+				<string>#68FFFE</string>
 			</dict>
 		</dict>
 		<dict>
@@ -164,7 +162,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#68b4ff</string>
+				<string>#68B4FF</string>
 			</dict>
 		</dict>
 		<dict>
@@ -173,7 +171,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#6869ff</string>
+				<string>#6869FF</string>
 			</dict>
 		</dict>
 		<dict>
@@ -182,7 +180,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#b368ff</string>
+				<string>#B368FF</string>
 			</dict>
 		</dict>
 	</array>

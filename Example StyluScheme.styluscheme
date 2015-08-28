@@ -1,5 +1,8 @@
-// This at-rule is required, sadly the unquote part as well
+// This at-rule is optional, and needs the unquote function
 unquote('@name "Example StyluScheme";')
+
+// This at-rule tells CSScheme to generate a `.hidden-tmTheme` file
+unquote('@hidden true;')
 
 warn("this should be displayed in the output panel on build")
 
