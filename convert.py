@@ -85,9 +85,12 @@ class convert_csscheme(WindowAndTextCommand):
                 return
 
             # Preview converted css for debugging, optionally
-            previewed = settings().get('preview_compiled_css')
-            if previewed:
-                self.preview_compiled_css(text, conv, in_tuple.base_name)
+            self.previewed = not settings().get('preview_compiled_css')
+
+            def preview_compiled_css():
+                if not self.previewed:
+                    self.preview_compiled_css(text, conv, in_tuple.base_name)
+                    self.previewed = True
 
             # Parse the CSS
             stylesheet = CSSchemeParser().parse_stylesheet(text)
@@ -95,8 +98,7 @@ class convert_csscheme(WindowAndTextCommand):
             # Do some awesome error printing action
             if stylesheet.errors:
                 conv.report_parse_errors(out, in_file, text, stylesheet.errors)
-                if not previewed:
-                    self.preview_compiled_css(text, conv, in_tuple.base_name)
+                preview_compiled_css()
                 return
             elif not stylesheet.rules:
                 # The CSS seems to be ... empty?
@@ -113,9 +115,8 @@ class convert_csscheme(WindowAndTextCommand):
                 else:
                     e = DumpError(r, "Unrecognized value for 'hidden' "
                                      "at-rule, expected 'true'")
-                    if not previewed:
-                        self.preview_compiled_css(text, conv, in_tuple.base_name)
                     conv.report_dump_error(out, in_file, text, e)
+                    preview_compiled_css()
                     return
 
             # Dump CSS data as plist into out_file
@@ -127,8 +128,7 @@ class convert_csscheme(WindowAndTextCommand):
                 if DEBUG:
                     import traceback
                     traceback.print_exc()
-                if not previewed:
-                    self.preview_compiled_css(text, conv, in_tuple.base_name)
+                preview_compiled_css()
                 return
 
         status("Build successful")
