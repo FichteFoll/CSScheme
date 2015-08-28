@@ -44,9 +44,12 @@ captured in an output panel. For automation purposes, the command is named
 Things you *must* consider when using **CSScheme**:
 
 - `@` at-rules will be added as string values to the "outer dictionary". You
-  **must** specify a global `@name` rule to specify the scheme's name. `@name`
+  *may* specify a global `@name` rule to specify the scheme's name. `@name`
   rules in a ruleset will show as the name for various color scheme editing
-  tools after compilation. You usually don't need it but it doesn't hurt either.
+  tools after compilation. Sublime Text itself does not use it.
+- In order to create a `.hidden-tmTheme` file, you need to specify a global
+  `@hidden: true;` rule. The converter will consume this rule and change the
+  output file's extension accordingly.
 - If you want a property to have no font styles you have to specify 
   `fontStyle: none;`. This will be translated to
   `<key>fontStyle</key><string />`.
