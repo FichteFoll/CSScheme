@@ -14,7 +14,8 @@ class CSSchemeCompletionListener(sublime_plugin.EventListener):
         for l in CSSchemeDumper.known_properties.values():
             properties |= l
 
-        self.property_completions = list(("{0}\t{0}:".format(s), s + ": $1;$0") for s in properties)
+        self.property_completions = list(("{0}\t{0}:".format(s), s + ": $1;$0")
+                                         for s in properties)
 
     def get_scope(self, view, l):
         # Do some string math (instead of regex because fastness)

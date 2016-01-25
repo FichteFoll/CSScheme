@@ -1,19 +1,17 @@
-"""
-    Parse files/strings in custom CSS format optimized for use with Text Mate and Sublime Text Color
-    Schemes.
+"""Parse CSS-like format optimized for use with Text Mate and Sublime Text Color Schemes.
 
-    Extends tinycss's css21 basic parser and differs in the following points:
+Extends tinycss's css21 basic parser and differs in the following points:
 
-    - Generally, all at-rules are only allowed once in a scope only accept a single value as their
-      head, no body. Must be STRING, IDENT, HASH or a valid uuid4. Examples:
+- Generally, all at-rules are only allowed once in a scope, only accept a single value as their
+  head, no body. Must be STRING, IDENT, HASH or a valid uuid4. Examples:
 
-        @some-at-rule "a string value";
-        @uuid 2e3af29f-ebee-431f-af96-72bda5d4c144;
+    @some-at-rule "a string value";
+    @uuid 2e3af29f-ebee-431f-af96-72bda5d4c144;
 
-    - At-rules are allowed in rulesets.
+- At-rules are allowed in rulesets.
 
-    - Declarations may only provide a list (separated by spaces) of values of the type FUNCTION,
-      HASH, STRING, IDENT (and DELIM commas for function parameters).
+- Declarations may only provide a list (separated by spaces) of values of the type FUNCTION,
+  HASH, STRING, IDENT, INTEGER (and DELIM commas for function parameters).
 """
 
 import re

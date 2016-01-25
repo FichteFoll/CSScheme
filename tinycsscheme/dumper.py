@@ -1,22 +1,22 @@
 """
-    Dump Stylesheet objects returned by CSSchemeParser methods into .tmTheme-style property lists.
+Dump Stylesheet objects returned by CSSchemeParser methods into .tmTheme-style property lists.
 
-    Does a few checks to assure that data is valid:
+Does a few checks to assure that data is valid:
 
-    - Must define exactly one * ruleset.
+- Must define exactly one * ruleset.
 
-    - @name at-rule is required.
+- @name at-rule is required.
 
-    - You can not overwrite keys with the @settings at-rule, neither can you overwrite @scope keys
-      in rulesets.
+- You can not overwrite keys with the @settings at-rule, neither can you overwrite @scope keys
+  in rulesets.
 
-    - Known property names are checked for validity. This includes but is not limited to:
-      + 'foreground', 'background', 'caret' which accept color values, and
-      + 'fontStyle', 'tagsOptions' which accept a list of idents with valid font decoration options.
+- Known property names are checked for validity. This includes but is not limited to:
+  + 'foreground', 'background', 'caret' which accept color values, and
+  + 'fontStyle', 'tagsOptions' which accept a list of idents with valid font decoration options.
 
-    - CSS color names as well as color functions 'rgb', 'hsl' and their alpha variants are checked
-      for validity of parameters and **evaluated to color hashes**, three-digit hashes (like #123)
-      are expanded to six digits.
+- CSS color names as well as color functions 'rgb', 'hsl' and their alpha variants are checked
+  for validity of parameters and **evaluated to color hashes**, three-digit hashes (like #123)
+  are expanded to six digits.
 """
 
 import re
@@ -52,10 +52,15 @@ class CSSchemeDumper(object):
     # Dict for properties that we will test for the validity of their value.
     # Other properties are not checked.
     known_properties = dict(
-        color={'activeGuide', 'background', 'bracketContentsForeground', 'bracketsForeground',
-               'caret', 'findHighlight', 'findHighlightForeground', 'foreground', 'guide', 'gutter',
-               'gutterForeground', 'highlight', 'inactiveSelection', 'invisibles', 'lineHighlight',
-               'selection', 'selectionBorder', 'shadow', 'stackGuide', 'tagsForeground'},
+        color={'foreground', 'background', 'invisibles',
+               'bracketsForeground', 'bracketContentsForeground',
+               'findHighlight', 'findHighlightForeground',
+               'guide', 'activeGuide', 'stackGuide',
+               'gutter', 'gutterForeground',
+               'selection', 'caret', 'inactiveSelection', 'selectionBorder',
+               'highlight', 'lineHighlight',
+               'shadow',
+               'tagsForeground'},
 
         integer={'shadowWidth'},
 
