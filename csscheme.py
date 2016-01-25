@@ -1,28 +1,17 @@
 import sublime
 import sublime_plugin
 
-try:
-    # Use a different name because PackageDev adds it to the path and that
-    # takes precedence over local paths (for some reason).
-    from .my_sublime_lib import WindowAndTextCommand
-    from .my_sublime_lib.path import file_path_tuple
-    from .my_sublime_lib.view import OutputPanel
+# Use a different name because PackageDev adds it to the path and that
+# takes precedence over local paths (for some reason).
+from my_sublime_lib import WindowAndTextCommand
+from my_sublime_lib.path import file_path_tuple
+from my_sublime_lib.view import OutputPanel
 
-    from .tinycsscheme.parser import CSSchemeParser
-    from .tinycsscheme.dumper import CSSchemeDumper, DumpError
+from tinycsscheme.parser import CSSchemeParser
+from tinycsscheme.dumper import CSSchemeDumper, DumpError
 
-    from .scope_data import COMPILED_HEADS
-    from . import converters
-except:
-    from my_sublime_lib import WindowAndTextCommand
-    from my_sublime_lib.path import file_path_tuple
-    from my_sublime_lib.view import OutputPanel
-
-    from tinycsscheme.parser import CSSchemeParser
-    from tinycsscheme.dumper import CSSchemeDumper, DumpError
-
-    from scope_data import COMPILED_HEADS
-    import converters
+from scope_data import COMPILED_HEADS
+import converters
 
 
 ###############################################################################
