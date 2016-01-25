@@ -1,34 +1,25 @@
 language: python
 
+# Run on container-based infrastructure
+sudo: false
+
 python:
-  # ST2 and ST3
-  - "2.6"
-  - "3.3"
+  - "2.6" # ST2
 
 env:
   # Do not do speed tests since they won't work and would generate a failure
   - TINYCSS_SKIP_SPEEDUPS_TESTS
 
 install:
-  # pytest is already deployed on Travis's VMs
-  # - pip install pytest
-  - pip install flake8
-  - pip install pytest-cov
-  - pip install coveralls
+  - pip install -r dev-requirements.txt
 
 script:
-  # Run flake8 on everything except tinycss
-  # Technically this only needs to run once (3.3), but :effort:
-  - >
-    flake8 .
-    --exclude=./tinycsscheme/tinycss*,./my_sublime_lib/view/__init__.py
-    --ignore=E221,E241
-    --max-line-length=100
+  - flake8 -v .
   # Run tinycss and tinycsscheme tests
-  - >
+  - >-
     py.test tinycsscheme/tests/
-    --cov-config tinycsscheme/.coveragerc
     --cov tinycsscheme
+    --cov-config tinycsscheme/.coveragerc
     --cov-report term-missing
 
 after_success:
