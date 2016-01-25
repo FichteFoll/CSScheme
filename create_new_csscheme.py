@@ -147,9 +147,9 @@ variable, support.variable {
 """.strip().replace("    ", "\t")
 
 # Do some dirty regex replaces because ... well, it's easy
-sasscheme_snippet = re.sub(r" \{$|\n\t*\}|;$", '', scsscheme_snippet, flags=re.M)
+sasscheme_snippet = re.sub(r"(?m) \{$|\n\t*\}|;$", '', scsscheme_snippet)
 # Does anyone actually like removing these colons? I prefer them visible
-styluscheme_snippet = re.sub(r":(?= )", '', sasscheme_snippet, flags=re.M)
+styluscheme_snippet = re.sub(r"(?m):(?= )", '', sasscheme_snippet)
 
 
 class create_csscheme(sublime_plugin.WindowCommand):

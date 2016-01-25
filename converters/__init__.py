@@ -1,9 +1,9 @@
 """Provides various to-csscheme converters."""
 
+from collections import Mapping
 import re
 import os
 import subprocess
-from collections import abc
 
 import sublime
 
@@ -69,7 +69,7 @@ class BaseConverter(object):
 
         # Construct command
         executable = cls.default_executable
-        if isinstance(executables, abc.Mapping) and cls.default_executable in executables:
+        if isinstance(executables, Mapping) and cls.default_executable in executables:
             executable = executables[cls.default_executable]
         cmd = (executable,) + cls.cmd_params + (file_path,)
 
