@@ -135,7 +135,7 @@ class SCSSConverter(BaseConverter):
     name = "SCSScheme"
     ext = "scsscheme"
     default_executable = "sass"
-    cmd_params = ('-l', '--scss')
+    cmd_params = ('--line-numbers', '--no-cache', '--scss')
 
     @classmethod
     def report_convert_errors(cls, out, file_path, returncode, stderr):
@@ -226,7 +226,7 @@ class SASSConverter(SCSSConverter):
 
     name = "SASScheme"
     ext = "sasscheme"
-    cmd_params = ('-l',)
+    cmd_params = SCSSConverter.cmd_params[:-1]
 
 
 class StylusConverter(SCSSConverter):
