@@ -24,11 +24,12 @@ repository:
 
   comment_line:
     name: comment.line.double-slash.csscheme
-    match: (//).*
-    captures:
-      '1': {name: punctuation.definition.line-comment.csscheme}
+    begin: //
+    beginCaptures:
+      '0': {name: punctuation.definition.line-comment.csscheme}
+    end: $\n?
 
-### AT-RULES LINE###############################################################
+### AT-RULES LINE ##############################################################
 
   at_rule_arbitrary:
     name: meta.at_rule.arbitrary.csscheme

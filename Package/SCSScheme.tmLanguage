@@ -670,16 +670,18 @@
 		</dict>
 		<key>comment_line</key>
 		<dict>
-			<key>captures</key>
+			<key>begin</key>
+			<string>//</string>
+			<key>beginCaptures</key>
 			<dict>
-				<key>1</key>
+				<key>0</key>
 				<dict>
 					<key>name</key>
 					<string>punctuation.definition.line-comment.csscheme</string>
 				</dict>
 			</dict>
-			<key>match</key>
-			<string>(//).*</string>
+			<key>end</key>
+			<string>$\n?</string>
 			<key>name</key>
 			<string>comment.line.double-slash.csscheme</string>
 		</dict>
