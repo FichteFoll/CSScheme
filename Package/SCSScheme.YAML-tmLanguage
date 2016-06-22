@@ -171,8 +171,7 @@ repository:
     end: \}
     patterns:
     - include: '#variables'
-    - include: '#comment_block'
-    - include: '#comment_line'
+    - include: '#comment'
     - begin: \bfrom\b
       beginCaptures:
         '0': {name: keyword.control.operator.for.from.csscheme}
@@ -242,7 +241,7 @@ repository:
 
   selector_patterns:
     patterns:
-    - include: '#comment_block'
+    - include: '#comment'
     - include: '#selector_placeholder'
     - include: '#selector_subtract'
     - include: '#interpolation'
@@ -279,8 +278,7 @@ repository:
     endCaptures:
       '0': {name: punctuation.definition.section.property_list.end.csscheme}
     patterns:
-    - include: '#comment_block'
-    - include: '#comment_line'
+    - include: '#comment'
     - include: '#properties'
     - include: '#rules'
 
@@ -316,8 +314,7 @@ repository:
     begin: \{
     end: (?=\})
     patterns:
-    - include: '#comment_block'
-    - include: '#comment_line'
+    - include: '#comment'
     - include: '#at_rule_return'
     - include: '#variable_setting'
 
@@ -502,6 +499,11 @@ repository:
     - include: '#parameters'
 
 ### CONVENIENCE STUFF ##########################################################
+
+  comment:
+    patterns:
+    - include: '#comment_block'
+    - include: '#comment_line'
 
   general: # Stuff that should be everywhere
     patterns:
