@@ -39,26 +39,34 @@ repository:
   selector:
     name: meta.selector.csscheme
     begin: \s*(?=[*a-zA-Z()-])
-    end: (?=\{)
+    end: \s*(?=\{)
     patterns:
+    - include: '#comment-block'
     - include: '#selector-patterns'
 
   selector-patterns:
     patterns:
-    - include: '#comment-block'
-    - name: entity.name.tag.wildcard.csscheme
+    - name: keyword.operator.subtraction.csscheme
+      match: (?<![\w_-])(-|'-'|\\-)  # '-' and \\- are escapes for the SASS pre-processor
+    - name: constant.language.wildcard.csscheme  # our special "settings" selector
       match: \*
-    - name: punctuation.parameter-sep.csscheme
-      match: ','
-    - name: meta.selector.subtract.csscheme
-      begin: (?<!\w)('?)-(\1)
-      beginCaptures:
-        '0': {name: keyword.control.selector.subtract.csscheme}
-      end: (?=[{,])
+    - name: keyword.operator.intersection.csscheme
+      match: '&'
+    - name: keyword.operator.union.csscheme
+      match: ',|\|'
+    - name: keyword.operator.nesting.csscheme
+      match: \s
+    - begin: \(
+      end: \)
+      captures:
+        '0': {name: punctuation.section.group.csscheme}
+      name: meta.group.csscheme
       patterns:
-      - include: '#selector-patterns'
+        - include: '#selector-patterns'
+    - name: meta.scope-token.csscheme
+      match: '[\w_.-]+'  # technically, more characters are supported but nowhere used
     - name: invalid.illegal.selector.csscheme
-      match: '[^\s\w*.-]'
+      match: '.'
 
   ruleset:
     name: meta.ruleset.csscheme

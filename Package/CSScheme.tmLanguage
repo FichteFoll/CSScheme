@@ -355,11 +355,15 @@
 			<key>begin</key>
 			<string>\s*(?=[*a-zA-Z()-])</string>
 			<key>end</key>
-			<string>(?=\{)</string>
+			<string>\s*(?=\{)</string>
 			<key>name</key>
 			<string>meta.selector.csscheme</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>include</key>
+					<string>#comment-block</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>#selector-patterns</string>
@@ -371,36 +375,50 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>include</key>
-					<string>#comment-block</string>
+					<key>match</key>
+					<string>(?&lt;![\w_-])(-|'-'|\\-)</string>
+					<key>name</key>
+					<string>keyword.operator.subtraction.csscheme</string>
 				</dict>
 				<dict>
 					<key>match</key>
 					<string>\*</string>
 					<key>name</key>
-					<string>entity.name.tag.wildcard.csscheme</string>
+					<string>constant.language.wildcard.csscheme</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>,</string>
+					<string>&amp;</string>
 					<key>name</key>
-					<string>punctuation.parameter-sep.csscheme</string>
+					<string>keyword.operator.intersection.csscheme</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>,|\|</string>
+					<key>name</key>
+					<string>keyword.operator.union.csscheme</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\s</string>
+					<key>name</key>
+					<string>keyword.operator.nesting.csscheme</string>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?&lt;!\w)('?)-(\1)</string>
-					<key>beginCaptures</key>
+					<string>\(</string>
+					<key>captures</key>
 					<dict>
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.control.selector.subtract.csscheme</string>
+							<string>punctuation.section.group.csscheme</string>
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=[{,])</string>
+					<string>\)</string>
 					<key>name</key>
-					<string>meta.selector.subtract.csscheme</string>
+					<string>meta.group.csscheme</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -411,7 +429,13 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>[^\s\w*.-]</string>
+					<string>[\w_.-]+</string>
+					<key>name</key>
+					<string>meta.scope-token.csscheme</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>.</string>
 					<key>name</key>
 					<string>invalid.illegal.selector.csscheme</string>
 				</dict>
