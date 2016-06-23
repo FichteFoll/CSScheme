@@ -12,6 +12,7 @@ env:
 
 install:
   - pip install -r dev-requirements.txt
+  - pip install coveralls
 
 script:
   - flake8 -v .
