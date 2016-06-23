@@ -145,7 +145,7 @@
 					<string>(?x)
    (?# http://www.w3.org/TR/CSS21/syndata.html#value-def-color)
 \b(aqua|black|blue|fuchsia|gray|green|lime|maroon|navy|olive|orange|
-   purple|red|silver|teal|white|yellow
+   purple|red|silver|teal|white|yellow|
    (?# http://www.w3schools.com/css/css_colornames.asp)
    aliceblue|antiquewhite|aquamarine|azure|beige|bisque|blanchedalmond|
    blueviolet|brown|burlywood|cadetblue|chartreuse|chocolate|coral|
