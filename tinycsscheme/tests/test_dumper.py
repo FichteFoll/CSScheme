@@ -15,28 +15,28 @@ from . import jsonify
 
 
 # Shorthand functions for tinycss classes
-def T(type_, value):
+def T(type_, value):  # noqa
     return Token(type_, value, value, None, 0, 0)
 
 
-def SR(keyword, value):
+def SR(keyword, value):  # noqa
     tokens = list(tokenize_grouped(value))
     assert len(tokens) == 1
     return StringRule(keyword, tokens[0], 0, 0)
 
 
-def SS(rules):
+def SS(rules):  # noqa
     return Stylesheet(rules, [], None)
 
 
-def RS(sel, decl, at_rules=[]):
+def RS(sel, decl, at_rules=[]):  # noqa
     sel = tokenize_grouped(sel)
     rs = RuleSet(sel, decl, 0, 0)
     rs.at_rules = at_rules
     return rs
 
 
-def DC(name, value):
+def DC(name, value):  # noqa
     return Declaration(name, tokenize_grouped(value), None, 0, 0)
 
 

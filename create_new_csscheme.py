@@ -153,7 +153,7 @@ sasscheme_snippet = re.sub(r" \{$|\n\t*\}|;$", '', scsscheme_snippet, flags=re.M
 styluscheme_snippet = re.sub(r":(?= )", '', sasscheme_snippet, flags=re.M)
 
 
-class create_csscheme(sublime_plugin.WindowCommand):
+class create_csscheme(sublime_plugin.WindowCommand):  # noqa
     snippets = dict(
         CSScheme=csscheme_snippet,
         SCSScheme=scsscheme_snippet,

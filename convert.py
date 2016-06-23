@@ -42,7 +42,7 @@ def status(msg, printonly=""):
 
 # Use window (and text) command to be able to call this command from both
 # sources (build systems are always window commands).
-class convert_csscheme(WindowAndTextCommand):
+class convert_csscheme(WindowAndTextCommand):  # noqa
 
     """Convert the active CSScheme (or variant) file into a .tmTheme plist."""
 
@@ -148,7 +148,7 @@ class convert_csscheme(WindowAndTextCommand):
         set_text(v, text)
 
 
-class convert_tmtheme(sublime_plugin.TextCommand):
+class convert_tmtheme(sublime_plugin.TextCommand):  # noqa
 
     """Convert a .tmTheme plist into a CSScheme file."""
 
