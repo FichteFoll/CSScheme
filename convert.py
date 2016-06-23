@@ -154,7 +154,8 @@ class convert_tmtheme(WindowAndTextCommand):  # noqa
 
     def is_enabled(self):
         path = self.view.file_name()
-        return bool(path) and path.endswith(".tmTheme")
+        return path and (path.endswith(".tmTheme")
+                         or path.endswith(".hidden-tmTheme"))
 
     def run(self, edit=None, overwrite=False, skip_names=False):
         path = self.view.file_name()
@@ -173,7 +174,8 @@ class convert_tmtheme(WindowAndTextCommand):  # noqa
                 return
 
             # Convert
-            csscheme = tmtheme.to_csscheme(data, out, skip_names)
+            csscheme = tmtheme.to_csscheme(data, out, skip_names,
+                                           hidden=path.endswith(".hidden-tmTheme"))
             if not csscheme:
                 return
 

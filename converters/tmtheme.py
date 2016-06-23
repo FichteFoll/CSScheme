@@ -63,15 +63,17 @@ def load(text, path, out):
                            )
 
 
-def to_csscheme(data, out, skip_names):
+def to_csscheme(data, out, skip_names, hidden=False):
     with StringIO() as stream:
-        # Name
-        name = data.get('name', "INSERT NAME HERE")
-        stream.write('@name "%s";' % name)
+        if 'name' in data:
+            stream.write('@name "%s";\n\n' % data['name'])
+
+        if hidden:
+            stream.write('@hidden true;\n\n')
 
         uuid = data.get('uuid')
         if uuid:
-            stream.write('\n\n@uuid %s;' % uuid)
+            stream.write('@uuid %s;\n\n' % uuid)
 
         # Search for settings item and extract the others
         items = data['settings']
@@ -92,7 +94,7 @@ def to_csscheme(data, out, skip_names):
 
         # Global settings
         settings.sort(key=lambda x: x[0].lower())
-        stream.write("\n\n* {")
+        stream.write("* {")
         for key, value in settings:
             stream.write("\n\t%s: %s;" % (key, value))
         stream.write("\n}")
@@ -115,4 +117,5 @@ def to_csscheme(data, out, skip_names):
 
             stream.write("\n}")
 
+        stream.write("\n")
         return stream.getvalue()
