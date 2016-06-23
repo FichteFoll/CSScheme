@@ -92,6 +92,7 @@ def test_datafy_errors(stylesheet, expected_error):
 
 
 @pytest.mark.parametrize(('ruleset', 'expected_data'), [
+    # declarations
     (RS('*', [DC('foreground',  "#123456"),
               DC('someSetting', "yeah"),
               DC('anInteger',   "2"),
@@ -107,15 +108,42 @@ def test_datafy_errors(stylesheet, expected_error):
      }}
      ),
 
-    (RS("some    other \nruleset '-' subtract \- more subtract",
+    # string rules
+    (RS("source",
         [DC('fontStyle', "bold"),
          ],
-        [SR('@name', "\"Test name\"")
+        [SR('@name', "\"Test name\""),
+         SR('@arbitrary', "\"just some string\"")
          ]),
      {'name': "Test name",
-      'scope': "some other ruleset - subtract - more subtract",
+      'arbitrary': "just some string",
+      'scope': "source",
       'settings': {
           'fontStyle': "bold",
+      }}
+    ),
+
+    # whitespace stripping of selector
+    (RS("some    other \nruleset with.blank.lines",
+        []),
+     {'scope': "some other ruleset with.blank.lines",
+      'settings': {
+      }}
+    ),
+
+    # escaped subtract operator (with legacy test)
+    (RS("not '-' subtract, real \- subtract",
+        []),
+     {'scope': "not '-' subtract, real - subtract",
+      'settings': {
+      }}
+     ),
+
+    # other escaped operators
+    (RS(R"\(a \| b\) \- \(c \& b.f, j.\1\)",
+        []),
+     {'scope': "(a | b) - (c & b.f, j.1)",
+      'settings': {
       }}
      ),
 ])
