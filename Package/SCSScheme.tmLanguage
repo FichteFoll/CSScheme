@@ -1239,7 +1239,7 @@
 		<key>selector</key>
 		<dict>
 			<key>begin</key>
-			<string>(?=[a-zA-Z()*&amp;%-])</string>
+			<string>(?=[a-zA-Z()*&amp;%\\-])</string>
 			<key>end</key>
 			<string>(?=[{};!])</string>
 			<key>name</key>
@@ -1249,6 +1249,59 @@
 				<dict>
 					<key>include</key>
 					<string>#selector_patterns</string>
+				</dict>
+			</array>
+		</dict>
+		<key>selector_operators</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>-|'-'|\\-</string>
+					<key>name</key>
+					<string>keyword.operator.subtraction.csscheme</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\\&amp;</string>
+					<key>name</key>
+					<string>keyword.operator.intersection.csscheme</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>,|\\\|</string>
+					<key>name</key>
+					<string>keyword.operator.union.csscheme</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\s</string>
+					<key>name</key>
+					<string>keyword.operator.nesting.csscheme</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\\\(</string>
+					<key>captures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.operator.group.csscheme</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>\\\)</string>
+					<key>name</key>
+					<string>meta.group.csscheme</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#selector_patterns</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>
@@ -1266,11 +1319,17 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#selector_subtract</string>
+					<string>#interpolation</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>&amp;</string>
+					<key>name</key>
+					<string>variable.other.reference.csscheme</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#interpolation</string>
+					<string>#selector_operators</string>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -1280,19 +1339,19 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>&amp;</string>
+					<string>[\w_.-]+</string>
 					<key>name</key>
-					<string>variable.other.reference.csscheme</string>
+					<string>meta.scope-token.csscheme</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>,</string>
+					<string>\\.</string>
 					<key>name</key>
-					<string>punctuation.separator.selector.csscheme</string>
+					<string>constant.character.escape.csscheme</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>[^\s\w*.-]|(?&lt;=\s)-(?=\s)</string>
+					<string>.</string>
 					<key>name</key>
 					<string>invalid.illegal.selector.csscheme</string>
 				</dict>
@@ -1312,30 +1371,6 @@
 			<string>(\%)[\w_-]+</string>
 			<key>name</key>
 			<string>entity.other.attribute-name.placeholder.csscheme</string>
-		</dict>
-		<key>selector_subtract</key>
-		<dict>
-			<key>begin</key>
-			<string>(?&lt;!\w)(?:'-'|\\-)</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.control.selector.subtract.csscheme</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(?=[{,%])</string>
-			<key>name</key>
-			<string>meta.selector.subtract.csscheme</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#selector_patterns</string>
-				</dict>
-			</array>
 		</dict>
 		<key>string_double</key>
 		<dict>

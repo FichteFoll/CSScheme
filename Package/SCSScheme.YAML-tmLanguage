@@ -233,7 +233,7 @@ repository:
 
   selector:
     name: meta.selector.csscheme
-    begin: (?=[a-zA-Z()*&%-])
+    begin: (?=[a-zA-Z()*&%\\-])
     end: (?=[{};!]) # ! for "!optional" in @extend
     patterns:
     - include: '#selector_patterns'
@@ -242,25 +242,36 @@ repository:
     patterns:
     - include: '#comment'
     - include: '#selector_placeholder'
-    - include: '#selector_subtract'
     - include: '#interpolation'
-    - name: constant.language.wildcard.csscheme
-      match: \*
     - name: variable.other.reference.csscheme
       match: '&'
-    - name: punctuation.separator.selector.csscheme
-      match: ','
+    - include: '#selector_operators'
+    - name: constant.language.wildcard.csscheme  # our special "settings" selector
+      match: \*
+    - name: meta.scope-token.csscheme
+      match: '[\w_.-]+'  # technically, more characters are supported but nowhere used
+    - name: constant.character.escape.csscheme
+      match: '\\.'
     - name: invalid.illegal.selector.csscheme
-      match: '[^\s\w*.-]|(?<=\s)-(?=\s)' # highlight wrong use of -
+      match: '.'
 
-  selector_subtract:
-    name: meta.selector.subtract.csscheme
-    begin: (?<!\w)(?:'-'|\\-)  # '-' is from an old version of sass
-    beginCaptures:
-      '0': {name: keyword.control.selector.subtract.csscheme}
-    end: (?=[{,%])
+  selector_operators:
     patterns:
-    - include: '#selector_patterns'
+    - name: keyword.operator.subtraction.csscheme
+      match: -|'-'|\\-  # '-' and \\- are escapes for the SASS pre-processor
+    - name: keyword.operator.intersection.csscheme
+      match: '\\&'
+    - name: keyword.operator.union.csscheme
+      match: ',|\\\|'
+    - name: keyword.operator.nesting.csscheme
+      match: \s
+    - begin: \\\(
+      end: \\\)
+      captures:
+        '0': {name: keyword.operator.group.csscheme}
+      name: meta.group.csscheme
+      patterns:
+        - include: '#selector_patterns'
 
   selector_placeholder:
     name: entity.other.attribute-name.placeholder.csscheme

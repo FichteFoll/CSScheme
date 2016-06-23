@@ -353,7 +353,7 @@
 		<key>selector</key>
 		<dict>
 			<key>begin</key>
-			<string>\s*(?=[*a-zA-Z()-])</string>
+			<string>(?=[*a-zA-Z()\\-])</string>
 			<key>end</key>
 			<string>\s*(?=\{)</string>
 			<key>name</key>
@@ -370,31 +370,25 @@
 				</dict>
 			</array>
 		</dict>
-		<key>selector-patterns</key>
+		<key>selector-operators</key>
 		<dict>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;![\w_-])(-|'-'|\\-)</string>
+					<string>-|'-'|\\-</string>
 					<key>name</key>
 					<string>keyword.operator.subtraction.csscheme</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\*</string>
-					<key>name</key>
-					<string>constant.language.wildcard.csscheme</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>&amp;</string>
+					<string>&amp;|\\&amp;</string>
 					<key>name</key>
 					<string>keyword.operator.intersection.csscheme</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>,|\|</string>
+					<string>,|\||\\\|</string>
 					<key>name</key>
 					<string>keyword.operator.union.csscheme</string>
 				</dict>
@@ -406,17 +400,17 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\(</string>
+					<string>\(|\\\(</string>
 					<key>captures</key>
 					<dict>
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.section.group.csscheme</string>
+							<string>keyword.operator.group.csscheme</string>
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>\)</string>
+					<string>\)|\\\)</string>
 					<key>name</key>
 					<string>meta.group.csscheme</string>
 					<key>patterns</key>
@@ -427,11 +421,33 @@
 						</dict>
 					</array>
 				</dict>
+			</array>
+		</dict>
+		<key>selector-patterns</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#selector-operators</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\*</string>
+					<key>name</key>
+					<string>constant.language.wildcard.csscheme</string>
+				</dict>
 				<dict>
 					<key>match</key>
 					<string>[\w_.-]+</string>
 					<key>name</key>
 					<string>meta.scope-token.csscheme</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\\.</string>
+					<key>name</key>
+					<string>constant.character.escape.csscheme</string>
 				</dict>
 				<dict>
 					<key>match</key>

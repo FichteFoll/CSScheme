@@ -38,35 +38,42 @@ repository:
 
   selector:
     name: meta.selector.csscheme
-    begin: \s*(?=[*a-zA-Z()-])
+    begin: (?=[*a-zA-Z()\\-])
     end: \s*(?=\{)
     patterns:
     - include: '#comment-block'
     - include: '#selector-patterns'
 
   selector-patterns:
+    # all backslash-escape variants are for the SASS pre-processor
     patterns:
-    - name: keyword.operator.subtraction.csscheme
-      match: (?<![\w_-])(-|'-'|\\-)  # '-' and \\- are escapes for the SASS pre-processor
+    - include: '#selector-operators'
     - name: constant.language.wildcard.csscheme  # our special "settings" selector
       match: \*
+    - name: meta.scope-token.csscheme
+      match: '[\w_.-]+'  # technically, more characters are supported but nowhere used
+    - name: constant.character.escape.csscheme
+      match: '\\.'
+    - name: invalid.illegal.selector.csscheme
+      match: '.'
+
+  selector-operators:
+    patterns:
+    - name: keyword.operator.subtraction.csscheme
+      match: -|'-'|\\-  # '-' is an escape for the SASS pre-processor
     - name: keyword.operator.intersection.csscheme
-      match: '&'
+      match: '&|\\&'
     - name: keyword.operator.union.csscheme
-      match: ',|\|'
+      match: ',|\||\\\|'
     - name: keyword.operator.nesting.csscheme
       match: \s
-    - begin: \(
-      end: \)
+    - begin: \(|\\\(
+      end: \)|\\\)
       captures:
-        '0': {name: punctuation.section.group.csscheme}
+        '0': {name: keyword.operator.group.csscheme}
       name: meta.group.csscheme
       patterns:
         - include: '#selector-patterns'
-    - name: meta.scope-token.csscheme
-      match: '[\w_.-]+'  # technically, more characters are supported but nowhere used
-    - name: invalid.illegal.selector.csscheme
-      match: '.'
 
   ruleset:
     name: meta.ruleset.csscheme
