@@ -1,6 +1,24 @@
 CSScheme Changelog
 ==================
 
+v1.3.0 (2016-06-23)
+-------------------
+
+- Prevent `sass` executable from building caches. They were put in weird places
+  and generally annoying.
+- Syntax highlighting changes to CSScheme and SCSScheme
+  * Multiple scopes have been changed to follow (yet-to-be-specified)
+    conventions
+  * Highlighting of all scope selector operators has been added
+  * Other minor tweaks
+- Allow backslash-escaping of any character, specifically for SASS
+  compatibility with selector operators and scope-segments starting with
+  numbers (#11)
+- Support for the old `'-'` escape sequence has been removed
+- `.hidden-tmTheme` files can now also be converted to `.csscheme`
+- Added a build system for tmTheme-to-CSScheme conversion
+
+
 v1.2.0 (2015-08-28)
 -------------------
 
@@ -70,7 +88,7 @@ v0.3.0 (2014-03-08)
 v0.2.1 (2014-03-01)
 -------------------
 
-- Added "foreground" to allowed style list properties (.g. "bracketsOptions")
+- Added "foreground" to allowed style list properties (e.g. "bracketsOptions")
 
 
 v0.2.0 (2014-02-24)
@@ -85,7 +103,7 @@ v0.2.0 (2014-02-24)
 v0.1.1 (2014-02-24)
 -------------------
 
-- Removed `$` form the SCSS word separator list
+- Removed `$` from the SCSS word separator list
 
 
 v0.1.0 (2014-02-22)
