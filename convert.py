@@ -1,7 +1,6 @@
 import os
 
 import sublime
-import sublime_plugin
 
 # Use a different name because PackageDev adds it to the path and that
 # takes precedence over local paths (for some reason).

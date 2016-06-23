@@ -121,7 +121,7 @@ def test_datafy_errors(stylesheet, expected_error):
       'settings': {
           'fontStyle': "bold",
       }}
-    ),
+     ),
 
     # whitespace stripping of selector
     (RS("some    other \nruleset with.blank.lines",
@@ -129,7 +129,7 @@ def test_datafy_errors(stylesheet, expected_error):
      {'scope': "some other ruleset with.blank.lines",
       'settings': {
       }}
-    ),
+     ),
 
     # escaped subtract operator (with legacy test)
     (RS("not '-' subtract, real \- subtract",
