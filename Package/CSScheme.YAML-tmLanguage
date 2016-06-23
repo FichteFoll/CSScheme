@@ -45,7 +45,6 @@ repository:
     - include: '#selector-patterns'
 
   selector-patterns:
-    # all backslash-escape variants are for the SASS pre-processor
     patterns:
     - include: '#selector-operators'
     - name: constant.language.wildcard.csscheme  # our special "settings" selector
@@ -58,9 +57,10 @@ repository:
       match: '.'
 
   selector-operators:
+    # all backslash-escape variants are for the SASS pre-processor
     patterns:
     - name: keyword.operator.subtraction.csscheme
-      match: -|'-'|\\-  # '-' is an escape for the SASS pre-processor
+      match: -|\\-
     - name: keyword.operator.intersection.csscheme
       match: '&|\\&'
     - name: keyword.operator.union.csscheme

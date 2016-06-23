@@ -256,9 +256,10 @@ repository:
       match: '.'
 
   selector_operators:
+    # all backslash-escape variants are for the SASS pre-processor
     patterns:
     - name: keyword.operator.subtraction.csscheme
-      match: -|'-'|\\-  # '-' and \\- are escapes for the SASS pre-processor
+      match: -|\\-
     - name: keyword.operator.intersection.csscheme
       match: '\\&'
     - name: keyword.operator.union.csscheme

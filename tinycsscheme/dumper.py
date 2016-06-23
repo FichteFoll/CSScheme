@@ -146,9 +146,6 @@ class CSSchemeDumper(object):
             # Notably, this allows "numeric classes"
             # and all operators (including braces).
             sel = sel.replace("\\", "")
-            # '-' was used initially for only the subtract operator
-            # but is not recognized anymore starting around Dec 2014.
-            sel = sel.replace("'-'", "-")
             # Also replace multiple whitespaces (including newlines)
             # with a single space;
             # we don't know how exactly it will perform otherwise.
