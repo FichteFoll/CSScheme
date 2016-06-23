@@ -125,3 +125,10 @@ storage {
 variable, support.variable {
     foreground: $col10;
 }
+
+// This is an example of advanced operator usage ...
+\(source.csscheme, source.scsscheme\) \& \(meta.selector \- punctuation.section.group\),
+// ... and using backslashes to escape any character.
+markup.heading.\1 {
+    fontStyle: italic;
+}

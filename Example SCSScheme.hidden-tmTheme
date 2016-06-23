@@ -183,6 +183,15 @@
 				<string>#B368FF</string>
 			</dict>
 		</dict>
+		<dict>
+			<key>scope</key>
+			<string>(source.csscheme, source.scsscheme) &amp; (meta.selector - punctuation.section.group), markup.heading.1</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>italic</string>
+			</dict>
+		</dict>
 	</array>
 </dict>
 </plist>
