@@ -148,7 +148,7 @@ class convert_csscheme(WindowAndTextCommand):  # noqa
         set_text(v, text)
 
 
-class convert_tmtheme(sublime_plugin.TextCommand):  # noqa
+class convert_tmtheme(WindowAndTextCommand):  # noqa
 
     """Convert a .tmTheme plist into a CSScheme file."""
 
@@ -156,7 +156,7 @@ class convert_tmtheme(sublime_plugin.TextCommand):  # noqa
         path = self.view.file_name()
         return bool(path) and path.endswith(".tmTheme")
 
-    def run(self, edit, overwrite=False, skip_names=False):
+    def run(self, edit=None, overwrite=False, skip_names=False):
         path = self.view.file_name()
         new_path = os.path.splitext(path)[0] + '.csscheme'
 
@@ -172,6 +172,7 @@ class convert_tmtheme(sublime_plugin.TextCommand):  # noqa
             if not data:
                 return
 
+            # Convert
             csscheme = tmtheme.to_csscheme(data, out, skip_names)
             if not csscheme:
                 return
