@@ -38,7 +38,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>variable.other.at-rule.csscheme</string>
+					<string>entity.name.at-rule.arbitrary.csscheme</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -53,7 +53,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.at-rule.end.csscheme</string>
+					<string>punctuation.terminator.at-rule.csscheme</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -257,6 +257,59 @@
 			<key>name</key>
 			<string>constant.numeric.percentage.csscheme</string>
 		</dict>
+		<key>properties</key>
+		<dict>
+			<key>begin</key>
+			<string>(?x)
+\b(?:(background|foreground|caret|invisibles|lineHighlight|selection|
+      activeGuide|fontStyle|tagsOptions)
+  |([a-zA-Z_-]+)
+  )
+\s*
+(:)
+</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.property.known.csscheme</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>support.other.property.arbitrary.csscheme</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.separator.property-value.csscheme</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(;)|(?=\})</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.terminator.property.csscheme</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.property.csscheme</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#comment-block</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#values</string>
+				</dict>
+			</array>
+		</dict>
 		<key>ruleset</key>
 		<dict>
 			<key>begin</key>
@@ -292,67 +345,8 @@
 					<string>#at-rule</string>
 				</dict>
 				<dict>
-					<key>begin</key>
-					<string>(?x)
-\b(?:(background|foreground|caret|invisibles|lineHighlight|selection|
-      activeGuide|fontStyle|tagsOptions)
-  |([a-zA-Z_-]+)
-  )
-\s*(:)
-</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.other.property.known.csscheme</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.other.property.arbitrary.csscheme</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.control.property.assertion.csscheme</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>(;)|(?=\})</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.control.property.end.csscheme</string>
-						</dict>
-					</dict>
-					<key>name</key>
-					<string>meta.property-name.css</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#comment-block</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#number</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#color</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#style</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#string</string>
-						</dict>
-					</array>
+					<key>include</key>
+					<string>#properties</string>
 				</dict>
 			</array>
 		</dict>
@@ -511,6 +505,28 @@
 </string>
 			<key>name</key>
 			<string>constant.numeric.uuid.csscheme</string>
+		</dict>
+		<key>values</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#number</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#color</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#style</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string</string>
+				</dict>
+			</array>
 		</dict>
 	</dict>
 	<key>scopeName</key>

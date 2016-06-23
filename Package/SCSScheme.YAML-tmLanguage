@@ -32,15 +32,14 @@ repository:
 ### AT-RULES LINE ##############################################################
 
   at_rule_arbitrary:
-    name: meta.at_rule.arbitrary.csscheme
+    name: meta.at-rule.arbitrary.csscheme
     begin: ((@)\w[\w_-]*)\b
     beginCaptures:
-      # keyword.control.at_rule.arbitrary.csscheme
-      '1': {name: variable.other.at_rule.csscheme}
-      '2': {name: punctuation.definition.at_rule.csscheme}
+      '1': {name: entity.name.at-rule.arbitrary.csscheme}
+      '2': {name: punctuation.definition.at-rule.csscheme}
     end: (;)|(?=[{}])
     endCaptures:
-      '1': {name: keyword.control.at_rule.end.csscheme}
+      '1': {name: punctuation.terminator.at-rule.csscheme}
     patterns:
     - include: '#values'
 
@@ -48,11 +47,11 @@ repository:
     name: meta.at-rule.content.csscheme
     begin: ((@)content)\b
     beginCaptures:
-      '1': {name: keyword.control.at_rule.content.csscheme}
-      '2': {name: punctuation.definition.at_rule.csscheme}
+      '1': {name: keyword.control.at-rule.content.csscheme}
+      '2': {name: punctuation.definition.at-rule.csscheme}
     end: (;)|(?=[{}])
     endCaptures:
-      '1': {name: keyword.control.at_rule.end.csscheme}
+      '1': {name: punctuation.terminator.at-rule.csscheme}
     patterns:
     # Not sure on this one, the examples were not detailed enough
     - include: '#selector'
@@ -62,11 +61,11 @@ repository:
     name: meta.at-rule.extend.csscheme
     begin: ((@)extend)\b
     beginCaptures:
-      '1': {name: keyword.control.at_rule.extend.csscheme}
-      '2': {name: punctuation.definition.at_rule.csscheme}
+      '1': {name: keyword.control.at-rule.extend.csscheme}
+      '2': {name: punctuation.definition.at-rule.csscheme}
     end: (;)|(?=[{}])
     endCaptures:
-      '1': {name: keyword.control.at_rule.end.csscheme}
+      '1': {name: punctuation.terminator.at-rule.csscheme}
     patterns:
     - include: '#selector'
     - include: '#constant_optional'
@@ -76,11 +75,11 @@ repository:
     name: meta.at-rule.import.csscheme
     begin: ((@)import)\b
     beginCaptures:
-      '1': {name: keyword.control.at_rule.import.csscheme}
-      '2': {name: punctuation.definition.at_rule.csscheme}
+      '1': {name: keyword.control.at-rule.import.csscheme}
+      '2': {name: punctuation.definition.at-rule.csscheme}
     end: (;)|(?=[{}])
     endCaptures:
-      '1': {name: keyword.control.at_rule.end.csscheme}
+      '1': {name: punctuation.terminator.at-rule.csscheme}
     patterns:
     - include: '#string_double'
     - include: '#string_single'
@@ -101,13 +100,13 @@ repository:
     name: meta.at-rule.include.csscheme
     begin: ((@)include)\s+([\w-]+)\b
     beginCaptures:
-      '1': {name: keyword.control.at_rule.include.csscheme}
-      '2': {name: punctuation.definition.at_rule.csscheme}
+      '1': {name: keyword.control.at-rule.include.csscheme}
+      '2': {name: punctuation.definition.at-rule.csscheme}
       # No idea how to color
       # '3': {name: storage.type.include.csscheme}
     end: (;)|(?=[{}])
     endCaptures:
-      '1': {name: keyword.control.at_rule.end.csscheme}
+      '1': {name: punctuation.terminator.at-rule.csscheme}
     patterns:
     - include: '#function_signature'
 
@@ -115,11 +114,11 @@ repository:
     name: meta.at-rule.return.csscheme
     begin: ((@)return)\b
     beginCaptures:
-      '1': {name: keyword.control.at_rule.return.csscheme}
-      '2': {name: punctuation.definition.at_rule.csscheme}
+      '1': {name: keyword.control.at-rule.return.csscheme}
+      '2': {name: punctuation.definition.at-rule.csscheme}
     end: (;)|(?=[{}])
     endCaptures:
-      '1': {name: keyword.control.at_rule.end.csscheme}
+      '1': {name: punctuation.terminator.at-rule.csscheme}
     patterns:
     - include: '#values'
 
@@ -127,11 +126,11 @@ repository:
     name: meta.at-rule.warn-debug.csscheme
     begin: ((@)(?:warn|debug))\b
     beginCaptures:
-      '1': {name: keyword.control.at_rule.warn-debug.csscheme}
-      '2': {name: punctuation.definition.at_rule.csscheme}
+      '1': {name: keyword.control.at-rule.warn-debug.csscheme}
+      '2': {name: punctuation.definition.at-rule.csscheme}
     end: (;)|(?=[{}])
     endCaptures:
-      '1': {name: keyword.control.at_rule.end.csscheme}
+      '1': {name: punctuation.terminator.at-rule.csscheme}
     patterns:
     - include: '#values'
 
@@ -141,8 +140,8 @@ repository:
     name: meta.at-rule.each.csscheme
     begin: ((@)each)\b
     beginCaptures:
-      '1': {name: keyword.control.at_rule.each.csscheme}
-      '2': {name: punctuation.definition.at_rule.csscheme}
+      '1': {name: keyword.control.at-rule.each.csscheme}
+      '2': {name: punctuation.definition.at-rule.csscheme}
     end: \}
     patterns:
     - name: keyword.control.operator
@@ -154,8 +153,8 @@ repository:
     name: meta.at-rule.else.csscheme
     begin: ((@)else)\b
     beginCaptures:
-      '1': {name: keyword.control.at_rule.else.csscheme}
-      '2': {name: punctuation.definition.at_rule.csscheme}
+      '1': {name: keyword.control.at-rule.else.csscheme}
+      '2': {name: punctuation.definition.at-rule.csscheme}
     end: \}
     patterns:
     - include: '#rule_block'
@@ -166,8 +165,8 @@ repository:
     name: meta.at-rule.for.csscheme
     begin: ((@)for)\b
     beginCaptures:
-      '1': {name: keyword.control.at_rule.for.csscheme}
-      '2': {name: punctuation.definition.at_rule.csscheme}
+      '1': {name: keyword.control.at-rule.for.csscheme}
+      '2': {name: punctuation.definition.at-rule.csscheme}
     end: \}
     patterns:
     - include: '#variables'
@@ -187,7 +186,7 @@ repository:
     begin: ((@)function)\s+([\w-]+)\b
     beginCaptures:
       '1': {name: storage.type.function.csscheme}
-      '2': {name: punctuation.definition.at_rule.csscheme}
+      '2': {name: punctuation.definition.at-rule.csscheme}
       '3': {name: entity.name.function.csscheme}
     end: \}
     patterns:
@@ -198,8 +197,8 @@ repository:
     name: meta.at-rule.if.csscheme
     begin: ((@)(?:else\s*)?if)\b
     beginCaptures:
-      '1': {name: keyword.control.at_rule.if.csscheme}
-      '2': {name: punctuation.definition.at_rule.csscheme}
+      '1': {name: keyword.control.at-rule.if.csscheme}
+      '2': {name: punctuation.definition.at-rule.csscheme}
     end: \}
     patterns:
     - include: '#logical_operators'
@@ -211,7 +210,7 @@ repository:
     begin: ((@)mixin)\s+([\w-]+)\b
     beginCaptures:
       '1': {name: storage.type.mixin.csscheme}
-      '2': {name: punctuation.definition.at_rule.csscheme}
+      '2': {name: punctuation.definition.at-rule.csscheme}
       '3': {name: entity.name.function.mixin.csscheme}
     end: \}
     patterns:
@@ -222,8 +221,8 @@ repository:
     name: meta.at-rule.while.csscheme
     begin: ((@)while)\b
     beginCaptures:
-      '1': {name: keyword.control.at_rule.while.csscheme}
-      '2': {name: punctuation.definition.at_rule.csscheme}
+      '1': {name: keyword.control.at-rule.while.csscheme}
+      '2': {name: punctuation.definition.at-rule.csscheme}
     end: \}
     patterns:
     - include: '#logical_operators'
@@ -245,7 +244,7 @@ repository:
     - include: '#selector_placeholder'
     - include: '#selector_subtract'
     - include: '#interpolation'
-    - name: entity.name.tag.wildcard.csscheme
+    - name: constant.language.wildcard.csscheme
       match: \*
     - name: variable.other.reference.csscheme
       match: '&'
@@ -256,7 +255,7 @@ repository:
 
   selector_subtract:
     name: meta.selector.subtract.csscheme
-    begin: (?<!\w)(?:'-'|\\-)
+    begin: (?<!\w)(?:'-'|\\-)  # '-' is from an old version of sass
     beginCaptures:
       '0': {name: keyword.control.selector.subtract.csscheme}
     end: (?=[{,%])
@@ -290,14 +289,15 @@ repository:
             activeGuide|fontStyle|tagsOptions)
         |([a-zA-Z_-]+)
         )
-      \s*(:)
+      \s*
+      (:)
     beginCaptures:
-      '1': {name: support.other.property.known.csscheme}
+      '1': {name: keyword.other.property.known.csscheme}
       '2': {name: support.other.property.arbitrary.csscheme}
-      '3': {name: keyword.control.property.assertion.csscheme}
+      '3': {name: punctuation.separator.property-value.csscheme}
     end: (;)|(?=[{}])
     endCaptures:
-      '1': {name: keyword.control.property.end.csscheme}
+      '1': {name: punctuation.terminator.property.csscheme}
     patterns:
     - include: '#values'
 
@@ -585,10 +585,10 @@ repository:
     begin: (?<!\w)(\$[\w_-]+)\s*(\:)
     beginCaptures:
       '1': {name: variable.other.csscheme}
-      '2': {name: keyword.control.variable.assertion.csscheme}
+      '2': {name: keyword.operator.assignment.csscheme}
     end: (;)|(?=[{}])
     endCaptures:
-      '1': {name: keyword.control.property.end.csscheme}
+      '1': {name: punctuation.terminator.assignment.csscheme}
     patterns:
     - include: '#values'
 

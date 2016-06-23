@@ -41,12 +41,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>variable.other.at_rule.csscheme</string>
+					<string>entity.name.at-rule.arbitrary.csscheme</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.at_rule.csscheme</string>
+					<string>punctuation.definition.at-rule.csscheme</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -56,11 +56,11 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.at_rule.end.csscheme</string>
+					<string>punctuation.terminator.at-rule.csscheme</string>
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>meta.at_rule.arbitrary.csscheme</string>
+			<string>meta.at-rule.arbitrary.csscheme</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -78,12 +78,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.at_rule.content.csscheme</string>
+					<string>keyword.control.at-rule.content.csscheme</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.at_rule.csscheme</string>
+					<string>punctuation.definition.at-rule.csscheme</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -93,7 +93,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.at_rule.end.csscheme</string>
+					<string>punctuation.terminator.at-rule.csscheme</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -119,12 +119,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.at_rule.each.csscheme</string>
+					<string>keyword.control.at-rule.each.csscheme</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.at_rule.csscheme</string>
+					<string>punctuation.definition.at-rule.csscheme</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -158,12 +158,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.at_rule.else.csscheme</string>
+					<string>keyword.control.at-rule.else.csscheme</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.at_rule.csscheme</string>
+					<string>punctuation.definition.at-rule.csscheme</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -193,12 +193,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.at_rule.extend.csscheme</string>
+					<string>keyword.control.at-rule.extend.csscheme</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.at_rule.csscheme</string>
+					<string>punctuation.definition.at-rule.csscheme</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -208,7 +208,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.at_rule.end.csscheme</string>
+					<string>punctuation.terminator.at-rule.csscheme</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -238,12 +238,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.at_rule.for.csscheme</string>
+					<string>keyword.control.at-rule.for.csscheme</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.at_rule.csscheme</string>
+					<string>punctuation.definition.at-rule.csscheme</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -307,7 +307,7 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.at_rule.csscheme</string>
+					<string>punctuation.definition.at-rule.csscheme</string>
 				</dict>
 				<key>3</key>
 				<dict>
@@ -340,12 +340,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.at_rule.if.csscheme</string>
+					<string>keyword.control.at-rule.if.csscheme</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.at_rule.csscheme</string>
+					<string>punctuation.definition.at-rule.csscheme</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -377,12 +377,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.at_rule.import.csscheme</string>
+					<string>keyword.control.at-rule.import.csscheme</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.at_rule.csscheme</string>
+					<string>punctuation.definition.at-rule.csscheme</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -392,7 +392,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.at_rule.end.csscheme</string>
+					<string>punctuation.terminator.at-rule.csscheme</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -462,12 +462,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.at_rule.include.csscheme</string>
+					<string>keyword.control.at-rule.include.csscheme</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.at_rule.csscheme</string>
+					<string>punctuation.definition.at-rule.csscheme</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -477,7 +477,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.at_rule.end.csscheme</string>
+					<string>punctuation.terminator.at-rule.csscheme</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -504,7 +504,7 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.at_rule.csscheme</string>
+					<string>punctuation.definition.at-rule.csscheme</string>
 				</dict>
 				<key>3</key>
 				<dict>
@@ -537,12 +537,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.at_rule.return.csscheme</string>
+					<string>keyword.control.at-rule.return.csscheme</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.at_rule.csscheme</string>
+					<string>punctuation.definition.at-rule.csscheme</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -552,7 +552,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.at_rule.end.csscheme</string>
+					<string>punctuation.terminator.at-rule.csscheme</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -574,12 +574,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.at_rule.warn-debug.csscheme</string>
+					<string>keyword.control.at-rule.warn-debug.csscheme</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.at_rule.csscheme</string>
+					<string>punctuation.definition.at-rule.csscheme</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -589,7 +589,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.at_rule.end.csscheme</string>
+					<string>punctuation.terminator.at-rule.csscheme</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -611,12 +611,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.at_rule.while.csscheme</string>
+					<string>keyword.control.at-rule.while.csscheme</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.at_rule.csscheme</string>
+					<string>punctuation.definition.at-rule.csscheme</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -1065,14 +1065,15 @@
       activeGuide|fontStyle|tagsOptions)
   |([a-zA-Z_-]+)
   )
-\s*(:)
+\s*
+(:)
 </string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>support.other.property.known.csscheme</string>
+					<string>keyword.other.property.known.csscheme</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -1082,7 +1083,7 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.property.assertion.csscheme</string>
+					<string>punctuation.separator.property-value.csscheme</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -1092,7 +1093,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.property.end.csscheme</string>
+					<string>punctuation.terminator.property.csscheme</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -1275,7 +1276,7 @@
 					<key>match</key>
 					<string>\*</string>
 					<key>name</key>
-					<string>entity.name.tag.wildcard.csscheme</string>
+					<string>constant.language.wildcard.csscheme</string>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -1502,7 +1503,7 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.variable.assertion.csscheme</string>
+					<string>keyword.operator.assignment.csscheme</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -1512,7 +1513,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.property.end.csscheme</string>
+					<string>punctuation.terminator.assignment.csscheme</string>
 				</dict>
 			</dict>
 			<key>name</key>
