@@ -152,8 +152,9 @@ class convert_tmtheme(WindowAndTextCommand):  # noqa
 
     def is_enabled(self):
         path = self.view.file_name()
-        return path and (path.endswith(".tmTheme")
-                         or path.endswith(".hidden-tmTheme"))
+        # must return a boolean
+        return bool(path and (path.endswith(".tmTheme")
+                              or path.endswith(".hidden-tmTheme")))
 
     def run(self, edit=None, overwrite=False, skip_names=False):
         path = self.view.file_name()
