@@ -9,7 +9,7 @@ from .my_sublime_lib.path import file_path_tuple
 from .my_sublime_lib.view import OutputPanel, get_text, set_text
 
 from .tinycsscheme.parser import CSSchemeParser, strvalue
-from .tinycsscheme.dumper import CSSchemeDumper, DumpError
+from .tinycsscheme import dumper
 
 from . import converters
 from .converters import tmtheme
@@ -113,8 +113,8 @@ class convert_csscheme(WindowAndTextCommand):  # noqa
                     del stylesheet.rules[i]
                     break
                 else:
-                    e = DumpError(r, "Unrecognized value for 'hidden' "
-                                     "at-rule, expected 'true'")
+                    e = dumper.DumpError(r, "Unrecognized value for 'hidden' "
+                                            "at-rule, expected 'true'")
                     conv.report_dump_error(out, in_file, text, e)
                     preview_compiled_css()
                     return
@@ -122,8 +122,8 @@ class convert_csscheme(WindowAndTextCommand):  # noqa
             # Dump CSS data as plist into out_file
             out_file = in_tuple.no_ext + ext
             try:
-                CSSchemeDumper().dump_stylesheet_file(out_file, stylesheet)
-            except DumpError as e:
+                dumper.dump_stylesheet_file(out_file, stylesheet)
+            except dumper.DumpError as e:
                 conv.report_dump_error(out, in_file, text, e)
                 if DEBUG:
                     import traceback

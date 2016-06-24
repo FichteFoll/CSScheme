@@ -8,7 +8,8 @@ from ..tinycss.css21 import Stylesheet, Declaration, RuleSet
 from ..tinycss.token_data import Token
 from ..tinycss.tokenizer import tokenize_grouped
 
-from ..dumper import CSSchemeDumper, DumpError
+from .. import dumper
+from ..dumper import DumpError
 from ..parser import StringRule
 
 from . import jsonify
@@ -59,7 +60,7 @@ def DC(name, value):  # noqa
      ),
 ])
 def test_datafy(stylesheet, expected_data):
-    data = CSSchemeDumper().datafy_stylesheet(stylesheet)
+    data = dumper.datafy_stylesheet(stylesheet)
     assert data == expected_data
 
 
@@ -85,7 +86,7 @@ def test_datafy(stylesheet, expected_data):
 ])
 def test_datafy_errors(stylesheet, expected_error):
     try:
-        CSSchemeDumper().datafy_stylesheet(stylesheet)
+        dumper.datafy_stylesheet(stylesheet)
         assert False, "no exception was raised"
     except DumpError as e:
         assert expected_error in str(e)
@@ -148,7 +149,7 @@ def test_datafy_errors(stylesheet, expected_error):
      ),
 ])
 def test_datafy_ruleset(ruleset, expected_data):
-    data = CSSchemeDumper().datafy_ruleset(ruleset)
+    data = dumper.datafy_ruleset(ruleset)
     assert data == expected_data
 
 
@@ -167,7 +168,7 @@ def test_datafy_ruleset(ruleset, expected_data):
 ])
 def test_datafy_ruleset_errors(ruleset, expected_error):
     try:
-        CSSchemeDumper().datafy_ruleset(ruleset)
+        dumper.datafy_ruleset(ruleset)
         assert False, "no exception was raised"
     except DumpError as e:
         assert expected_error in str(e)
@@ -221,7 +222,7 @@ def test_datafy_ruleset_errors(ruleset, expected_error):
      ('shadowWidth', [('STRING', "-4")])),
 ])
 def test_validify_decl(decl, expected_decl):
-    CSSchemeDumper().validify_declaration(decl, '')
+    dumper.validify_declaration(decl, '')
     assert (decl.name, list(jsonify(decl.value))) == expected_decl
 
 
@@ -273,7 +274,7 @@ def test_validify_decl(decl, expected_decl):
 ])
 def test_validify_decl_errors(decl, expected_error):
     try:
-        CSSchemeDumper().validify_declaration(decl, '')
+        dumper.validify_declaration(decl, '')
         assert False, "no exception was raised"
     except DumpError as e:
         assert expected_error in str(e)
@@ -311,7 +312,7 @@ def test_validify_decl_errors(decl, expected_error):
      ('prop', [('HASH', "#0045041A")])),
 ])
 def test_translate_colors(decl, expected_decl):
-    CSSchemeDumper().translate_colors(decl, '')
+    dumper.translate_colors(decl, '')
     assert (decl.name, list(jsonify(decl.value))) == expected_decl
 
 
@@ -362,7 +363,7 @@ def test_translate_colors(decl, expected_decl):
 ])
 def test_translate_colors_errors(decl, expected_error):
     try:
-        CSSchemeDumper().translate_colors(decl, '')
+        dumper.translate_colors(decl, '')
         assert False, "no exception was raised"
     except DumpError as e:
         assert expected_error in str(e)
