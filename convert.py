@@ -8,8 +8,7 @@ from .my_sublime_lib import WindowAndTextCommand
 from .my_sublime_lib.path import file_path_tuple
 from .my_sublime_lib.view import OutputPanel, get_text, set_text
 
-from .tinycsscheme.parser import CSSchemeParser, strvalue
-from .tinycsscheme import dumper
+from .tinycsscheme import parser, dumper
 
 from . import converters
 from .converters import tmtheme
@@ -92,7 +91,7 @@ class convert_csscheme(WindowAndTextCommand):  # noqa
                     self.previewed = True
 
             # Parse the CSS
-            stylesheet = CSSchemeParser().parse_stylesheet(text)
+            stylesheet = parser.parse_stylesheet(text)
 
             # Do some awesome error printing action
             if stylesheet.errors:
@@ -108,7 +107,7 @@ class convert_csscheme(WindowAndTextCommand):  # noqa
             for i, r in enumerate(stylesheet.rules):
                 if not r.at_keyword or r.at_keyword.strip('@') != 'hidden':
                     continue
-                if strvalue(r.value) == 'true':
+                if parser.strvalue(r.value) == 'true':
                     ext = '.hidden-tmTheme'
                     del stylesheet.rules[i]
                     break

@@ -14,19 +14,22 @@ Extends tinycss's css21 basic parser and differs in the following points:
   HASH, STRING, IDENT, INTEGER (and DELIM commas for function parameters).
 """
 
+
+__all__ = (
+    # from tinycss.css21 imported
+    'ParseError',
+    # from this file
+    'parse_stylesheet',
+    'StringRule',
+    'CSSchemeParser',
+)
+
+
 import re
 from itertools import chain
 
 from .tinycss.css21 import (ParseError, Declaration, RuleSet, CSS21Parser,
                             strip_whitespace, validate_any)
-
-__all__ = [
-    # from tinycss.css21 imported
-    'ParseError',
-    # from this file
-    'StringRule',
-    'CSSchemeParser'
-]
 
 
 def is_uuid(test):
@@ -35,10 +38,16 @@ def is_uuid(test):
 
 
 def strvalue(token):
+    """Get the string value of a token."""
     if token.type == 'DIMENSION':
         return token.as_css()
     else:
         return str(token.value)
+
+
+def parse_stylesheet(css_unicode, encoding=None):
+    """Shorthand to parse a css stylesheet file."""
+    return CSSchemeParser().parse_stylesheet(css_unicode, encoding)
 
 
 class StringRule(object):
