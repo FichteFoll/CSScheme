@@ -23,8 +23,6 @@ def load(text, path, out):
     """
     dirname = os.path.dirname(path)
     out.set_path(dirname, file_regex)
-    if text.startswith('<?xml version="1.0" encoding="UTF-8"?>'):
-        text = text[38:]
 
     try:
         from xml.parsers.expat import ExpatError, ErrorString
@@ -113,7 +111,11 @@ def to_csscheme(data, out, skip_names, hidden=False):
                 out.write_line("Missing 'settings' key in item")
                 return
             for key, value in item['settings'].items():
-                stream.write("\n\t%s: %s;" % (key, value))
+                # translate an empty fontStyle into fontStyle: none
+                if (key == "fontStyle" and value == ""):
+                    stream.write("\n\tfontStyle: none;")
+                else:
+                    stream.write("\n\t%s: %s;" % (key, value))
 
             stream.write("\n}")
 

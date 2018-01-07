@@ -4,8 +4,6 @@ import re
 import os
 import subprocess
 
-import sublime
-
 __all__ = ('all', 'CSSConverter', 'SCSSConverter', 'SASSConverter', 'StylusConverter')
 
 
@@ -50,12 +48,13 @@ class BaseConverter(object):
         return file_path.endswith('.' + cls.ext)
 
     @classmethod
-    def convert(cls, out, file_path, executables):
+    def convert(cls, out, file_path, executables, shell):
         """Convert the specified file to CSScheme and return as string.
 
         * out - output panel to write output to
         * file_path - file to convert
         * executables - dict with optional path settings
+        * shell - whether to invoke external commands using shell
         """
         # Just read the file when we have no executable
         if not cls.default_executable:
@@ -77,7 +76,7 @@ class BaseConverter(object):
             process = subprocess.Popen(cmd,
                                        stdout=subprocess.PIPE,
                                        stderr=subprocess.PIPE,
-                                       shell=sublime.platform() == 'windows',
+                                       shell=shell,
                                        universal_newlines=True)
             stdout, stderr = process.communicate()
         except Exception as e:

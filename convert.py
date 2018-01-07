@@ -78,7 +78,7 @@ class convert_csscheme(WindowAndTextCommand):  # noqa
             executables = settings().get("executables", {})
 
             # Run converter
-            text = conv.convert(out, in_file, executables)
+            text = conv.convert(out, in_file, executables, sublime.platform() == 'windows')
             if not text:
                 return
 
